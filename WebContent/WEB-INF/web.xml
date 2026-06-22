@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee 
+         http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
+         id="WebApp_ID" version="4.0">
+
+    <display-name>Freelite</display-name>
+
+    <!-- 欢迎页 -->
+    <welcome-file-list>
+        <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
+
+    <!-- ==================== A - 用户模块 ==================== -->
+    <servlet>
+        <servlet-name>RegisterServlet</servlet-name>
+        <servlet-class>com.freelite.servlet.RegisterServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>RegisterServlet</servlet-name>
+        <url-pattern>/register</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>LoginServlet</servlet-name>
+        <servlet-class>com.freelite.servlet.LoginServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LoginServlet</servlet-name>
+        <url-pattern>/login</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>LogoutServlet</servlet-name>
+        <servlet-class>com.freelite.servlet.LogoutServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LogoutServlet</servlet-name>
+        <url-pattern>/logout</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ProfileServlet</servlet-name>
+        <servlet-class>com.freelite.servlet.ProfileServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ProfileServlet</servlet-name>
+        <url-pattern>/profile/*</url-pattern>
+    </servlet-mapping>
+
+    <!-- ==================== B - 项目模块 ==================== -->
+    <servlet>
+        <servlet-name>ProjectListServlet</servlet-name>
+        <servlet-class>com.freelite.servlet.ProjectListServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ProjectListServlet</servlet-name>
+        <url-pattern>/projects</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>PostProjectServlet</servlet-name>
+        <servlet-class>com.freelite.servlet.PostProjectServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>PostProjectServlet</servlet-name>
+        <url-pattern>/project/post</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ProjectDetailServlet</servlet-name>
+        <servlet-class>com.freelite.servlet.ProjectDetailServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ProjectDetailServlet</servlet-name>
+        <url-pattern>/project/*</url-pattern>
+    </servlet-mapping>
+
+    <!-- ==================== C - 竞标模块 ==================== -->
+    <servlet>
+        <servlet-name>PlaceBidServlet</servlet-name>
+        <servlet-class>com.freelite.servlet.PlaceBidServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>PlaceBidServlet</servlet-name>
+        <url-pattern>/bid/place</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>BidListServlet</servlet-name>
+        <servlet-class>com.freelite.servlet.BidListServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>BidListServlet</servlet-name>
+        <url-pattern>/bids/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>MyBidsServlet</servlet-name>
+        <servlet-class>com.freelite.servlet.MyBidsServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MyBidsServlet</servlet-name>
+        <url-pattern>/my/bids</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>AwardBidServlet</servlet-name>
+        <servlet-class>com.freelite.servlet.AwardBidServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AwardBidServlet</servlet-name>
+        <url-pattern>/bid/award</url-pattern>
+    </servlet-mapping>
+
+    <!-- ==================== D - 订单/评价/看板模块 ==================== -->
+    <servlet>
+        <servlet-name>OrderListServlet</servlet-name>
+        <servlet-class>com.freelite.servlet.OrderListServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>OrderListServlet</servlet-name>
+        <url-pattern>/orders</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>OrderDetailServlet</servlet-name>
+        <servlet-class>com.freelite.servlet.OrderDetailServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>OrderDetailServlet</servlet-name>
+        <url-pattern>/order/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>CompleteOrderServlet</servlet-name>
+        <servlet-class>com.freelite.servlet.CompleteOrderServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CompleteOrderServlet</servlet-name>
+        <url-pattern>/order/complete</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ReviewServlet</servlet-name>
+        <servlet-class>com.freelite.servlet.ReviewServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ReviewServlet</servlet-name>
+        <url-pattern>/review</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>DashboardServlet</servlet-name>
+        <servlet-class>com.freelite.servlet.DashboardServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DashboardServlet</servlet-name>
+        <url-pattern>/dashboard</url-pattern>
+    </servlet-mapping>
+
+    <!-- 字符编码过滤器 -->
+    <filter>
+        <filter-name>EncodingFilter</filter-name>
+        <filter-class>org.apache.catalina.filters.SetCharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>EncodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+</web-app>

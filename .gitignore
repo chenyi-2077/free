@@ -1,0 +1,23 @@
+# Eclipse
+.project
+.classpath
+.settings/
+bin/
+target/
+build/
+
+# IDE
+*.iml
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Maven (if any)
+pom.xml
