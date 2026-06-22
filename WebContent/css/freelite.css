@@ -1,0 +1,94 @@
+/* ========== Freelite 全局样式 ========== */
+
+/* 布局 */
+body {
+    background: #f5f6fa;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+/* 导航栏 */
+.navbar-custom {
+    background: white;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+.navbar-custom .navbar-brand {
+    font-weight: 700;
+    color: #667eea !important;
+    font-size: 1.4rem;
+}
+.navbar-custom .nav-link {
+    color: #666 !important;
+    font-weight: 500;
+    padding: 8px 16px;
+    border-radius: 8px;
+    transition: all 0.2s;
+}
+.navbar-custom .nav-link:hover {
+    background: rgba(102, 126, 234, 0.08);
+    color: #667eea !important;
+}
+
+/* 卡片 */
+.card {
+    border: none;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    transition: all 0.2s;
+}
+
+/* 渐变按钮 */
+.btn-gradient {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border: none;
+    border-radius: 8px;
+    padding: 10px 24px;
+    font-weight: 600;
+    color: white;
+    transition: all 0.2s;
+}
+.btn-gradient:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    color: white;
+}
+
+/* 表单控件统一风格 */
+.form-control, .form-select {
+    border-radius: 8px;
+    padding: 12px;
+    border: 1.5px solid #e0e0e0;
+    transition: all 0.2s;
+}
+.form-control:focus, .form-select:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+}
+
+/* 技能标签 */
+.skill-badge {
+    background: rgba(102, 126, 234, 0.12);
+    color: #667eea;
+    border-radius: 20px;
+    padding: 3px 12px;
+    display: inline-block;
+    margin: 2px;
+    font-size: 0.85rem;
+}
+
+/* 星星 */
+.star { color: #ffc107; }
+
+/* 价格标签 */
+.price-tag {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #28a745;
+}
+
+/* Logo 渐变 */
+.logo-gradient { 
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 700;
+}

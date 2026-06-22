@@ -49,6 +49,15 @@
         <url-pattern>/profile/*</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>EditProfileServlet</servlet-name>
+        <servlet-class>com.freelite.servlet.EditProfileServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>EditProfileServlet</servlet-name>
+        <url-pattern>/profile/edit</url-pattern>
+    </servlet-mapping>
+
     <!-- ==================== B - 项目模块 ==================== -->
     <servlet>
         <servlet-name>ProjectListServlet</servlet-name>
