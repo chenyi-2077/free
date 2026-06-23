@@ -1,59 +1,54 @@
 package com.freelite.servlet;
 
-import com.freelite.dao.UserDAO;
+import com.freelite.dao.UserDao;
 import com.freelite.model.User;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-/**
- * 个人主页 Servlet
- * A负责
- * 
- * GET /profile      → 自己的个人主页
- * GET /profile/123  → 查看用户123的主页
- */
 public class ProfileServlet extends HttpServlet {
 
-    private UserDAO userDAO = new UserDAO();
+    private UserDao userDao = new UserDao();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-
-        HttpSession session = req.getSession(false);
-        User loginUser = (session != null) ? (User) session.getAttribute("user") : null;
-
+        User loginUser = (User) req.getSession().getAttribute("user");
         if (loginUser == null) {
             resp.sendRedirect(req.getContextPath() + "/login");
             return;
         }
 
+        // 从路径提取用户 ID，如 /profile/2 或 /profile
         String pathInfo = req.getPathInfo();
         int profileUserId;
+        boolean isOwnProfile;
 
-        if (pathInfo == null || pathInfo.equals("/") || pathInfo.equals("")) {
+        if (pathInfo == null || pathInfo.equals("/")) {
+            // 查看自己的主页
             profileUserId = loginUser.getId();
+            isOwnProfile = true;
         } else {
             try {
                 profileUserId = Integer.parseInt(pathInfo.replace("/", ""));
             } catch (NumberFormatException e) {
                 profileUserId = loginUser.getId();
             }
+            isOwnProfile = (profileUserId == loginUser.getId());
         }
 
-        User profileUser = userDAO.findById(profileUserId);
+        User profileUser = userDao.findById(profileUserId);
         if (profileUser == null) {
-            resp.sendError(404, "用户不存在");
+            resp.sendRedirect(req.getContextPath() + "/projects");
             return;
         }
 
         req.setAttribute("profileUser", profileUser);
-        req.setAttribute("isOwnProfile", profileUserId == loginUser.getId());
+        req.setAttribute("isOwnProfile", isOwnProfile);
         req.getRequestDispatcher("/A-user/profile.jsp").forward(req, resp);
     }
 }

@@ -1,37 +1,30 @@
 package com.freelite.model;
 
-/**
- * 用户实体类
- * A负责
- */
+import java.time.LocalDateTime;
+
 public class User {
     private int id;
     private String email;
     private String password;
-    private String role;      // "employer" 或 "freelancer"
+    private String role;        // "employer" | "freelancer"
     private String displayName;
     private String avatar;
     private String skills;
     private double rating;
-    private String createdAt;
+    private LocalDateTime createdAt;
 
-    // 构造方法
     public User() {}
 
-    public User(int id, String email, String password, String role, String displayName,
-                String avatar, String skills, double rating, String createdAt) {
-        this.id = id;
+    public User(String email, String password, String role, String displayName, String skills) {
         this.email = email;
         this.password = password;
         this.role = role;
         this.displayName = displayName;
-        this.avatar = avatar;
         this.skills = skills;
-        this.rating = rating;
-        this.createdAt = createdAt;
+        this.rating = 0.0;
     }
 
-    // Getters & Setters
+    // --- Getters / Setters ---
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 
@@ -56,6 +49,6 @@ public class User {
     public double getRating() { return rating; }
     public void setRating(double rating) { this.rating = rating; }
 
-    public String getCreatedAt() { return createdAt; }
-    public void setCreatedAt(String createdAt) { this.createdAt = createdAt; }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 }

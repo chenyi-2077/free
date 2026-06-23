@@ -1,41 +1,68 @@
 package com.freelite.servlet;
 
-import com.freelite.dao.BidDAO;
-import com.freelite.model.User;
+import com.freelite.dao.*;
+import com.freelite.model.*;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-/**
- * 选标 Servlet
- * C负责
- * 
- * POST /bid/award → 雇主选中某个竞标
- * 参数：bidId, projectId
- */
 public class AwardBidServlet extends HttpServlet {
 
-    private BidDAO bidDAO = new BidDAO();
+    private BidDao bidDao = new BidDao();
+    private ProjectDao projectDao = new ProjectDao();
+    private OrderDao orderDao = new OrderDao();
+    private UserDao userDao = new UserDao();
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-
-        HttpSession session = req.getSession(false);
-        User user = (session != null) ? (User) session.getAttribute("user") : null;
-        if (user == null) {
+        User loginUser = (User) req.getSession().getAttribute("user");
+        if (loginUser == null) {
             resp.sendRedirect(req.getContextPath() + "/login");
             return;
         }
 
-        int bidId = Integer.parseInt(req.getParameter("bidId"));
-        int projectId = Integer.parseInt(req.getParameter("projectId"));
+        String bidIdStr = req.getParameter("bidId");
+        String projectIdStr = req.getParameter("projectId");
 
-        boolean success = bidDAO.awardBid(bidId, projectId, user.getId());
+        int bidId = Integer.parseInt(bidIdStr);
+        int projectId = Integer.parseInt(projectIdStr);
+
+        Project project = projectDao.findById(projectId);
+        if (project == null || project.getEmployerId() != loginUser.getId()) {
+            resp.sendRedirect(req.getContextPath() + "/projects");
+            return;
+        }
+
+        Bid bid = bidDao.findById(bidId);
+        if (bid == null || !"pending".equals(bid.getStatus())) {
+            resp.sendRedirect(req.getContextPath() + "/project/" + projectId);
+            return;
+        }
+
+        // 选中该竞标，拒绝其他竞标
+        bidDao.updateStatus(bidId, "accepted");
+        for (Bid other : bidDao.findByProjectId(projectId)) {
+            if (other.getId() != bidId && "pending".equals(other.getStatus())) {
+                bidDao.updateStatus(other.getId(), "rejected");
+            }
+        }
+
+        // 更新项目状态
+        projectDao.updateStatus(projectId, "in_progress");
+
+        // 创建订单
+        Order order = new Order();
+        order.setProjectId(projectId);
+        order.setEmployerId(loginUser.getId());
+        order.setFreelancerId(bid.getFreelancerId());
+        order.setAmount(bid.getAmount());
+        orderDao.insert(order);
+
         resp.sendRedirect(req.getContextPath() + "/project/" + projectId);
     }
 }
