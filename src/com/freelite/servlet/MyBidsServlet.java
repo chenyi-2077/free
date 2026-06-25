@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import com.freelite.util.AuthUtil;
 
 public class MyBidsServlet extends HttpServlet {
 
@@ -17,13 +18,8 @@ public class MyBidsServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        User loginUser = (User) req.getSession().getAttribute("user");
-        if (loginUser == null) {
-            resp.sendRedirect(req.getContextPath() + "/login");
-            return;
-        }
-
-        req.setAttribute("bids", bidDao.findByFreelancerId(loginUser.getId()));
+        User loginUser = AuthUtil.requireLogin(req, resp);
+        if (loginUser == null) return;
         req.getRequestDispatcher("/C-bid/myBids.jsp").forward(req, resp);
     }
 }

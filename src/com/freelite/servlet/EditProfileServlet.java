@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import com.freelite.util.AuthUtil;
 
 public class EditProfileServlet extends HttpServlet {
 
@@ -17,22 +18,16 @@ public class EditProfileServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        User loginUser = (User) req.getSession().getAttribute("user");
-        if (loginUser == null) {
-            resp.sendRedirect(req.getContextPath() + "/login");
-            return;
-        }
+        User loginUser = AuthUtil.requireLogin(req, resp);
+        if (loginUser == null) return;
         req.getRequestDispatcher("/A-user/editProfile.jsp").forward(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        User loginUser = (User) req.getSession().getAttribute("user");
-        if (loginUser == null) {
-            resp.sendRedirect(req.getContextPath() + "/login");
-            return;
-        }
+        User loginUser = AuthUtil.requireLogin(req, resp);
+        if (loginUser == null) return;
 
         String displayName = req.getParameter("displayName");
         String skills = req.getParameter("skills");

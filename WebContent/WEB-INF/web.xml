@@ -169,6 +169,16 @@
         <url-pattern>/dashboard</url-pattern>
     </servlet-mapping>
 
+    <!-- 登录认证过滤器 -->
+    <filter>
+        <filter-name>AuthFilter</filter-name>
+        <filter-class>com.freelite.filter.AuthFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>AuthFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
     <!-- 字符编码过滤器 -->
     <filter>
         <filter-name>EncodingFilter</filter-name>
