@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import com.freelite.util.AuthUtil;
 
 public class AwardBidServlet extends HttpServlet {
 
@@ -21,8 +20,11 @@ public class AwardBidServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        User loginUser = AuthUtil.requireLogin(req, resp);
-        if (loginUser == null) return;
+        User loginUser = (User) req.getSession().getAttribute("user");
+        if (loginUser == null) {
+            resp.sendRedirect(req.getContextPath() + "/login");
+            return;
+        }
 
         String bidIdStr = req.getParameter("bidId");
         String projectIdStr = req.getParameter("projectId");

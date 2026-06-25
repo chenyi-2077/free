@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import com.freelite.util.AuthUtil;
 
 public class PlaceBidServlet extends HttpServlet {
 
@@ -20,8 +19,13 @@ public class PlaceBidServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        User loginUser = AuthUtil.requireLogin(req, resp);
-        if (loginUser == null) return;
+        User loginUser = (User) req.getSession().getAttribute("user");
+        if (loginUser == null) {
+            resp.sendRedirect(req.getContextPath() + "/login");
+            return;
+        }
+
+        String projectIdStr = req.getParameter("projectId");
         if (projectIdStr == null || projectIdStr.isEmpty()) {
             resp.sendRedirect(req.getContextPath() + "/projects");
             return;
@@ -41,9 +45,13 @@ public class PlaceBidServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        req.setCharacterEncoding("UTF-8");
-        User loginUser = AuthUtil.requireLogin(req, resp);
-        if (loginUser == null) return;
+        User loginUser = (User) req.getSession().getAttribute("user");
+        if (loginUser == null) {
+            resp.sendRedirect(req.getContextPath() + "/login");
+            return;
+        }
+
+        String projectIdStr = req.getParameter("projectId");
         String amountStr = req.getParameter("amount");
         String daysStr = req.getParameter("days");
         String proposal = req.getParameter("proposal");

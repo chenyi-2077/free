@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDate;
-import com.freelite.util.AuthUtil;
 
 public class PostProjectServlet extends HttpServlet {
 
@@ -21,16 +20,25 @@ public class PostProjectServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        User loginUser = AuthUtil.requireLogin(req, resp);
-        if (loginUser == null) return;
+        User loginUser = (User) req.getSession().getAttribute("user");
+        if (loginUser == null) {
+            resp.sendRedirect(req.getContextPath() + "/login");
+            return;
+        }
+        req.setAttribute("categories", categoryDao.findAll());
+        req.getRequestDispatcher("/B-project/postProject.jsp").forward(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        req.setCharacterEncoding("UTF-8");
-        User loginUser = AuthUtil.requireLogin(req, resp);
-        if (loginUser == null) return;
+        User loginUser = (User) req.getSession().getAttribute("user");
+        if (loginUser == null) {
+            resp.sendRedirect(req.getContextPath() + "/login");
+            return;
+        }
+
+        String title = req.getParameter("title");
         String description = req.getParameter("description");
         String budgetStr = req.getParameter("budget");
         String deadlineStr = req.getParameter("deadline");
