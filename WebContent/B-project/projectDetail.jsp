@@ -5,6 +5,8 @@
     Project project = (Project) request.getAttribute("project");
     List<Bid> bids = (List<Bid>) request.getAttribute("bids");
     boolean isOwner = (boolean) request.getAttribute("isOwner");
+    String successMsg = (String) session.getAttribute("successMsg");
+    if (successMsg != null) { session.removeAttribute("successMsg"); }
 %>
 <!DOCTYPE html>
 <html lang="zh-CN">
@@ -37,6 +39,12 @@
     </nav>
 
     <div class="container mt-4">
+        <% if (successMsg != null) { %>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <%= successMsg %>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        <% } %>
         <div class="row">
             <%-- 主内容 --%>
             <div class="col-md-8">

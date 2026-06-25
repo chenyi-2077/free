@@ -63,6 +63,7 @@ public class AwardBidServlet extends HttpServlet {
         order.setAmount(bid.getAmount());
         orderDao.insert(order);
 
+        req.getSession().setAttribute("successMsg", "🎉 中标成功！订单已自动创建。");
         resp.sendRedirect(req.getContextPath() + "/project/" + projectId);
     }
 }
