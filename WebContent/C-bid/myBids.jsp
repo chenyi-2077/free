@@ -66,7 +66,7 @@
                             <span class="badge bg-secondary">未选中</span>
                         <% } %>
                         <div class="mt-1" style="font-size: 0.8rem; color: #999;">
-                            <%= bid.getCreatedAt() != null ? bid.getCreatedAt().substring(0, 10) : "" %>
+                            <%= bid.getCreatedAt() != null ? bid.getCreatedAt().toLocalDate().toString() : "" %>
                         </div>
                     </div>
                 </div>
