@@ -14,7 +14,11 @@ public class DeliveryDao {
                 + "VALUES (?,?,?,?,?,?,?,?,?)";
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            ps.setInt(1, d.getOrderId());
+            if (d.getOrderId() > 0) {
+                ps.setInt(1, d.getOrderId());
+            } else {
+                ps.setNull(1, Types.INTEGER);
+            }
             ps.setInt(2, d.getProjectId());
             ps.setInt(3, d.getUserId());
             ps.setString(4, d.getTitle());
