@@ -69,6 +69,15 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>MyProjectsServlet</servlet-name>
+        <servlet-class>com.freelite.servlet.MyProjectsServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MyProjectsServlet</servlet-name>
+        <url-pattern>/my/projects</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>PostProjectServlet</servlet-name>
         <servlet-class>com.freelite.servlet.PostProjectServlet</servlet-class>
     </servlet>

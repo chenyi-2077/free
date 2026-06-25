@@ -123,6 +123,28 @@ public class ProjectDao {
         return -1;
     }
 
+    /**
+     * 按雇主 ID 查询其发布的全部项目
+     */
+    public List<Project> findByEmployerId(int employerId) {
+        List<Project> list = new ArrayList<>();
+        String sql = "SELECT p.*, c.name AS category_name, u.display_name AS employer_name "
+                + "FROM project p "
+                + "LEFT JOIN category c ON p.category_id = c.id "
+                + "LEFT JOIN user u ON p.employer_id = u.id "
+                + "WHERE p.employer_id=? ORDER BY p.created_at DESC";
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, employerId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) list.add(mapProject(rs));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
     public void updateStatus(int id, String status) {
         String sql = "UPDATE project SET status=? WHERE id=?";
         try (Connection conn = DBUtil.getConnection();
