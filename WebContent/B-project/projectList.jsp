@@ -8,6 +8,10 @@
     int totalPages = (int) request.getAttribute("totalPages");
     String keyword = (String) request.getAttribute("keyword");
     int selectedCategory = (int) request.getAttribute("selectedCategory");
+    String successMsg = (String) session.getAttribute("successMsg");
+    if (successMsg != null) { session.removeAttribute("successMsg"); }
+    String errorMsg = (String) session.getAttribute("errorMsg");
+    if (errorMsg != null) { session.removeAttribute("errorMsg"); }
 %>
 <!DOCTYPE html>
 <html lang="zh-CN">
@@ -52,6 +56,12 @@
     </nav>
 
     <div class="container mt-4">
+        <% if (successMsg != null) { %>
+            <div class="alert alert-success alert-dismissible fade show"><%= successMsg %><button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>
+        <% } %>
+        <% if (errorMsg != null) { %>
+            <div class="alert alert-danger alert-dismissible fade show"><%= errorMsg %><button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>
+        <% } %>
         <%-- 头部 --%>
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h4 class="fw-bold mb-0">📋 项目市场</h4>

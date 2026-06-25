@@ -132,7 +132,8 @@ public class DeliveryChatServlet extends HttpServlet {
 
         // 权限检查：只有雇主或中标自由职业者能看
         if (!hasAccess(loginUser, project)) {
-            resp.sendError(403);
+            req.getSession().setAttribute("errorMsg", "❌ 您无权访问该项目的沟通与交付页面，只有项目雇主和中标自由职业者可查看。");
+            resp.sendRedirect(req.getContextPath() + "/projects");
             return;
         }
 
@@ -172,7 +173,8 @@ public class DeliveryChatServlet extends HttpServlet {
             return;
         }
         if (!hasAccess(loginUser, project)) {
-            resp.sendError(403);
+            req.getSession().setAttribute("errorMsg", "❌ 您无权访问该项目的沟通与交付页面。");
+            resp.sendRedirect(req.getContextPath() + "/projects");
             return;
         }
 
