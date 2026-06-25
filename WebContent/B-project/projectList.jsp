@@ -70,7 +70,7 @@
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <select name="category" class="form-select">
+                    <select name="category" class="form-select" onchange="this.form.submit()">
                         <option value="0">全部分类</option>
                         <% for (Category c : categories) { %>
                             <option value="<%= c.getId() %>" <%= c.getId() == selectedCategory ? "selected" : "" %>><%= c.getName() %></option>
