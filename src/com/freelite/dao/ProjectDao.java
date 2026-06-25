@@ -19,7 +19,7 @@ public class ProjectDao {
                 + "FROM project p "
                 + "LEFT JOIN category c ON p.category_id = c.id "
                 + "LEFT JOIN user u ON p.employer_id = u.id "
-                + "WHERE 1=1 ");
+                + "WHERE p.status != 'cancelled' ");
         if (keyword != null && !keyword.trim().isEmpty()) {
             sql.append(" AND (p.title LIKE ? OR p.description LIKE ?)");
         }
@@ -53,7 +53,7 @@ public class ProjectDao {
 
     public int count(String keyword, int categoryId) {
         StringBuilder sql = new StringBuilder(
-                "SELECT COUNT(*) FROM project p WHERE 1=1 ");
+                "SELECT COUNT(*) FROM project p WHERE p.status != 'cancelled' ");
         if (keyword != null && !keyword.trim().isEmpty()) {
             sql.append(" AND (p.title LIKE ? OR p.description LIKE ?)");
         }

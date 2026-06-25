@@ -59,13 +59,13 @@
                                        if ("open".equals(status)) badgeClass = "bg-success";
                                        else if ("in_progress".equals(status)) badgeClass = "bg-primary";
                                        else if ("completed".equals(status)) badgeClass = "bg-info";
-                                       else if ("closed".equals(status)) badgeClass = "bg-dark";
+                                       else if ("cancelled".equals(status)) badgeClass = "bg-dark";
                                     %>
                                     <span class="badge <%= badgeClass %>">
                                         <% if ("open".equals(status)) { %>开放中
                                         <% } else if ("in_progress".equals(status)) { %>进行中
                                         <% } else if ("completed".equals(status)) { %>已完成
-                                        <% } else if ("closed".equals(status)) { %>已关闭
+                                        <% } else if ("cancelled".equals(status)) { %>已取消
                                         <% } else { %><%= status %><% } %>
                                     </span>
                                 </td>

@@ -38,13 +38,13 @@ public class UpdateProjectStatusServlet extends HttpServlet {
         String current = project.getStatus();
         boolean valid = false;
         switch (newStatus) {
-            case "closed":
-                // 任何状态都可以关闭
+            case "cancelled":
+                // open/in_progress 可以取消
                 if ("open".equals(current) || "in_progress".equals(current)) valid = true;
                 break;
             case "open":
-                // 已关闭的可以重新开放
-                if ("closed".equals(current)) valid = true;
+                // 已取消的可重新开放
+                if ("cancelled".equals(current)) valid = true;
                 break;
         }
 

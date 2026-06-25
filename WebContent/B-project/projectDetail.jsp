@@ -146,12 +146,12 @@
                         <% if ("open".equals(project.getStatus()) || "in_progress".equals(project.getStatus())) { %>
                             <form action="${pageContext.request.contextPath}/project/status" method="post" class="d-inline w-100">
                                 <input type="hidden" name="id" value="<%= project.getId() %>">
-                                <input type="hidden" name="status" value="closed">
+                                <input type="hidden" name="status" value="cancelled">
                                 <input type="hidden" name="redirect" value="/project/<%= project.getId() %>">
-                                <button type="submit" class="btn btn-outline-danger w-100 mb-2" onclick="return confirm('确定关闭此项目？关闭后竞标者无法继续投递。')">🔒 关闭项目</button>
+                                <button type="submit" class="btn btn-outline-danger w-100 mb-2" onclick="return confirm('确定取消此项目？取消后竞标者无法继续投递。')">🔒 取消项目</button>
                             </form>
                         <% } %>
-                        <% if ("closed".equals(project.getStatus())) { %>
+                        <% if ("cancelled".equals(project.getStatus())) { %>
                             <form action="${pageContext.request.contextPath}/project/status" method="post" class="d-inline w-100">
                                 <input type="hidden" name="id" value="<%= project.getId() %>">
                                 <input type="hidden" name="status" value="open">
@@ -166,7 +166,7 @@
                         <% if ("open".equals(project.getStatus())) { %>招募中<% } 
                            else if ("in_progress".equals(project.getStatus())) { %>进行中<% } 
                            else if ("completed".equals(project.getStatus())) { %>已完成<% } 
-                           else if ("closed".equals(project.getStatus())) { %>已关闭<% } %>
+                           else if ("cancelled".equals(project.getStatus())) { %>已取消<% } %>
                     </small>
                 </div>
             </div>
