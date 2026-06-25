@@ -233,6 +233,34 @@
         <url-pattern>/order/confirm</url-pattern>
     </servlet-mapping>
 
+    <!-- ==================== F - 交付与消息 ==================== -->
+    <servlet>
+        <servlet-name>DeliveryUploadServlet</servlet-name>
+        <servlet-class>com.freelite.servlet.DeliveryUploadServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DeliveryUploadServlet</servlet-name>
+        <url-pattern>/delivery/upload</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>DeliveryDownloadServlet</servlet-name>
+        <servlet-class>com.freelite.servlet.DeliveryDownloadServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DeliveryDownloadServlet</servlet-name>
+        <url-pattern>/delivery/download</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ProjectMessageServlet</servlet-name>
+        <servlet-class>com.freelite.servlet.ProjectMessageServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ProjectMessageServlet</servlet-name>
+        <url-pattern>/project/message</url-pattern>
+    </servlet-mapping>
+
     <!-- 登录认证过滤器 -->
     <filter>
         <filter-name>AuthFilter</filter-name>

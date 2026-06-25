@@ -90,6 +90,32 @@
                         </form>
                     <% } %>
 
+                    <hr>
+
+                    <%-- 交付物（自由职业者上传 / 雇主查看） --%>
+                    <h5 class="fw-bold mb-3">📦 交付物</h5>
+                    <% if (!isEmployer) { %>
+                        <form action="${pageContext.request.contextPath}/delivery/upload" method="post" enctype="multipart/form-data" class="mb-3">
+                            <input type="hidden" name="orderId" value="<%= order.getId() %>">
+                            <div class="mb-2">
+                                <input type="text" name="title" class="form-control" placeholder="交付标题（如：V1.0 源码）">
+                            </div>
+                            <div class="mb-2">
+                                <textarea name="description" class="form-control" rows="2" placeholder="交付说明..."></textarea>
+                            </div>
+                            <div class="mb-2">
+                                <input type="file" name="file" class="form-control" required>
+                            </div>
+                            <button type="submit" class="btn btn-success w-100" style="border-radius: 8px; padding: 12px; font-weight: 600;">📤 上传交付物</button>
+                        </form>
+                    <% } %>
+                    <% if (order.getProjectId() > 0) { %>
+                        <a href="${pageContext.request.contextPath}/project/message?projectId=<%= order.getProjectId() %>"
+                           class="btn btn-outline-primary w-100 mb-3" style="border-radius: 8px; padding: 12px; font-weight: 600;">
+                            💬 项目沟通
+                        </a>
+                    <% } %>
+
                     <%-- 评价 --%>
                     <% if (canReview) { %>
                         <div class="card p-3" style="background: rgba(102, 126, 234, 0.06);">
