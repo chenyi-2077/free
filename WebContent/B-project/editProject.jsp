@@ -16,7 +16,7 @@
     <link href="https://cdn.bootcdn.net/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <jsp:include page="/WEB-INF/tags/navbar.tag" />
+    <jsp:include page="/WEB-INF/tags/navbar.jsp" />
 
     <div class="container mt-4" style="max-width: 720px;">
         <h2 class="mb-4">编辑项目</h2>

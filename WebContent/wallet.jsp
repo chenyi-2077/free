@@ -38,7 +38,7 @@
     </style>
 </head>
 <body>
-    <jsp:include page="/WEB-INF/tags/navbar.tag" />
+    <jsp:include page="/WEB-INF/tags/navbar.jsp" />
 
     <div class="container mt-4" style="max-width: 720px;">
         <% if (successMsg != null) { %>
