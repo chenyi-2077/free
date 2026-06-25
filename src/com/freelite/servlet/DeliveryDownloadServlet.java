@@ -55,7 +55,13 @@ public class DeliveryDownloadServlet extends HttpServlet {
             return;
         }
         if (!file.exists()) {
-            resp.sendError(404);
+            resp.setContentType("text/html;charset=UTF-8");
+            resp.getWriter().write("<html><body style='font-family:sans-serif;text-align:center;padding:80px 20px;'>"
+                + "<h2 style='color:#999;'>📁 文件不可用</h2>"
+                + "<p style='color:#666;font-size:16px;'>该交付物文件已过期或已被清理。</p>"
+                + "<p style='color:#999;font-size:14px;'>Freelite 自动清理超过30天的交付物文件，但记录保留。</p>"
+                + "<a href='javascript:history.back()' style='color:#667eea;'>← 返回</a>"
+                + "</body></html>");
             return;
         }
 
