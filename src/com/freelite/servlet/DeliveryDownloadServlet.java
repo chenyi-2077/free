@@ -30,14 +30,7 @@ public class DeliveryDownloadServlet extends HttpServlet {
             return;
         }
 
-        // 支持 /file/delivery/{id} 路径格式
         String idStr = req.getParameter("id");
-        if (idStr == null || idStr.isEmpty()) {
-            String pathInfo = req.getPathInfo();
-            if (pathInfo != null && pathInfo.length() > 1) {
-                idStr = pathInfo.replace("/", "").trim();
-            }
-        }
         if (idStr == null || idStr.isEmpty()) {
             resp.sendError(404);
             return;

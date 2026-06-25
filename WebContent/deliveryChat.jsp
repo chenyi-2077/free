@@ -119,7 +119,7 @@
                                         </small>
                                     </div>
                                     <% if (d.getFileName() != null && !d.getFileName().isEmpty()) { %>
-                                        <a href="<%= request.getContextPath() %>/file/delivery/<%= d.getId() %>" class="btn btn-sm btn-outline-primary">
+                                        <a href="<%= request.getContextPath() %>/file/download?id=<%= d.getId() %>" class="btn btn-sm btn-outline-primary">
                                             ⬇ <%= d.getFileName() %>
                                         </a>
                                     <% } %>
