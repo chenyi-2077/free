@@ -71,6 +71,22 @@ public class DeliveryDao {
         return list;
     }
 
+    public Delivery findById(int id) {
+        String sql = "SELECT d.*, u.display_name AS user_name FROM delivery d "
+                + "LEFT JOIN user u ON d.user_id = u.id "
+                + "WHERE d.id=?";
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) return mapDelivery(rs);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     private Delivery mapDelivery(ResultSet rs) throws SQLException {
         Delivery d = new Delivery();
         d.setId(rs.getInt("id"));

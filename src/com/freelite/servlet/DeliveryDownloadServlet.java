@@ -37,9 +37,7 @@ public class DeliveryDownloadServlet extends HttpServlet {
         }
 
         int deliveryId = Integer.parseInt(idStr);
-        Delivery delivery = deliveryDao.findByOrderId(-1).stream()
-                .filter(d -> d.getId() == deliveryId)
-                .findFirst().orElse(null);
+        Delivery delivery = deliveryDao.findById(deliveryId);
 
         if (delivery == null || delivery.getFilePath() == null || delivery.getFilePath().isEmpty()) {
             resp.sendError(404);
