@@ -13,10 +13,12 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLEncoder;
+import javax.servlet.annotation.WebServlet;
 
 /**
  * 下载交付物
  */
+@WebServlet("/file/download")
 public class DeliveryDownloadServlet extends HttpServlet {
 
     private DeliveryDao deliveryDao = new DeliveryDao();

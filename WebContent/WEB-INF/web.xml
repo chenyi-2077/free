@@ -235,15 +235,6 @@
 
     <!-- ==================== F - 交付与消息 ==================== -->
     <servlet>
-        <servlet-name>DeliveryDownloadServlet</servlet-name>
-        <servlet-class>com.freelite.servlet.DeliveryDownloadServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>DeliveryDownloadServlet</servlet-name>
-        <url-pattern>/file/download</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
         <servlet-name>DeliveryChatServlet</servlet-name>
         <servlet-class>com.freelite.servlet.DeliveryChatServlet</servlet-class>
     </servlet>
