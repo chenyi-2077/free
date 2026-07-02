@@ -7,14 +7,7 @@
     <title>登录 - Freelite</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/freelite.css">
-    <style>
-        body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-        }
-        .card { box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/auth-light.css">
     </style>
 </head>
 <body>
@@ -48,7 +41,7 @@
                     </form>
 
                     <p class="text-muted mt-3">
-                        还没有账号？<a href="${pageContext.request.contextPath}/register" style="color: #764ba2; font-weight: 600;">立即注册 →</a>
+                        还没有账号？<a href="${pageContext.request.contextPath}/register" style="color: #00C897; font-weight: 600;">立即注册 →</a>
                     </p>
                 </div>
             </div>

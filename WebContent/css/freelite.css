@@ -28,6 +28,11 @@ body {
     color: var(--okx-text-primary);
 }
 
+/* 白卡文字色 */
+.card, .card-body, .card-header, .card-footer {
+    color: #111827;
+}
+
 /* 导航栏 — OKX 顶部深色条 */
 .navbar-custom, .navbar {
     background: var(--okx-bg-secondary) !important;
@@ -53,16 +58,16 @@ body {
     color: var(--okx-text-primary) !important;
 }
 
-/* 卡片 — OKX 深色卡片 */
+/* 卡片 — 白色卡片 */
 .card {
-    background: var(--okx-bg-card) !important;
-    border: 1px solid var(--okx-border) !important;
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
     border-radius: var(--okx-radius);
-    box-shadow: none;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
     transition: all 0.15s;
 }
 .card:hover {
-    border-color: #3A424D;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
 
 /* 主按钮 — OKX 青绿按钮 */
@@ -277,8 +282,8 @@ a:hover {
 
 /* 卡片头部 */
 .card-header {
-    background: var(--okx-bg-card);
-    border-bottom: 1px solid var(--okx-border);
+    background: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
 }
 
 /* 选中高亮 */

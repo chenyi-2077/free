@@ -7,27 +7,7 @@
     <title>注册 - Freelite</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/freelite.css">
-    <style>
-        body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-        }
-        .role-card {
-            cursor: pointer;
-            border: 2px solid #e0e0e0;
-            border-radius: 12px;
-            padding: 1rem;
-            text-align: center;
-            transition: all 0.2s;
-        }
-        .role-card:hover { border-color: #667eea; }
-        .role-card.selected {
-            border-color: #667eea;
-            background: rgba(102, 126, 234, 0.08);
-        }
-    </style>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/auth-light.css">
 </head>
 <body>
     <div class="container">
@@ -88,7 +68,7 @@
                     </form>
 
                     <p class="text-muted text-center mt-3">
-                        已有账号？<a href="${pageContext.request.contextPath}/login" style="color: #764ba2; font-weight: 600;">立即登录 →</a>
+                        已有账号？<a href="${pageContext.request.contextPath}/login" style="color: #00C897; font-weight: 600;">立即登录 →</a>
                     </p>
                 </div>
             </div>
