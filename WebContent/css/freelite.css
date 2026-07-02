@@ -2,135 +2,119 @@
 /* 深色模式 + 青绿强调色，参考 OKX 2025 Dark Theme */
 
 :root {
-    --okx-bg-primary: #0B0E11;
-    --okx-bg-secondary: #1E2329;
-    --okx-bg-card: #151A20;
-    --okx-bg-hover: #242B33;
-    --okx-accent: #00C897;
-    --okx-accent-hover: #00DBA3;
-    --okx-accent-dim: rgba(0, 200, 151, 0.12);
-    --okx-red: #F6465D;
-    --okx-green: #00C897;
-    --okx-yellow: #F0B90B;
-    --okx-text-primary: #EAECEF;
-    --okx-text-secondary: #848E9C;
-    --okx-text-muted: #5E6673;
-    --okx-border: #2B2F36;
-    --okx-divider: #2B2F36;
-    --okx-radius: 12px;
-    --okx-radius-sm: 8px;
+    --bg-body: #0B0E11;
+    --bg-card: #f3f4f6;
+    --bg-card-hover: #e5e7eb;
+    --bg-nav: #1E2329;
+    --bg-nav-hover: #242B33;
+    --accent: #00C897;
+    --accent-hover: #00DBA3;
+    --accent-dim: rgba(0, 200, 151, 0.12);
+    --red: #F6465D;
+    --green: #00C897;
+    --yellow: #F0B90B;
+    --text-primary: #EAECEF;
+    --text-secondary: #848E9C;
+    --text-muted: #5E6673;
+    --border: #2B2F36;
+    --radius: 12px;
+    --radius-sm: 8px;
 }
 
 /* 布局 */
 body {
-    background: var(--okx-bg-primary);
+    background: var(--bg-body);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", "Helvetica Neue", sans-serif;
-    color: var(--okx-text-primary);
+    color: var(--text-primary);
 }
 
-/* 白卡文字色 */
+/* 卡片（对话框）浅灰色 + 深色字 */
 .card, .card-body, .card-header, .card-footer {
+    background: var(--bg-card) !important;
+    border: 1px solid #d1d5db !important;
+    border-radius: var(--radius);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
     color: #111827;
 }
 
-/* 导航栏 — OKX 顶部深色条 */
+/* 导航栏 — 深色条 */
 .navbar-custom, .navbar {
-    background: var(--okx-bg-secondary) !important;
-    box-shadow: 0 1px 0 var(--okx-divider);
-    border-bottom: 1px solid var(--okx-border) !important;
+    background: var(--bg-nav) !important;
+    border-bottom: 1px solid var(--border) !important;
 }
 .navbar-custom .navbar-brand, .navbar .navbar-brand {
     font-weight: 700 !important;
-    color: var(--okx-accent) !important;
+    color: var(--accent) !important;
     font-size: 1.35rem;
     letter-spacing: -0.3px;
 }
 .navbar-custom .nav-link, .navbar .nav-link {
-    color: var(--okx-text-secondary) !important;
+    color: var(--text-secondary) !important;
     font-weight: 500;
     padding: 8px 16px;
-    border-radius: var(--okx-radius-sm);
-    transition: all 0.15s;
+    border-radius: var(--radius-sm);
     font-size: 0.9rem;
 }
 .navbar-custom .nav-link:hover, .navbar .nav-link:hover {
-    background: var(--okx-bg-hover);
-    color: var(--okx-text-primary) !important;
+    background: var(--bg-nav-hover);
+    color: var(--text-primary) !important;
 }
 
-/* 卡片 — 白色卡片 */
-.card {
-    background: #ffffff !important;
-    border: 1px solid #e5e7eb !important;
-    border-radius: var(--okx-radius);
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
-    transition: all 0.15s;
-}
-.card:hover {
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-}
-
-/* 主按钮 — OKX 青绿按钮 */
+/* 主按钮 */
 .btn-gradient, .btn-primary {
-    background: var(--okx-accent) !important;
+    background: var(--accent) !important;
     border: none !important;
-    border-radius: var(--okx-radius-sm) !important;
+    border-radius: var(--radius-sm) !important;
     padding: 10px 24px;
     font-weight: 600;
     color: #0B0E11 !important;
-    transition: all 0.15s;
 }
 .btn-gradient:hover, .btn-primary:hover {
-    background: var(--okx-accent-hover) !important;
-    box-shadow: 0 4px 20px rgba(0, 200, 151, 0.25);
+    background: var(--accent-hover) !important;
     color: #0B0E11 !important;
-}
-.btn-gradient:active, .btn-primary:active {
-    transform: scale(0.98);
 }
 
 /* 次要按钮 */
 .btn-outline-light {
-    border-color: var(--okx-border) !important;
-    color: var(--okx-text-primary) !important;
-    border-radius: var(--okx-radius-sm);
+    border-color: var(--border) !important;
+    color: var(--text-primary) !important;
+    border-radius: var(--radius-sm);
 }
 .btn-outline-light:hover {
-    background: var(--okx-bg-hover) !important;
-    border-color: #3A424D !important;
+    background: var(--bg-nav-hover) !important;
 }
 
 .btn-secondary {
-    background: var(--okx-bg-secondary) !important;
-    border: 1px solid var(--okx-border) !important;
-    color: var(--okx-text-primary) !important;
-    border-radius: var(--okx-radius-sm);
+    background: var(--bg-secondary) !important;
+    border: 1px solid var(--border) !important;
+    color: var(--text-primary) !important;
+    border-radius: var(--radius-sm);
 }
 .btn-secondary:hover {
-    background: var(--okx-bg-hover) !important;
+    background: var(--bg-hover) !important;
     border-color: #3A424D !important;
 }
 
 /* 表单控件 — 深色输入框 */
 .form-control, .form-select {
-    background: var(--okx-bg-secondary) !important;
-    border: 1px solid var(--okx-border) !important;
-    border-radius: var(--okx-radius-sm);
+    background: var(--bg-secondary) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: var(--radius-sm);
     padding: 12px 14px;
-    color: var(--okx-text-primary) !important;
+    color: var(--text-primary) !important;
     transition: all 0.15s;
     font-size: 0.9rem;
 }
 .form-control:focus, .form-select:focus {
-    border-color: var(--okx-accent) !important;
+    border-color: var(--accent) !important;
     box-shadow: 0 0 0 2px rgba(0, 200, 151, 0.15) !important;
-    background: var(--okx-bg-secondary) !important;
+    background: var(--bg-secondary) !important;
 }
 .form-control::placeholder {
-    color: var(--okx-text-muted);
+    color: var(--text-muted);
 }
 .form-label {
-    color: var(--okx-text-secondary);
+    color: var(--text-secondary);
     font-size: 0.85rem;
     font-weight: 500;
     margin-bottom: 6px;
@@ -138,8 +122,8 @@ body {
 
 /* 标签 / Badge — OKX 风格 */
 .skill-badge, .badge {
-    background: var(--okx-accent-dim) !important;
-    color: var(--okx-accent) !important;
+    background: var(--accent-dim) !important;
+    color: var(--accent) !important;
     border-radius: 4px;
     padding: 3px 10px;
     font-size: 0.8rem;
@@ -147,39 +131,39 @@ body {
     border: none;
 }
 .badge.bg-primary {
-    background: var(--okx-accent-dim) !important;
-    color: var(--okx-accent) !important;
+    background: var(--accent-dim) !important;
+    color: var(--accent) !important;
 }
 .badge.bg-success {
     background: rgba(0, 200, 151, 0.2) !important;
-    color: var(--okx-accent) !important;
+    color: var(--accent) !important;
 }
 .badge.bg-warning {
     background: rgba(240, 185, 11, 0.2) !important;
-    color: var(--okx-yellow) !important;
+    color: var(--yellow) !important;
 }
 .badge.bg-secondary {
     background: rgba(94, 102, 115, 0.3) !important;
-    color: var(--okx-text-secondary) !important;
+    color: var(--text-secondary) !important;
 }
 .badge.bg-danger {
     background: rgba(246, 70, 93, 0.2) !important;
-    color: var(--okx-red) !important;
+    color: var(--red) !important;
 }
 
 /* 星星 */
-.star { color: var(--okx-yellow); }
+.star { color: var(--yellow); }
 
 /* 价格标签 */
 .price-tag {
     font-size: 1rem;
     font-weight: 700;
-    color: var(--okx-accent);
+    color: var(--accent);
 }
 
 /* Logo 纯色（OKX 不用渐变） */
 .logo-gradient {
-    color: var(--okx-accent);
+    color: var(--accent);
     font-weight: 700;
     background: none;
     -webkit-background-clip: unset;
@@ -188,97 +172,97 @@ body {
 
 /* 表格 — 深色表格 */
 .table {
-    color: var(--okx-text-primary);
-    border-color: var(--okx-border);
+    color: var(--text-primary);
+    border-color: var(--border);
 }
 .table thead th, .table-light th {
-    background: var(--okx-bg-secondary) !important;
-    border-bottom: 1px solid var(--okx-border);
-    color: var(--okx-text-secondary);
+    background: var(--bg-secondary) !important;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-secondary);
     font-weight: 500;
     font-size: 0.85rem;
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
 .table td, .table th {
-    border-color: var(--okx-border);
+    border-color: var(--border);
     vertical-align: middle;
 }
 .table-hover tbody tr:hover {
-    background: var(--okx-bg-hover);
+    background: var(--bg-hover);
 }
 
 /* 分页 */
 .page-link {
-    background: var(--okx-bg-secondary) !important;
-    border-color: var(--okx-border) !important;
-    color: var(--okx-text-secondary) !important;
-    border-radius: var(--okx-radius-sm);
+    background: var(--bg-secondary) !important;
+    border-color: var(--border) !important;
+    color: var(--text-secondary) !important;
+    border-radius: var(--radius-sm);
     margin: 0 2px;
     transition: all 0.15s;
 }
 .page-link:hover {
-    background: var(--okx-bg-hover) !important;
-    color: var(--okx-text-primary) !important;
+    background: var(--bg-hover) !important;
+    color: var(--text-primary) !important;
 }
 .page-item.active .page-link {
-    background: var(--okx-accent) !important;
-    border-color: var(--okx-accent) !important;
+    background: var(--accent) !important;
+    border-color: var(--accent) !important;
     color: #0B0E11 !important;
 }
 .page-item.disabled .page-link {
-    background: var(--okx-bg-primary) !important;
-    border-color: var(--okx-border) !important;
-    color: var(--okx-text-muted) !important;
+    background: var(--bg-primary) !important;
+    border-color: var(--border) !important;
+    color: var(--text-muted) !important;
 }
 
 /* 警告/提示条 — 深色适配 */
 .alert {
-    border-radius: var(--okx-radius-sm);
+    border-radius: var(--radius-sm);
     border: none;
     font-size: 0.9rem;
 }
 .alert-danger {
     background: rgba(246, 70, 93, 0.12);
-    color: var(--okx-red);
+    color: var(--red);
 }
 .alert-success {
     background: rgba(0, 200, 151, 0.12);
-    color: var(--okx-accent);
+    color: var(--accent);
 }
 .alert-info {
     background: rgba(240, 185, 11, 0.12);
-    color: var(--okx-yellow);
+    color: var(--yellow);
 }
 
 /* 链接 */
 a {
-    color: var(--okx-accent);
+    color: var(--accent);
     transition: all 0.15s;
 }
 a:hover {
-    color: var(--okx-accent-hover);
+    color: var(--accent-hover);
 }
 
 /* 模态框 — 深色 */
 .modal-content {
-    background: var(--okx-bg-card);
-    border: 1px solid var(--okx-border);
-    border-radius: var(--okx-radius);
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
 }
 .modal-header {
-    border-bottom: 1px solid var(--okx-border);
+    border-bottom: 1px solid var(--border);
 }
 .modal-footer {
-    border-top: 1px solid var(--okx-border);
+    border-top: 1px solid var(--border);
 }
 
 /* 文本颜色 */
-.text-muted { color: var(--okx-text-secondary) !important; }
-.text-primary { color: var(--okx-accent) !important; }
-.text-success { color: var(--okx-accent) !important; }
-.text-danger { color: var(--okx-red) !important; }
-.text-warning { color: var(--okx-yellow) !important; }
+.text-muted { color: var(--text-secondary) !important; }
+.text-primary { color: var(--accent) !important; }
+.text-success { color: var(--accent) !important; }
+.text-danger { color: var(--red) !important; }
+.text-warning { color: var(--yellow) !important; }
 
 /* 卡片头部 */
 .card-header {
@@ -298,10 +282,10 @@ a:hover {
     height: 6px;
 }
 ::-webkit-scrollbar-track {
-    background: var(--okx-bg-primary);
+    background: var(--bg-primary);
 }
 ::-webkit-scrollbar-thumb {
-    background: var(--okx-border);
+    background: var(--border);
     border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
@@ -310,25 +294,25 @@ a:hover {
 
 /* 分割线 */
 hr {
-    border-color: var(--okx-divider);
+    border-color: var(--divider);
     opacity: 1;
 }
 
 /* Dropdown 菜单 */
 .dropdown-menu {
-    background: var(--okx-bg-card);
-    border: 1px solid var(--okx-border);
-    border-radius: var(--okx-radius-sm);
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
 }
 .dropdown-item {
-    color: var(--okx-text-primary);
+    color: var(--text-primary);
 }
 .dropdown-item:hover {
-    background: var(--okx-bg-hover);
-    color: var(--okx-text-primary);
+    background: var(--bg-hover);
+    color: var(--text-primary);
 }
 
 /* 头部 logo 导航中间文字 */
 .navbar .text-muted, .navbar-custom .text-muted {
-    color: var(--okx-text-secondary) !important;
+    color: var(--text-secondary) !important;
 }

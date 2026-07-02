@@ -14,10 +14,10 @@
     <title>项目沟通 - Freelite</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body { background: #f5f6fa; }
+        
         .chat-container { max-width: 720px; margin: 0 auto; }
         .msg-bubble { border-radius: 16px; padding: 12px 16px; margin-bottom: 12px; max-width: 80%; }
-        .msg-self { background: #667eea; color: white; margin-left: auto; border-bottom-right-radius: 4px; }
+        .msg-self { background: var(--accent); color: white; margin-left: auto; border-bottom-right-radius: 4px; }
         .msg-other { background: white; border: 1px solid #e0e0e0; border-bottom-left-radius: 4px; }
         .msg-time { font-size: 0.7rem; opacity: 0.7; margin-top: 4px; }
         .msg-sender { font-size: 0.8rem; font-weight: 600; margin-bottom: 4px; }

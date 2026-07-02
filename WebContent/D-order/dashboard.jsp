@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
     <style>
-        body { background: #f5f6fa; }
+        
         .navbar { background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
         .stat-card {
             border: none;
@@ -28,16 +28,16 @@
         .stat-card .number { font-size: 2.5rem; font-weight: 700; }
         .stat-card .label { opacity: 0.9; }
         .card-chart { border: none; border-radius: 16px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); padding: 1.5rem; background: white; }
-        .bg-purple { background: linear-gradient(135deg, #667eea, #764ba2); }
+        .bg-purple { background: var(--accent); }
         .bg-green { background: linear-gradient(135deg, #11998e, #38ef7d); }
-        .bg-orange { background: linear-gradient(135deg, #f093fb, #f5576c); }
-        .bg-blue { background: linear-gradient(135deg, #4facfe, #00f2fe); }
+        .bg-orange { background: linear-gradient(135deg, #F6465D, #FF6B81); }
+        .bg-blue { background: linear-gradient(135deg, #3498db, #67b8f7); }
     </style>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg">
         <div class="container">
-            <a class="navbar-brand fw-bold" href="<%= request.getContextPath() %>/projects" style="color: #667eea;">Freelite</a>
+            <a class="navbar-brand fw-bold" href="<%= request.getContextPath() %>/projects" style="color: var(--accent);">Freelite</a>
             <div class="d-flex">
                 <a href="<%= request.getContextPath() %>/projects" class="text-decoration-none text-muted me-3">项目</a>
                 <a href="<%= request.getContextPath() %>/profile" class="text-decoration-none text-muted"><%= loginUser.getDisplayName() %></a>
@@ -140,13 +140,13 @@
                     borderRadius: [8, 8, 0, 0],
                     color: [
                         new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                            { offset: 0, color: '#667eea' }, { offset: 1, color: '#764ba2' }
+                            { offset: 0, color: '#00C897' }, { offset: 1, color: '#00DBA3' }
                         ]),
                         new echarts.graphic.LinearGradient(0, 0, 0, 1, [
                             { offset: 0, color: '#11998e' }, { offset: 1, color: '#38ef7d' }
                         ]),
                         new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                            { offset: 0, color: '#f093fb' }, { offset: 1, color: '#f5576c' }
+                            { offset: 0, color: '#F6465D' }, { offset: 1, color: '#FF6B81' }
                         ])
                     ]
                 }

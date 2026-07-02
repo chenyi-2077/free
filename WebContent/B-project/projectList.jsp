@@ -33,8 +33,6 @@
             box-shadow: 0 8px 25px rgba(0,0,0,0.1);
         }
         a.card-project-link { text-decoration: none; color: inherit; display: block; }
-        .page-link { color: #667eea; }
-        .page-item.active .page-link { background: #667eea; border-color: #667eea; }
     </style>
 </head>
 <body>

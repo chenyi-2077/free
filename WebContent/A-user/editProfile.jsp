@@ -12,11 +12,11 @@
     <title>编辑资料 - Freelite</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body { background: #f5f6fa; }
+        
         .navbar { background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
         .card { border: none; border-radius: 16px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
         .btn-primary {
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: var(--accent);
             border: none; border-radius: 8px; padding: 12px; font-weight: 600;
         }
         .form-control { border-radius: 8px; padding: 12px; }
@@ -26,7 +26,7 @@
 <body>
     <nav class="navbar">
         <div class="container">
-            <a class="navbar-brand fw-bold" href="<%= request.getContextPath() %>/projects" style="color: #667eea;">Freelite</a>
+            <a class="navbar-brand fw-bold" href="<%= request.getContextPath() %>/projects" style="color: var(--accent);">Freelite</a>
             <a href="<%= request.getContextPath() %>/profile" class="text-decoration-none text-muted">← 返回</a>
         </div>
     </nav>

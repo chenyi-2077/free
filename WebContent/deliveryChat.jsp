@@ -24,16 +24,16 @@
     <title>交付与沟通 - <%= projectTitle %> - Freelite</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body { background: #f5f6fa; }
+        
         .card { border: none; border-radius: 16px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
         .msg-bubble { border-radius: 16px; padding: 12px 16px; margin-bottom: 10px; max-width: 80%; }
-        .msg-self { background: #667eea; color: white; margin-left: auto; border-bottom-right-radius: 4px; }
+        .msg-self { background: var(--accent); color: white; margin-left: auto; border-bottom-right-radius: 4px; }
         .msg-other { background: white; border: 1px solid #e0e0e0; border-bottom-left-radius: 4px; }
         .msg-time { font-size: 0.7rem; opacity: 0.7; margin-top: 4px; }
         .msg-sender { font-size: 0.8rem; font-weight: 600; margin-bottom: 4px; }
         .delivery-file { background: #f8f9fa; border-radius: 8px; padding: 10px; }
         .tab-btn { border-radius: 8px; font-weight: 600; }
-        .tab-btn.active { background: #667eea; color: white; border-color: #667eea; }
+        .tab-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
     </style>
 </head>
 <body>

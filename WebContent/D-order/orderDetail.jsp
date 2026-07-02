@@ -102,7 +102,7 @@
 
                     <%-- 评价 --%>
                     <% if (canReview) { %>
-                        <div class="card p-3" style="background: rgba(102, 126, 234, 0.06);">
+                        <div class="card p-3" style="">
                             <h5 class="fw-bold mb-3">⭐ 评价</h5>
                             <form action="${pageContext.request.contextPath}/review" method="post">
                                 <input type="hidden" name="orderId" value="<%= order.getId() %>">

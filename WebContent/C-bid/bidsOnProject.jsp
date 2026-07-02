@@ -14,7 +14,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
-        body { background: #f5f6fa; }
+        
         .navbar { background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
         .card { border: none; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
     </style>
@@ -22,7 +22,7 @@
 <body>
     <nav class="navbar">
         <div class="container">
-            <a class="navbar-brand fw-bold" href="<%= request.getContextPath() %>/projects" style="color: #667eea;">Freelite</a>
+            <a class="navbar-brand fw-bold" href="<%= request.getContextPath() %>/projects" style="color: var(--accent);">Freelite</a>
             <a href="<%= request.getContextPath() %>/project/<%= projectId %>" class="text-decoration-none text-muted">← 返回项目</a>
         </div>
     </nav>
@@ -45,7 +45,7 @@
                             <p class="text-muted small mt-1 mb-0"><%= bid.getProposal() != null ? bid.getProposal() : "无方案描述" %></p>
                         </div>
                         <div class="text-end">
-                            <span class="fw-bold" style="color: #28a745;">¥<%= String.format("%.0f", bid.getAmount()) %></span>
+                            <span class="fw-bold" style="color: var(--accent);">¥<%= String.format("%.0f", bid.getAmount()) %></span>
                             <small class="text-muted ms-1"><%= bid.getDays() %> 天</small>
                             <div class="mt-1">
                                 <% if ("pending".equals(bid.getStatus())) { %>

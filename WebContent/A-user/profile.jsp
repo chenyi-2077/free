@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/freelite.css">
     <style>
         .profile-header {
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: var(--accent);
             color: white;
             padding: 3rem 0;
             border-radius: 0 0 24px 24px;
@@ -27,7 +27,7 @@
             width: 96px; height: 96px;
             background: white; border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
-            font-size: 2.5rem; color: #667eea;
+            font-size: 2.5rem; color: var(--accent);
             margin: 0 auto; box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
     </style>
@@ -101,10 +101,10 @@
     </div>
     <style>
         .btn-outline-primary {
-            border: 1.5px solid #667eea; color: #667eea;
+            border: 1.5px solid var(--accent); color: var(--accent);
             border-radius: 8px; padding: 10px; font-weight: 600;
         }
-        .btn-outline-primary:hover { background: #667eea; color: white; }
+        .btn-outline-primary:hover { background: var(--accent); color: white; }
     </style>
 </body>
 </html>

@@ -47,11 +47,11 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <div style="flex: 1;">
                         <h6 class="fw-bold mb-1">
-                            <a href="${pageContext.request.contextPath}/project/<%= bid.getProjectId() %>" class="text-decoration-none" style="color: #333;">
+                            <a href="${pageContext.request.contextPath}/project/<%= bid.getProjectId() %>" class="text-decoration-none" style="color: #111827;">
                                 项目 #<%= bid.getProjectId() %>
                             </a>
                         </h6>
-                        <span class="fw-bold" style="color: #28a745;">¥<%= String.format("%.0f", bid.getAmount()) %></span>
+                        <span class="fw-bold" style="color: var(--accent);">¥<%= String.format("%.0f", bid.getAmount()) %></span>
                         <span class="text-muted ms-2"><%= bid.getDays() %> 天</span>
                         <p class="text-muted small mt-1 mb-0">
                             <%= bid.getProposal() != null && bid.getProposal().length() > 80 ? bid.getProposal().substring(0, 80) + "..." : bid.getProposal() %>
@@ -65,7 +65,7 @@
                         <% } else { %>
                             <span class="badge bg-secondary">未选中</span>
                         <% } %>
-                        <div class="mt-1" style="font-size: 0.8rem; color: #999;">
+                        <div class="mt-1" style="font-size: 0.8rem; color: var(--text-muted);">
                             <%= bid.getCreatedAt() != null ? bid.getCreatedAt().toLocalDate().toString() : "" %>
                         </div>
                     </div>

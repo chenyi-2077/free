@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/freelite.css">
     <style>
         .bid-card {
-            border-left: 4px solid #667eea;
+            border-left: 4px solid var(--accent);
             border-radius: 0 12px 12px 0;
             transition: all 0.2s;
         }
@@ -96,7 +96,7 @@
                                         </p>
                                     </div>
                                     <div class="text-end ms-3" style="min-width: 120px;">
-                                        <div class="fw-bold" style="color: #28a745;">¥<%= String.format("%.0f", bid.getAmount()) %></div>
+                                        <div class="fw-bold" style="color: var(--accent);">¥<%= String.format("%.0f", bid.getAmount()) %></div>
                                         <small class="text-muted"><%= bid.getDays() %> 天</small>
                                         <% if ("pending".equals(bid.getStatus()) && isOwner && "open".equals(project.getStatus())) { %>
                                             <form action="${pageContext.request.contextPath}/bid/award" method="post" class="mt-2">
@@ -175,8 +175,8 @@
     <style>
         .btn-outline-secondary { border-radius: 8px; padding: 10px; font-weight: 600; }
         .btn-outline-secondary:hover { background: #f0f0f0; }
-        .btn-outline-success { border-radius: 8px; padding: 10px; font-weight: 600; border: 1.5px solid #28a745; color: #28a745; }
-        .btn-outline-success:hover { background: #28a745; color: white; }
+        .btn-outline-success { border-radius: 8px; padding: 10px; font-weight: 600; border: 1.5px solid var(--accent); color: var(--accent); }
+        .btn-outline-success:hover { background: var(--accent); color: white; }
     </style>
 </body>
 </html>
