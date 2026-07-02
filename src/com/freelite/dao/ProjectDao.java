@@ -207,6 +207,27 @@ public class ProjectDao {
         }
     }
 
+    public List<Project> findBiddedProjects(int freelancerId) {
+        List<Project> list = new ArrayList<>();
+        String sql = "SELECT p.*, c.name AS category_name, u.display_name AS employer_name "
+                + "FROM project p "
+                + "JOIN bid b ON b.project_id = p.id "
+                + "LEFT JOIN category c ON p.category_id = c.id "
+                + "LEFT JOIN user u ON p.employer_id = u.id "
+                + "WHERE b.freelancer_id=? "
+                + "ORDER BY b.created_at DESC";
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, freelancerId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) list.add(mapProject(rs));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
     private Project mapProject(ResultSet rs) throws SQLException {
         Project p = new Project();
         p.setId(rs.getInt("id"));

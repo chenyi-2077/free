@@ -22,7 +22,11 @@ public class MyProjectsServlet extends HttpServlet {
             return;
         }
 
-        req.setAttribute("projects", projectDao.findByEmployerId(loginUser.getId()));
+        // 我开发的项目（作为雇主发布的）
+        req.setAttribute("myProjects", projectDao.findByEmployerId(loginUser.getId()));
+        // 我竞标的项目（作为自由职业者投过竞标的）
+        req.setAttribute("biddedProjects", projectDao.findBiddedProjects(loginUser.getId()));
+
         req.getRequestDispatcher("/B-project/myProjects.jsp").forward(req, resp);
     }
 }
