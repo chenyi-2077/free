@@ -23,9 +23,18 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/freelite.css">
     <style>
-        .card-project { transition: all 0.2s; cursor: pointer; height: 100%; }
-        .card-project:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,0.3); }
+        .card-project {
+            transition: all 0.2s;
+            cursor: pointer;
+            height: 100%;
+        }
+        .card-project:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
         a.card-project-link { text-decoration: none; color: inherit; display: block; }
+        .page-link { color: #667eea; }
+        .page-item.active .page-link { background: #667eea; border-color: #667eea; }
     </style>
 </head>
 <body>
@@ -36,8 +45,12 @@
                 <span class="text-muted" style="font-size: 0.9rem;">
                     <%= loginUser.getDisplayName() != null ? loginUser.getDisplayName() : loginUser.getEmail() %>
                 </span>
+                <a href="${pageContext.request.contextPath}/my/projects" class="nav-link">我的项目</a>
+                <a href="${pageContext.request.contextPath}/profile" class="nav-link">个人主页</a>
                 <a href="${pageContext.request.contextPath}/orders" class="nav-link">订单</a>
-                <a href="${pageContext.request.contextPath}/projects" class="nav-link">项目市场</a>
+                <a href="${pageContext.request.contextPath}/wallet" class="nav-link">钱包</a>
+                <a href="${pageContext.request.contextPath}/dashboard" class="nav-link">看板</a>
+                <a href="${pageContext.request.contextPath}/logout" class="nav-link">退出</a>
             </div>
         </div>
     </nav>
@@ -49,7 +62,7 @@
         <% if (errorMsg != null) { %>
             <div class="alert alert-danger alert-dismissible fade show"><%= errorMsg %><button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>
         <% } %>
-
+        <%-- 头部 --%>
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h4 class="fw-bold mb-0">📋 项目市场</h4>
             <a href="${pageContext.request.contextPath}/project/post" class="btn btn-gradient">
@@ -92,11 +105,11 @@
             <% } else { %>
                 <% for (Project p : projects) { %>
                     <div class="col-md-6 mb-3">
-                        <a href="${pageContext.request.contextPath}/bid/place?projectId=<%= p.getId() %>" class="card-project-link">
+                        <a href="${pageContext.request.contextPath}/project/<%= p.getId() %>" class="card-project-link">
                             <div class="card card-project p-3">
                                 <div class="d-flex justify-content-between">
                                     <div style="flex: 1;">
-                                        <h5 class="fw-bold mb-1" style="color: var(--okx-text-primary);"><%= p.getTitle() %></h5>
+                                        <h5 class="fw-bold mb-1"><%= p.getTitle() %></h5>
                                         <div class="mb-2">
                                             <span class="skill-badge"><%= p.getCategoryName() %></span>
                                             <span class="text-muted ms-2" style="font-size: 0.85rem;"><%= p.getEmployerName() %></span>
@@ -108,7 +121,7 @@
                                     </div>
                                     <div class="text-end ms-3" style="min-width: 100px;">
                                         <div class="price-tag">¥<%= String.format("%.0f", p.getBudget()) %></div>
-                                        <div style="font-size: 0.8rem; color: var(--okx-text-muted);">
+                                        <div style="font-size: 0.8rem; color: #999;">
                                             <% java.time.format.DateTimeFormatter dtf = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd"); %><%= p.getCreatedAt() != null ? p.getCreatedAt().format(dtf) : "" %>
                                         </div>
                                     </div>

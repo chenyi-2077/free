@@ -19,7 +19,7 @@
     <nav class="navbar navbar-custom">
         <div class="container">
             <a class="navbar-brand" href="${pageContext.request.contextPath}/projects">Freelite</a>
-            <a href="${pageContext.request.contextPath}/projects" class="nav-link">← 返回项目列表</a>
+            <a href="${pageContext.request.contextPath}/project/<%= project.getId() %>" class="nav-link">← 返回</a>
         </div>
     </nav>
 

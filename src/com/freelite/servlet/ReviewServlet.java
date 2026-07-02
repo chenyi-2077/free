@@ -17,17 +17,6 @@ public class ReviewServlet extends HttpServlet {
     private UserDao userDao = new UserDao();
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
-        User loginUser = (User) req.getSession().getAttribute("user");
-        if (loginUser == null) {
-            resp.sendRedirect(req.getContextPath() + "/login");
-            return;
-        }
-        req.getRequestDispatcher("/D-order/review.jsp").forward(req, resp);
-    }
-
-    @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         User loginUser = (User) req.getSession().getAttribute("user");

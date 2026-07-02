@@ -31,24 +31,20 @@ public class LoginServlet extends HttpServlet {
         String email = req.getParameter("email");
         String password = req.getParameter("password");
 
-        try {
-            User user = userDao.findByEmail(email);
-            if (user == null || !user.getPassword().equals(password)) {
-                req.setAttribute("error", "邮箱或密码错误");
-                req.getRequestDispatcher("/A-user/login.jsp").forward(req, resp);
-                return;
-            }
-
-            req.getSession().setAttribute("user", user);
-            String redirect = req.getParameter("redirect");
-            if (redirect != null && !redirect.isEmpty()) {
-                resp.sendRedirect(req.getContextPath() + redirect);
-            } else {
-                resp.sendRedirect(req.getContextPath() + "/projects");
-            }
-        } catch (RuntimeException e) {
-            req.setAttribute("error", "⚠️ " + e.getMessage());
+        User user = userDao.findByEmail(email);
+        if (user == null || !user.getPassword().equals(password)) {
+            req.setAttribute("error", "邮箱或密码错误");
             req.getRequestDispatcher("/A-user/login.jsp").forward(req, resp);
+            return;
+        }
+
+        req.getSession().setAttribute("user", user);
+        // 如果有 redirect 参数则跳转
+        String redirect = req.getParameter("redirect");
+        if (redirect != null && !redirect.isEmpty()) {
+            resp.sendRedirect(req.getContextPath() + redirect);
+        } else {
+            resp.sendRedirect(req.getContextPath() + "/projects");
         }
     }
 }

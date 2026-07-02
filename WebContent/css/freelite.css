@@ -1,291 +1,94 @@
-/* ========== Freelite v2 — OKX 风格 ========== */
-/* 深色模式 + 青绿强调色，参考 OKX 2025 Dark Theme */
-
-:root {
-    --okx-bg-primary: #0B0E11;
-    --okx-bg-secondary: #1E2329;
-    --okx-bg-card: #151A20;
-    --okx-bg-hover: #242B33;
-    --okx-accent: #00C897;
-    --okx-accent-hover: #00DBA3;
-    --okx-accent-dim: rgba(0, 200, 151, 0.12);
-    --okx-red: #F6465D;
-    --okx-green: #00C897;
-    --okx-yellow: #F0B90B;
-    --okx-text-primary: #EAECEF;
-    --okx-text-secondary: #848E9C;
-    --okx-text-muted: #5E6673;
-    --okx-border: #2B2F36;
-    --okx-divider: #2B2F36;
-    --okx-radius: 12px;
-    --okx-radius-sm: 8px;
-}
+/* ========== Freelite 全局样式 ========== */
 
 /* 布局 */
 body {
-    background: var(--okx-bg-primary);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", "Helvetica Neue", sans-serif;
-    color: var(--okx-text-primary);
+    background: #f5f6fa;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
 }
 
-/* 导航栏 — OKX 顶部深色条 */
-.navbar-custom, .navbar {
-    background: var(--okx-bg-secondary) !important;
-    box-shadow: 0 1px 0 var(--okx-divider);
-    border-bottom: 1px solid var(--okx-border) !important;
+/* 导航栏 */
+.navbar-custom {
+    background: white;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
 }
-.navbar-custom .navbar-brand, .navbar .navbar-brand {
-    font-weight: 700 !important;
-    color: var(--okx-accent) !important;
-    font-size: 1.35rem;
-    letter-spacing: -0.3px;
+.navbar-custom .navbar-brand {
+    font-weight: 700;
+    color: #667eea !important;
+    font-size: 1.4rem;
 }
-.navbar-custom .nav-link, .navbar .nav-link {
-    color: var(--okx-text-secondary) !important;
+.navbar-custom .nav-link {
+    color: #666 !important;
     font-weight: 500;
     padding: 8px 16px;
-    border-radius: var(--okx-radius-sm);
-    transition: all 0.15s;
-    font-size: 0.9rem;
+    border-radius: 8px;
+    transition: all 0.2s;
 }
-.navbar-custom .nav-link:hover, .navbar .nav-link:hover {
-    background: var(--okx-bg-hover);
-    color: var(--okx-text-primary) !important;
+.navbar-custom .nav-link:hover {
+    background: rgba(102, 126, 234, 0.08);
+    color: #667eea !important;
 }
 
-/* 卡片 — OKX 深色卡片 */
+/* 卡片 */
 .card {
-    background: var(--okx-bg-card) !important;
-    border: 1px solid var(--okx-border) !important;
-    border-radius: var(--okx-radius);
-    box-shadow: none;
-    transition: all 0.15s;
-}
-.card:hover {
-    border-color: #3A424D;
+    border: none;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    transition: all 0.2s;
 }
 
-/* 主按钮 — OKX 青绿按钮 */
-.btn-gradient, .btn-primary {
-    background: var(--okx-accent) !important;
-    border: none !important;
-    border-radius: var(--okx-radius-sm) !important;
+/* 渐变按钮 */
+.btn-gradient {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border: none;
+    border-radius: 8px;
     padding: 10px 24px;
     font-weight: 600;
-    color: #0B0E11 !important;
-    transition: all 0.15s;
+    color: white;
+    transition: all 0.2s;
 }
-.btn-gradient:hover, .btn-primary:hover {
-    background: var(--okx-accent-hover) !important;
-    box-shadow: 0 4px 20px rgba(0, 200, 151, 0.25);
-    color: #0B0E11 !important;
-}
-.btn-gradient:active, .btn-primary:active {
-    transform: scale(0.98);
+.btn-gradient:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    color: white;
 }
 
-/* 次要按钮 */
-.btn-outline-light {
-    border-color: var(--okx-border) !important;
-    color: var(--okx-text-primary) !important;
-    border-radius: var(--okx-radius-sm);
-}
-.btn-outline-light:hover {
-    background: var(--okx-bg-hover) !important;
-    border-color: #3A424D !important;
-}
-
-/* 表单控件 — 深色输入框 */
+/* 表单控件统一风格 */
 .form-control, .form-select {
-    background: var(--okx-bg-secondary) !important;
-    border: 1px solid var(--okx-border) !important;
-    border-radius: var(--okx-radius-sm);
-    padding: 12px 14px;
-    color: var(--okx-text-primary) !important;
-    transition: all 0.15s;
-    font-size: 0.9rem;
+    border-radius: 8px;
+    padding: 12px;
+    border: 1.5px solid #e0e0e0;
+    transition: all 0.2s;
 }
 .form-control:focus, .form-select:focus {
-    border-color: var(--okx-accent) !important;
-    box-shadow: 0 0 0 2px rgba(0, 200, 151, 0.15) !important;
-    background: var(--okx-bg-secondary) !important;
-}
-.form-control::placeholder {
-    color: var(--okx-text-muted);
-}
-.form-label {
-    color: var(--okx-text-secondary);
-    font-size: 0.85rem;
-    font-weight: 500;
-    margin-bottom: 6px;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
 }
 
-/* 标签 / Badge — OKX 风格 */
-.skill-badge, .badge {
-    background: var(--okx-accent-dim) !important;
-    color: var(--okx-accent) !important;
-    border-radius: 4px;
-    padding: 3px 10px;
-    font-size: 0.8rem;
-    font-weight: 500;
-    border: none;
+/* 技能标签 */
+.skill-badge {
+    background: rgba(102, 126, 234, 0.12);
+    color: #667eea;
+    border-radius: 20px;
+    padding: 3px 12px;
+    display: inline-block;
+    margin: 2px;
+    font-size: 0.85rem;
 }
 
 /* 星星 */
-.star { color: var(--okx-yellow); }
+.star { color: #ffc107; }
 
 /* 价格标签 */
 .price-tag {
-    font-size: 1rem;
+    font-size: 1.1rem;
     font-weight: 700;
-    color: var(--okx-accent);
+    color: #28a745;
 }
 
-/* Logo 纯色（OKX 不用渐变） */
-.logo-gradient {
-    color: var(--okx-accent);
+/* Logo 渐变 */
+.logo-gradient { 
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
     font-weight: 700;
-    background: none;
-    -webkit-background-clip: unset;
-    -webkit-text-fill-color: unset;
-}
-
-/* 表格 — 深色表格 */
-.table {
-    color: var(--okx-text-primary);
-    border-color: var(--okx-border);
-}
-.table thead th {
-    border-bottom: 1px solid var(--okx-border);
-    color: var(--okx-text-secondary);
-    font-weight: 500;
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-.table td {
-    border-color: var(--okx-border);
-    vertical-align: middle;
-}
-.table-hover tbody tr:hover {
-    background: var(--okx-bg-hover);
-}
-
-/* 分页 */
-.page-link {
-    background: var(--okx-bg-secondary) !important;
-    border-color: var(--okx-border) !important;
-    color: var(--okx-text-secondary) !important;
-    border-radius: var(--okx-radius-sm);
-    margin: 0 2px;
-    transition: all 0.15s;
-}
-.page-link:hover {
-    background: var(--okx-bg-hover) !important;
-    color: var(--okx-text-primary) !important;
-}
-.page-item.active .page-link {
-    background: var(--okx-accent) !important;
-    border-color: var(--okx-accent) !important;
-    color: #0B0E11 !important;
-}
-.page-item.disabled .page-link {
-    background: var(--okx-bg-primary) !important;
-    border-color: var(--okx-border) !important;
-    color: var(--okx-text-muted) !important;
-}
-
-/* 警告/提示条 — 深色适配 */
-.alert {
-    border-radius: var(--okx-radius-sm);
-    border: none;
-    font-size: 0.9rem;
-}
-.alert-danger {
-    background: rgba(246, 70, 93, 0.12);
-    color: var(--okx-red);
-}
-.alert-success {
-    background: rgba(0, 200, 151, 0.12);
-    color: var(--okx-accent);
-}
-.alert-info {
-    background: rgba(240, 185, 11, 0.12);
-    color: var(--okx-yellow);
-}
-
-/* 链接 */
-a {
-    color: var(--okx-accent);
-    transition: all 0.15s;
-}
-a:hover {
-    color: var(--okx-accent-hover);
-}
-
-/* 模态框 — 深色 */
-.modal-content {
-    background: var(--okx-bg-card);
-    border: 1px solid var(--okx-border);
-    border-radius: var(--okx-radius);
-}
-.modal-header {
-    border-bottom: 1px solid var(--okx-border);
-}
-.modal-footer {
-    border-top: 1px solid var(--okx-border);
-}
-
-/* 文本颜色 */
-.text-muted { color: var(--okx-text-secondary) !important; }
-.text-primary { color: var(--okx-accent) !important; }
-.text-success { color: var(--okx-accent) !important; }
-.text-danger { color: var(--okx-red) !important; }
-.text-warning { color: var(--okx-yellow) !important; }
-
-/* 选中高亮 */
-::selection {
-    background: rgba(0, 200, 151, 0.3);
-    color: #fff;
-}
-
-/* 滚动条 */
-::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-}
-::-webkit-scrollbar-track {
-    background: var(--okx-bg-primary);
-}
-::-webkit-scrollbar-thumb {
-    background: var(--okx-border);
-    border-radius: 3px;
-}
-::-webkit-scrollbar-thumb:hover {
-    background: #3A424D;
-}
-
-/* 分割线 */
-hr {
-    border-color: var(--okx-divider);
-    opacity: 1;
-}
-
-/* Dropdown 菜单 */
-.dropdown-menu {
-    background: var(--okx-bg-card);
-    border: 1px solid var(--okx-border);
-    border-radius: var(--okx-radius-sm);
-}
-.dropdown-item {
-    color: var(--okx-text-primary);
-}
-.dropdown-item:hover {
-    background: var(--okx-bg-hover);
-    color: var(--okx-text-primary);
-}
-
-/* 头部 logo 导航中间文字 */
-.navbar .text-muted, .navbar-custom .text-muted {
-    color: var(--okx-text-secondary) !important;
 }

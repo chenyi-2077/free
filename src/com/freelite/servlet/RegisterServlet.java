@@ -29,27 +29,22 @@ public class RegisterServlet extends HttpServlet {
         String displayName = req.getParameter("displayName");
         String skills = req.getParameter("skills");
 
-        try {
-            // 检查邮箱是否已注册
-            if (userDao.findByEmail(email) != null) {
-                req.setAttribute("error", "该邮箱已被注册");
-                req.getRequestDispatcher("/A-user/register.jsp").forward(req, resp);
-                return;
-            }
+        // 检查邮箱是否已注册
+        if (userDao.findByEmail(email) != null) {
+            req.setAttribute("error", "该邮箱已被注册");
+            req.getRequestDispatcher("/A-user/register.jsp").forward(req, resp);
+            return;
+        }
 
-            User user = new User(email, password, role, displayName, skills);
-            int id = userDao.insert(user);
-            if (id > 0) {
-                // 注册成功，自动登录
-                user.setId(id);
-                req.getSession().setAttribute("user", user);
-                resp.sendRedirect(req.getContextPath() + "/projects");
-            } else {
-                req.setAttribute("error", "注册失败，请重试");
-                req.getRequestDispatcher("/A-user/register.jsp").forward(req, resp);
-            }
-        } catch (RuntimeException e) {
-            req.setAttribute("error", "⚠️ " + e.getMessage());
+        User user = new User(email, password, role, displayName, skills);
+        int id = userDao.insert(user);
+        if (id > 0) {
+            // 注册成功，自动登录
+            user.setId(id);
+            req.getSession().setAttribute("user", user);
+            resp.sendRedirect(req.getContextPath() + "/projects");
+        } else {
+            req.setAttribute("error", "注册失败，请重试");
             req.getRequestDispatcher("/A-user/register.jsp").forward(req, resp);
         }
     }

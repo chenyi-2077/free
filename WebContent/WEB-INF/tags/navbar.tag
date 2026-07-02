@@ -1,4 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ tag body-content="scriptless" %>
+<%@ attribute name="title" required="false" %>
 <nav class="navbar navbar-expand-lg" style="background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
     <div class="container">
         <a class="navbar-brand fw-bold" href="${pageContext.request.contextPath}/projects" style="color: #667eea;">Freelite</a>

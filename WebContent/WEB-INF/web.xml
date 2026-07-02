@@ -7,11 +7,12 @@
 
     <display-name>Freelite</display-name>
 
+    <!-- 欢迎页 -->
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
 
-    <!-- A - 用户模块 -->
+    <!-- ==================== A - 用户模块 ==================== -->
     <servlet>
         <servlet-name>RegisterServlet</servlet-name>
         <servlet-class>com.freelite.servlet.RegisterServlet</servlet-class>
@@ -30,7 +31,34 @@
         <url-pattern>/login</url-pattern>
     </servlet-mapping>
 
-    <!-- B - 项目模块 -->
+    <servlet>
+        <servlet-name>LogoutServlet</servlet-name>
+        <servlet-class>com.freelite.servlet.LogoutServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LogoutServlet</servlet-name>
+        <url-pattern>/logout</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ProfileServlet</servlet-name>
+        <servlet-class>com.freelite.servlet.ProfileServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ProfileServlet</servlet-name>
+        <url-pattern>/profile/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>EditProfileServlet</servlet-name>
+        <servlet-class>com.freelite.servlet.EditProfileServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>EditProfileServlet</servlet-name>
+        <url-pattern>/profile/edit</url-pattern>
+    </servlet-mapping>
+
+    <!-- ==================== B - 项目模块 ==================== -->
     <servlet>
         <servlet-name>ProjectListServlet</servlet-name>
         <servlet-class>com.freelite.servlet.ProjectListServlet</servlet-class>
@@ -38,6 +66,15 @@
     <servlet-mapping>
         <servlet-name>ProjectListServlet</servlet-name>
         <url-pattern>/projects</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>MyProjectsServlet</servlet-name>
+        <servlet-class>com.freelite.servlet.MyProjectsServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MyProjectsServlet</servlet-name>
+        <url-pattern>/my/projects</url-pattern>
     </servlet-mapping>
 
     <servlet>
@@ -49,7 +86,43 @@
         <url-pattern>/project/post</url-pattern>
     </servlet-mapping>
 
-    <!-- C - 竞标模块 -->
+    <servlet>
+        <servlet-name>ProjectDetailServlet</servlet-name>
+        <servlet-class>com.freelite.servlet.ProjectDetailServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ProjectDetailServlet</servlet-name>
+        <url-pattern>/project/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>EditProjectServlet</servlet-name>
+        <servlet-class>com.freelite.servlet.EditProjectServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>EditProjectServlet</servlet-name>
+        <url-pattern>/project/edit</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>DeleteProjectServlet</servlet-name>
+        <servlet-class>com.freelite.servlet.DeleteProjectServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DeleteProjectServlet</servlet-name>
+        <url-pattern>/project/delete</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>UpdateProjectStatusServlet</servlet-name>
+        <servlet-class>com.freelite.servlet.UpdateProjectStatusServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UpdateProjectStatusServlet</servlet-name>
+        <url-pattern>/project/status</url-pattern>
+    </servlet-mapping>
+
+    <!-- ==================== C - 竞标模块 ==================== -->
     <servlet>
         <servlet-name>PlaceBidServlet</servlet-name>
         <servlet-class>com.freelite.servlet.PlaceBidServlet</servlet-class>
@@ -68,7 +141,25 @@
         <url-pattern>/bids/*</url-pattern>
     </servlet-mapping>
 
-    <!-- D - 订单/评价 -->
+    <servlet>
+        <servlet-name>MyBidsServlet</servlet-name>
+        <servlet-class>com.freelite.servlet.MyBidsServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MyBidsServlet</servlet-name>
+        <url-pattern>/my/bids</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>AwardBidServlet</servlet-name>
+        <servlet-class>com.freelite.servlet.AwardBidServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AwardBidServlet</servlet-name>
+        <url-pattern>/bid/award</url-pattern>
+    </servlet-mapping>
+
+    <!-- ==================== D - 订单/评价/看板模块 ==================== -->
     <servlet>
         <servlet-name>OrderListServlet</servlet-name>
         <servlet-class>com.freelite.servlet.OrderListServlet</servlet-class>
@@ -79,6 +170,24 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>OrderDetailServlet</servlet-name>
+        <servlet-class>com.freelite.servlet.OrderDetailServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>OrderDetailServlet</servlet-name>
+        <url-pattern>/order/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>CompleteOrderServlet</servlet-name>
+        <servlet-class>com.freelite.servlet.CompleteOrderServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CompleteOrderServlet</servlet-name>
+        <url-pattern>/order/complete</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>ReviewServlet</servlet-name>
         <servlet-class>com.freelite.servlet.ReviewServlet</servlet-class>
     </servlet>
@@ -86,6 +195,72 @@
         <servlet-name>ReviewServlet</servlet-name>
         <url-pattern>/review</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>DashboardServlet</servlet-name>
+        <servlet-class>com.freelite.servlet.DashboardServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DashboardServlet</servlet-name>
+        <url-pattern>/dashboard</url-pattern>
+    </servlet-mapping>
+
+    <!-- ==================== E - 结算系统 ==================== -->
+    <servlet>
+        <servlet-name>WalletServlet</servlet-name>
+        <servlet-class>com.freelite.servlet.WalletServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>WalletServlet</servlet-name>
+        <url-pattern>/wallet</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>RechargeServlet</servlet-name>
+        <servlet-class>com.freelite.servlet.RechargeServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>RechargeServlet</servlet-name>
+        <url-pattern>/recharge</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ConfirmOrderServlet</servlet-name>
+        <servlet-class>com.freelite.servlet.ConfirmOrderServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ConfirmOrderServlet</servlet-name>
+        <url-pattern>/order/confirm</url-pattern>
+    </servlet-mapping>
+
+    <!-- ==================== F - 交付与消息 ==================== -->
+    <servlet>
+        <servlet-name>DeliveryDownloadServlet</servlet-name>
+        <servlet-class>com.freelite.servlet.DeliveryDownloadServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DeliveryDownloadServlet</servlet-name>
+        <url-pattern>/file/download</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>DeliveryChatServlet</servlet-name>
+        <servlet-class>com.freelite.servlet.DeliveryChatServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DeliveryChatServlet</servlet-name>
+        <url-pattern>/deliveryChat</url-pattern>
+    </servlet-mapping>
+
+    <!-- 登录认证过滤器 -->
+    <filter>
+        <filter-name>AuthFilter</filter-name>
+        <filter-class>com.freelite.filter.AuthFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>AuthFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 
     <!-- 字符编码过滤器 -->
     <filter>
@@ -100,4 +275,5 @@
         <filter-name>EncodingFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
+
 </web-app>
