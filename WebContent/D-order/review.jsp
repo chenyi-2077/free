@@ -29,13 +29,13 @@
             direction: rtl;
         }
         .star-rating span {
-            color: #ddd;
+            color: var(--okx-text-muted);
             transition: color 0.15s;
         }
         .star-rating span:hover,
         .star-rating span:hover ~ span,
         .star-rating.active span {
-            color: #f5b342;
+            color: var(--okx-yellow);
         }
     </style>
 </head>

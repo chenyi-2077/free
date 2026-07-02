@@ -9,12 +9,11 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/freelite.css">
     <style>
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--okx-bg-primary);
             min-height: 100vh;
             display: flex;
             align-items: center;
         }
-        .card { box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
     </style>
 </head>
 <body>
@@ -22,7 +21,7 @@
         <div class="row justify-content-center">
             <div class="col-md-5">
                 <div class="card p-4 text-center">
-                    <div style="font-size: 2.5rem;" class="logo-gradient mb-2">Freelite</div>
+                    <div style="font-size: 2.5rem; font-weight: 700;" class="logo-gradient mb-2">Freelite</div>
                     <p class="text-muted">轻量化的自由职业项目竞标平台</p>
 
                     <% String error = (String) request.getAttribute("error"); %>
@@ -48,7 +47,7 @@
                     </form>
 
                     <p class="text-muted mt-3">
-                        还没有账号？<a href="${pageContext.request.contextPath}/register" style="color: #764ba2; font-weight: 600;">立即注册 →</a>
+                        还没有账号？<a href="${pageContext.request.contextPath}/register" class="fw-bold">立即注册 →</a>
                     </p>
                 </div>
             </div>

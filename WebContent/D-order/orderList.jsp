@@ -38,7 +38,7 @@
             </div>
         <% } else { %>
             <table class="table table-hover align-middle">
-                <thead class="table-light">
+                <thead style="background: var(--okx-bg-secondary);">
                     <tr>
                         <th>订单ID</th>
                         <th>金额</th>

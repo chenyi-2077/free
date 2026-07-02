@@ -24,10 +24,8 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/freelite.css">
     <style>
         .card-project { transition: all 0.2s; cursor: pointer; height: 100%; }
-        .card-project:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
+        .card-project:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,0.3); }
         a.card-project-link { text-decoration: none; color: inherit; display: block; }
-        .page-link { color: #667eea; }
-        .page-item.active .page-link { background: #667eea; border-color: #667eea; }
     </style>
 </head>
 <body>
@@ -98,7 +96,7 @@
                             <div class="card card-project p-3">
                                 <div class="d-flex justify-content-between">
                                     <div style="flex: 1;">
-                                        <h5 class="fw-bold mb-1"><%= p.getTitle() %></h5>
+                                        <h5 class="fw-bold mb-1" style="color: var(--okx-text-primary);"><%= p.getTitle() %></h5>
                                         <div class="mb-2">
                                             <span class="skill-badge"><%= p.getCategoryName() %></span>
                                             <span class="text-muted ms-2" style="font-size: 0.85rem;"><%= p.getEmployerName() %></span>
@@ -110,7 +108,7 @@
                                     </div>
                                     <div class="text-end ms-3" style="min-width: 100px;">
                                         <div class="price-tag">¥<%= String.format("%.0f", p.getBudget()) %></div>
-                                        <div style="font-size: 0.8rem; color: #999;">
+                                        <div style="font-size: 0.8rem; color: var(--okx-text-muted);">
                                             <% java.time.format.DateTimeFormatter dtf = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd"); %><%= p.getCreatedAt() != null ? p.getCreatedAt().format(dtf) : "" %>
                                         </div>
                                     </div>
