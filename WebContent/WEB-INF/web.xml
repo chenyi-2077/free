@@ -252,6 +252,16 @@
         <url-pattern>/deliveryChat</url-pattern>
     </servlet-mapping>
 
+    <!-- ==================== 切换角色 ==================== -->
+    <servlet>
+        <servlet-name>SwitchRoleServlet</servlet-name>
+        <servlet-class>com.freelite.servlet.SwitchRoleServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SwitchRoleServlet</servlet-name>
+        <url-pattern>/profile/switchRole</url-pattern>
+    </servlet-mapping>
+
     <!-- 登录认证过滤器 -->
     <filter>
         <filter-name>AuthFilter</filter-name>

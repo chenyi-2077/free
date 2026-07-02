@@ -40,6 +40,7 @@
                 <a href="${pageContext.request.contextPath}/projects" class="nav-link">项目</a>
                 <a href="${pageContext.request.contextPath}/my/projects" class="nav-link">我的项目</a>
                 <a href="${pageContext.request.contextPath}/orders" class="nav-link">订单</a>
+                <a href="${pageContext.request.contextPath}/wallet" class="nav-link">钱包</a>
                 <a href="${pageContext.request.contextPath}/dashboard" class="nav-link">看板</a>
                 <a href="${pageContext.request.contextPath}/logout" class="nav-link">退出</a>
             </div>
@@ -87,11 +88,30 @@
                     <a href="${pageContext.request.contextPath}/profile/edit" class="btn btn-gradient w-100 mb-3">
                         <i class="bi bi-pencil"></i> 编辑资料
                     </a>
-                <% } %>
 
-                <%-- 查看其他人的竞标 --%>
-                <% if (isOwnProfile && "freelancer".equals(profileUser.getRole())) { %>
-                    <a href="${pageContext.request.contextPath}/my/bids" class="btn btn-outline-primary w-100">
+                    <%-- 切换角色 --%>
+                    <div class="card p-3 mb-3">
+                        <h5 class="fw-bold mb-3"><i class="bi bi-people"></i> 当前身份</h5>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <span class="badge" style="background: var(--accent-dim); color: var(--accent); font-size: 0.9rem; padding: 6px 14px;">
+                                    <%= "employer".equals(profileUser.getRole()) ? "👔 雇主" : "💻 自由职业者" %>
+                                </span>
+                                <p class="text-muted small mt-2 mb-0">
+                                    <%= "employer".equals(profileUser.getRole()) ? "发布项目需要雇主身份，投竞标需要自由职业者身份" : "投竞标需要自由职业者身份，发布项目需要雇主身份" %>
+                                </p>
+                            </div>
+                            <form action="${pageContext.request.contextPath}/profile/switchRole" method="post" style="display: inline;">
+                                <input type="hidden" name="role" value="<%= "employer".equals(profileUser.getRole()) ? "freelancer" : "employer" %>">
+                                <button type="submit" class="btn btn-outline-primary" style="white-space: nowrap;">
+                                    <i class="bi bi-arrow-left-right"></i> 切换为<%= "employer".equals(profileUser.getRole()) ? "自由职业者" : "雇主" %>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <%-- 查看竞标记录 --%>
+                    <a href="${pageContext.request.contextPath}/my/bids" class="btn btn-outline-primary w-100 mb-3">
                         <i class="bi bi-send"></i> 我的竞标记录
                     </a>
                 <% } %>
