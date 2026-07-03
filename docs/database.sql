@@ -17,7 +17,7 @@ CREATE TABLE user (
     display_name VARCHAR(50),
     avatar VARCHAR(255),
     skills VARCHAR(500),
-    rating DECIMAL(2,1) DEFAULT 0.0,
+    rating DECIMAL(3,1) DEFAULT 0.0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -161,14 +161,14 @@ CREATE TABLE project_message (
 -- -----------------------------------------------------------
 
 INSERT INTO user (email, password, role, display_name, skills, rating) VALUES
-('alice@test.com', '123456', 'employer', 'Alice 科技公司', NULL, 4.5),
-('bob@test.com', '123456', 'freelancer', 'Bob 全栈开发', 'Java, Spring, MySQL, Vue.js', 4.8),
-('carol@test.com', '123456', 'freelancer', 'Carol UI 设计师', 'Figma, Photoshop, Sketch', 4.2);
+('alice@test.com', '123456', 'employer', 'Alice Tech', NULL, 4.5),
+('bob@test.com', '123456', 'freelancer', 'Bob Dev', 'Java, Spring, MySQL, Vue.js', 4.8),
+('carol@test.com', '123456', 'freelancer', 'Carol UI', 'Figma, Photoshop, Sketch', 4.2);
 
 INSERT INTO project (title, description, budget, deadline, category_id, employer_id, status) VALUES
-('开发一个博客系统', '需要一个支持 Markdown 的个人博客系统，包含后台管理', 5000.00, '2026-08-01', 1, 1, 'open'),
-('设计 App 首页', '为我们的健身 App 设计一个全新的首页 UI', 2000.00, '2026-07-15', 3, 1, 'open'),
-('数据清洗脚本', '每天自动清洗和整理 CSV 数据，输出标准格式', 1500.00, '2026-07-10', 5, 1, 'open');
+('Build a Blog System', 'A personal blog system with Markdown support and admin panel', 5000.00, '2026-08-01', 1, 1, 'open'),
+('Design App Homepage', 'Design a brand new homepage UI for our fitness app', 2000.00, '2026-07-15', 3, 1, 'open'),
+('Data Cleaning Script', 'Daily CSV data cleaning and formatting script', 1500.00, '2026-07-10', 5, 1, 'open');
 
 INSERT INTO wallet (user_id, balance, frozen) VALUES
 (1, 10000.00, 0.00),
