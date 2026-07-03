@@ -3,7 +3,8 @@
 <%
     User loginUser = (User) session.getAttribute("user");
     List<Bid> bids = (List<Bid>) request.getAttribute("bids");
-    int projectId = (int) request.getAttribute("projectId");
+    Integer projectIdObj = (Integer) request.getAttribute("projectId");
+    int projectId = projectIdObj != null ? projectIdObj : 0;
 %>
 <!DOCTYPE html>
 <html lang="zh-CN">

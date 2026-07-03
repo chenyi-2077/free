@@ -3,8 +3,10 @@
 <%
     User loginUser = (User) session.getAttribute("user");
     Order order = (Order) request.getAttribute("order");
-    boolean canReview = (boolean) request.getAttribute("canReview");
-    boolean isEmployer = (boolean) request.getAttribute("isEmployer");
+    Boolean canReviewObj = (Boolean) request.getAttribute("canReview");
+    boolean canReview = canReviewObj != null && canReviewObj;
+    Boolean isEmployerObj = (Boolean) request.getAttribute("isEmployer");
+    boolean isEmployer = isEmployerObj != null && isEmployerObj;
     if (order == null) { response.sendRedirect(request.getContextPath() + "/orders"); return; }
 %>
 <!DOCTYPE html>

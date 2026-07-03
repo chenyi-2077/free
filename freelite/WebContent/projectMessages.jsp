@@ -4,7 +4,8 @@
     User loginUser = (User) session.getAttribute("user");
     if (loginUser == null) { response.sendRedirect(request.getContextPath() + "/login"); return; }
     List<ProjectMessage> messages = (List<ProjectMessage>) request.getAttribute("messages");
-    int projectId = (int) request.getAttribute("projectId");
+    Integer projectIdObj = (Integer) request.getAttribute("projectId");
+    int projectId = projectIdObj != null ? projectIdObj : 0;
 %>
 <!DOCTYPE html>
 <html lang="zh-CN">

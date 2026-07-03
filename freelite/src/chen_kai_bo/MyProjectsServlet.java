@@ -27,7 +27,9 @@ public class MyProjectsServlet extends HttpServlet {
         }
 
         List<Project> projects = projectDao.findByEmployerId(user.getId());
-        req.setAttribute("projects", projects);
+        List<Project> bidded = projectDao.findByFreelancerId(user.getId());
+        req.setAttribute("myProjects", projects);
+        req.setAttribute("biddedProjects", bidded);
         req.getRequestDispatcher("/B-project/myProjects.jsp").forward(req, resp);
     }
 }

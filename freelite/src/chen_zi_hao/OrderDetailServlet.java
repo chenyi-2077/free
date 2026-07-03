@@ -36,8 +36,15 @@ public class OrderDetailServlet extends HttpServlet {
 
         List<Review> reviews = reviewDao.findByOrderId(order.getId());
 
+        chen_yi_an.User loginUser = (chen_yi_an.User) req.getSession().getAttribute("user");
+        boolean canReview = loginUser != null && order.getStatus().equals("completed")
+            && reviewDao.findByOrderId(order.getId()).isEmpty();
+        boolean isEmployer = loginUser != null && loginUser.getId() == order.getEmployerId();
+
         req.setAttribute("order", order);
         req.setAttribute("reviews", reviews);
+        req.setAttribute("canReview", canReview);
+        req.setAttribute("isEmployer", isEmployer);
         req.getRequestDispatcher("/D-order/orderDetail.jsp").forward(req, resp);
     }
 }

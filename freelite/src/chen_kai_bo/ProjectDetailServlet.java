@@ -39,6 +39,8 @@ public class ProjectDetailServlet extends HttpServlet {
 
         req.setAttribute("project", project);
         req.setAttribute("bids", bids);
+        req.setAttribute("isOwner", req.getSession().getAttribute("user") != null
+            && ((chen_yi_an.User) req.getSession().getAttribute("user")).getId() == project.getEmployerId());
         req.getRequestDispatcher("/B-project/projectDetail.jsp").forward(req, resp);
     }
 }
