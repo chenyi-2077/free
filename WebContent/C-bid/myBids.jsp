@@ -23,7 +23,7 @@
                 <a href="${pageContext.request.contextPath}/my/projects" class="nav-link">我的项目</a>
                 <a href="${pageContext.request.contextPath}/orders" class="nav-link">订单</a>
                 <a href="${pageContext.request.contextPath}/wallet" class="nav-link">钱包</a>
-                <a href="${pageContext.request.contextPath}/logout" class="nav-link">退出</a>
+                <a href="${pageContext.request.contextPath}/logout" class="nav-link">退出登录</a>
             </div>
         </div>
     </nav>
@@ -76,5 +76,6 @@
             }
         %>
     </div>
+<jsp:include page="/WEB-INF/tags/chatWidget.jsp" />
 </body>
 </html>

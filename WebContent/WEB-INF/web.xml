@@ -252,6 +252,39 @@
         <url-pattern>/deliveryChat</url-pattern>
     </servlet-mapping>
 
+    <!-- ==================== 聊天弹窗 API ==================== -->
+    <servlet>
+        <servlet-name>MyChatProjectsServlet</servlet-name>
+        <servlet-class>com.freelite.servlet.MyChatProjectsServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MyChatProjectsServlet</servlet-name>
+        <url-pattern>/api/myChatProjects</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ChatMessageApiServlet</servlet-name>
+        <servlet-class>com.freelite.servlet.ChatMessageApiServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ChatMessageApiServlet</servlet-name>
+        <url-pattern>/api/chatMessages</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ChatDeliveryApiServlet</servlet-name>
+        <servlet-class>com.freelite.servlet.ChatDeliveryApiServlet</servlet-class>
+        <multipart-config>
+            <max-file-size>52428800</max-file-size>
+            <max-request-size>104857600</max-request-size>
+            <file-size-threshold>2097152</file-size-threshold>
+        </multipart-config>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ChatDeliveryApiServlet</servlet-name>
+        <url-pattern>/api/chatDelivery</url-pattern>
+    </servlet-mapping>
+
     <!-- ==================== 切换角色 ==================== -->
     <servlet>
         <servlet-name>SwitchRoleServlet</servlet-name>

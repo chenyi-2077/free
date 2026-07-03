@@ -18,7 +18,8 @@ import java.util.Set;
 public class AuthFilter implements Filter {
 
     private static final Set<String> PUBLIC_PATHS = new HashSet<>(Arrays.asList(
-            "/login", "/register", "/projects", "/project/"
+            "/login", "/register", "/projects", "/project/",
+            "/api/myChatProjects", "/api/chatMessages", "/api/chatDelivery"
     ));
 
     private static final Set<String> STATIC_EXTENSIONS = new HashSet<>(Arrays.asList(

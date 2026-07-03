@@ -14,6 +14,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>编辑项目 - Freelite</title>
     <link href="https://cdn.bootcdn.net/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/freelite.css">
 </head>
 <body>
     <jsp:include page="/WEB-INF/tags/navbar.jsp" />
@@ -68,5 +69,6 @@
     </div>
 
     <script src="https://cdn.bootcdn.net/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<jsp:include page="/WEB-INF/tags/chatWidget.jsp" />
 </body>
 </html>

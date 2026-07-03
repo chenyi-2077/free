@@ -1,24 +1,26 @@
-/* ========== Freelite v2 — OKX 风格 ========== */
-/* 深色模式 + 青绿强调色，参考 OKX 2025 Dark Theme */
+/* ========== Freelite v2 — 白色主题 ========== */
 
 :root {
-    --bg-body: #0B0E11;
-    --bg-card: #f3f4f6;
-    --bg-card-hover: #e5e7eb;
-    --bg-nav: #1E2329;
-    --bg-nav-hover: #242B33;
+    --bg-body: #ffffff;
+    --bg-card: #ffffff;
+    --bg-card-hover: #f9fafb;
+    --bg-nav: #ffffff;
+    --bg-nav-hover: #f3f4f6;
     --accent: #00C897;
     --accent-hover: #00DBA3;
     --accent-dim: rgba(0, 200, 151, 0.12);
     --red: #F6465D;
     --green: #00C897;
     --yellow: #F0B90B;
-    --text-primary: #EAECEF;
-    --text-secondary: #848E9C;
-    --text-muted: #5E6673;
-    --border: #2B2F36;
+    --text-primary: #111827;
+    --text-secondary: #6b7280;
+    --text-muted: #9ca3af;
+    --border: #e5e7eb;
     --radius: 12px;
     --radius-sm: 8px;
+    --bg-secondary: #f9fafb;
+    --bg-hover: #f3f4f6;
+    --divider: #e5e7eb;
 }
 
 /* 布局 */
@@ -28,19 +30,20 @@ body {
     color: var(--text-primary);
 }
 
-/* 卡片（对话框）浅灰色 + 深色字 */
+/* 卡片 */
 .card, .card-body, .card-header, .card-footer {
     background: var(--bg-card) !important;
-    border: 1px solid #d1d5db !important;
+    border: 1px solid #e5e7eb !important;
     border-radius: var(--radius);
     box-shadow: 0 1px 4px rgba(0,0,0,0.04);
     color: #111827;
 }
 
-/* 导航栏 — 深色条 */
+/* 导航栏 — 白色底 */
 .navbar-custom, .navbar {
     background: var(--bg-nav) !important;
     border-bottom: 1px solid var(--border) !important;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
 }
 .navbar-custom .navbar-brand, .navbar .navbar-brand {
     font-weight: 700 !important;
@@ -77,44 +80,46 @@ body {
 /* 次要按钮 */
 .btn-outline-light {
     border-color: var(--border) !important;
-    color: var(--text-primary) !important;
+    color: #374151 !important;
     border-radius: var(--radius-sm);
+    border: 1px solid #d1d5db;
 }
 .btn-outline-light:hover {
     background: var(--bg-nav-hover) !important;
+    color: #111827 !important;
 }
 
 .btn-secondary {
     background: var(--bg-secondary) !important;
     border: 1px solid var(--border) !important;
-    color: var(--text-primary) !important;
+    color: #374151 !important;
     border-radius: var(--radius-sm);
 }
 .btn-secondary:hover {
     background: var(--bg-hover) !important;
-    border-color: #3A424D !important;
+    border-color: #d1d5db !important;
 }
 
-/* 表单控件 — 深色输入框 */
+/* 表单控件 */
 .form-control, .form-select {
-    background: var(--bg-secondary) !important;
-    border: 1px solid var(--border) !important;
+    background: #ffffff !important;
+    border: 1px solid #d1d5db !important;
     border-radius: var(--radius-sm);
     padding: 12px 14px;
-    color: var(--text-primary) !important;
+    color: #111827 !important;
     transition: all 0.15s;
     font-size: 0.9rem;
 }
 .form-control:focus, .form-select:focus {
     border-color: var(--accent) !important;
     box-shadow: 0 0 0 2px rgba(0, 200, 151, 0.15) !important;
-    background: var(--bg-secondary) !important;
+    background: #ffffff !important;
 }
 .form-control::placeholder {
     color: var(--text-muted);
 }
 .form-label {
-    color: var(--text-secondary);
+    color: #374151;
     font-size: 0.85rem;
     font-weight: 500;
     margin-bottom: 6px;
@@ -170,13 +175,13 @@ body {
     -webkit-text-fill-color: unset;
 }
 
-/* 表格 — 深色表格 */
+/* 表格 — 白色底 */
 .table {
-    color: var(--text-primary);
+    color: #111827;
     border-color: var(--border);
 }
 .table thead th, .table-light th {
-    background: var(--bg-secondary) !important;
+    background: #f9fafb !important;
     border-bottom: 1px solid var(--border);
     color: var(--text-secondary);
     font-weight: 500;
@@ -194,45 +199,53 @@ body {
 
 /* 分页 */
 .page-link {
-    background: var(--bg-secondary) !important;
-    border-color: var(--border) !important;
+    background: #ffffff !important;
+    border-color: #d1d5db !important;
     color: var(--text-secondary) !important;
     border-radius: var(--radius-sm);
     margin: 0 2px;
     transition: all 0.15s;
 }
 .page-link:hover {
-    background: var(--bg-hover) !important;
-    color: var(--text-primary) !important;
+    background: #f3f4f6 !important;
+    color: #111827 !important;
 }
 .page-item.active .page-link {
     background: var(--accent) !important;
     border-color: var(--accent) !important;
-    color: #0B0E11 !important;
+    color: #ffffff !important;
 }
 .page-item.disabled .page-link {
-    background: var(--bg-primary) !important;
-    border-color: var(--border) !important;
+    background: #f9fafb !important;
+    border-color: #e5e7eb !important;
     color: var(--text-muted) !important;
 }
 
-/* 警告/提示条 — 深色适配 */
+/* 警告/提示条 */
 .alert {
     border-radius: var(--radius-sm);
-    border: none;
+    border: 1px solid transparent;
     font-size: 0.9rem;
 }
 .alert-danger {
-    background: rgba(246, 70, 93, 0.12);
-    color: var(--red);
+    background: #fef2f2;
+    color: #dc2626;
+    border-color: #fecaca;
 }
 .alert-success {
-    background: rgba(0, 200, 151, 0.12);
-    color: var(--accent);
+    background: #f0fdf4;
+    color: #16a34a;
+    border-color: #bbf7d0;
 }
 .alert-info {
-    background: rgba(240, 185, 11, 0.12);
-    color: var(--yellow);
+    background: #fefce8;
+    color: #a16207;
+    border-color: #fef08a;
+}
+.alert-warning {
+    background: #fffbeb;
+    color: #d97706;
+    border-color: #fde68a;
 }
 
 /* 链接 */
@@ -244,21 +257,21 @@ a:hover {
     color: var(--accent-hover);
 }
 
-/* 模态框 — 深色 */
+/* 模态框 */
 .modal-content {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
     border-radius: var(--radius);
 }
 .modal-header {
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid #e5e7eb;
 }
 .modal-footer {
-    border-top: 1px solid var(--border);
+    border-top: 1px solid #e5e7eb;
 }
 
 /* 文本颜色 */
-.text-muted { color: var(--text-secondary) !important; }
+.text-muted { color: #6b7280 !important; }
 .text-primary { color: var(--accent) !important; }
 .text-success { color: var(--accent) !important; }
 .text-danger { color: var(--red) !important; }
@@ -266,7 +279,7 @@ a:hover {
 
 /* 卡片头部 */
 .card-header {
-    background: #ffffff;
+    background: #f9fafb;
     border-bottom: 1px solid #e5e7eb;
 }
 
@@ -282,37 +295,37 @@ a:hover {
     height: 6px;
 }
 ::-webkit-scrollbar-track {
-    background: var(--bg-primary);
+    background: #f3f4f6;
 }
 ::-webkit-scrollbar-thumb {
-    background: var(--border);
+    background: #d1d5db;
     border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-    background: #3A424D;
+    background: #9ca3af;
 }
 
 /* 分割线 */
 hr {
-    border-color: var(--divider);
+    border-color: #e5e7eb;
     opacity: 1;
 }
 
 /* Dropdown 菜单 */
 .dropdown-menu {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
     border-radius: var(--radius-sm);
 }
 .dropdown-item {
-    color: var(--text-primary);
+    color: #111827;
 }
 .dropdown-item:hover {
-    background: var(--bg-hover);
-    color: var(--text-primary);
+    background: #f3f4f6;
+    color: #111827;
 }
 
 /* 头部 logo 导航中间文字 */
 .navbar .text-muted, .navbar-custom .text-muted {
-    color: var(--text-secondary) !important;
+    color: #6b7280 !important;
 }

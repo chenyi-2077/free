@@ -13,8 +13,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>项目沟通 - Freelite</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/freelite.css">
     <style>
-        
+        body { background: #ffffff; }
         .chat-container { max-width: 720px; margin: 0 auto; }
         .msg-bubble { border-radius: 16px; padding: 12px 16px; margin-bottom: 12px; max-width: 80%; }
         .msg-self { background: var(--accent); color: white; margin-left: auto; border-bottom-right-radius: 4px; }
@@ -63,5 +64,6 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<jsp:include page="/WEB-INF/tags/chatWidget.jsp" />
 </body>
 </html>

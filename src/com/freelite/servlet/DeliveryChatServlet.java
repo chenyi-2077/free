@@ -145,6 +145,26 @@ public class DeliveryChatServlet extends HttpServlet {
         req.setAttribute("projectTitle", project.getTitle());
         req.setAttribute("messages", messages);
         req.setAttribute("deliveries", deliveries);
+
+        // 订单信息
+        List<com.freelite.model.Order> projectOrders = orderDao.findByProject(projectId);
+        if (projectOrders != null && !projectOrders.isEmpty()) {
+            req.setAttribute("order", projectOrders.get(0));
+        }
+
+        // 角色判断
+        String myRole = "viewer";
+        if (loginUser.getId() == project.getEmployerId()) {
+            myRole = "employer";
+        } else if (projectOrders != null) {
+            for (com.freelite.model.Order o : projectOrders) {
+                if (o.getFreelancerId() == loginUser.getId()) {
+                    myRole = "freelancer";
+                    break;
+                }
+            }
+        }
+        req.setAttribute("myRole", myRole);
         req.getRequestDispatcher("/deliveryChat.jsp").forward(req, resp);
     }
 

@@ -35,7 +35,7 @@
                 <a href="${pageContext.request.contextPath}/my/projects" class="nav-link">我的项目</a>
                 <a href="${pageContext.request.contextPath}/wallet" class="nav-link">钱包</a>
                 <a href="${pageContext.request.contextPath}/profile" class="nav-link">个人主页</a>
-                <a href="${pageContext.request.contextPath}/logout" class="nav-link">退出</a>
+                <a href="${pageContext.request.contextPath}/logout" class="nav-link">退出登录</a>
             </div>
         </div>
     </nav>
@@ -178,5 +178,6 @@
         .btn-outline-success { border-radius: 8px; padding: 10px; font-weight: 600; border: 1.5px solid var(--accent); color: var(--accent); }
         .btn-outline-success:hover { background: var(--accent); color: white; }
     </style>
+<jsp:include page="/WEB-INF/tags/chatWidget.jsp" />
 </body>
 </html>

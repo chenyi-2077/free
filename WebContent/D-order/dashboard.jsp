@@ -153,5 +153,6 @@
             }]
         });
     </script>
+<jsp:include page="/WEB-INF/tags/chatWidget.jsp" />
 </body>
 </html>

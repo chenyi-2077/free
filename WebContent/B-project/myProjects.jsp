@@ -114,8 +114,8 @@
                                     </td>
                                     <td style="color: #6b7280;"><%= p.getCreatedAt() != null ? p.getCreatedAt().toLocalDate().toString() : "-" %></td>
                                     <td>
-                                        <a href="${pageContext.request.contextPath}/project/<%= p.getId() %>" class="btn btn-sm btn-outline-light">查看</a>
-                                        <a href="${pageContext.request.contextPath}/project/edit?id=<%= p.getId() %>" class="btn btn-sm btn-outline-light">编辑</a>
+                                        <a href="${pageContext.request.contextPath}/project/<%= p.getId() %>" class="btn btn-sm btn-outline-light" style="color: #111827 !important;">查看</a>
+                                        <a href="${pageContext.request.contextPath}/project/edit?id=<%= p.getId() %>" class="btn btn-sm btn-outline-light" style="color: #111827 !important;">编辑</a>
                                     </td>
                                 </tr>
                             <% } %>
@@ -184,5 +184,6 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<jsp:include page="/WEB-INF/tags/chatWidget.jsp" />
 </body>
 </html>
