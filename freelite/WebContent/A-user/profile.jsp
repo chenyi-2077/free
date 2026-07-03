@@ -1,53 +1,131 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="com.freelite.model.User, java.util.List, com.freelite.model.Review" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="chen_yi_an.User" %>
 <%
+    User loginUser = (User) session.getAttribute("user");
     User profileUser = (User) request.getAttribute("profileUser");
-    List<Review> reviews = (List<Review>) request.getAttribute("reviews");
-    Double avgRating = (Double) request.getAttribute("avgRating");
+    Boolean isOwnProfile = (Boolean) request.getAttribute("isOwnProfile");
     if (profileUser == null) { response.sendRedirect(request.getContextPath() + "/login"); return; }
+    if (isOwnProfile == null) isOwnProfile = false;
 %>
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>个人主页 - Freelite</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= profileUser.getDisplayName() != null && !profileUser.getDisplayName().isEmpty() ? profileUser.getDisplayName() : "用户" %> - Freelite</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/freelite.css">
+    <style>
+        .profile-header {
+            background: var(--accent);
+            color: white;
+            padding: 3rem 0;
+            border-radius: 0 0 24px 24px;
+        }
+        .avatar {
+            width: 96px; height: 96px;
+            background: white; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2.5rem; color: var(--accent);
+            margin: 0 auto; box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+    </style>
 </head>
-<body class="bg-light">
-    <%@ include file="/navbar.jsp" %>
-    <div class="container py-4">
-        <div class="card shadow-sm mb-4">
-            <div class="card-body">
-                <h4><%= profileUser.getDisplayName() != null ? profileUser.getDisplayName() : "未命名" %></h4>
-                <p class="text-muted">邮箱：<%= profileUser.getEmail() %></p>
-                <p>身份：<%= "employer".equals(profileUser.getRole()) ? "雇主" : "自由职业者" %></p>
-                <% if (profileUser.getSkills() != null && !profileUser.getSkills().isEmpty()) { %>
-                    <p>技能：
-                        <% for (String skill : profileUser.getSkills().split(",")) { %>
-                            <span class="badge bg-secondary me-1"><%= skill.trim() %></span>
-                        <% } %>
-                    </p>
-                <% } %>
-                <p>评分：<span class="text-warning">★</span> <%= String.format("%.1f", avgRating != null ? avgRating : 0.0) %></p>
-                <a href="${pageContext.request.contextPath}/profile/edit" class="btn btn-outline-primary btn-sm">编辑资料</a>
+<body>
+    <nav class="navbar navbar-custom">
+        <div class="container">
+            <a class="navbar-brand" href="${pageContext.request.contextPath}/projects">Freelite</a>
+            <div class="d-flex gap-2">
+                <a href="${pageContext.request.contextPath}/projects" class="nav-link">项目</a>
+                <a href="${pageContext.request.contextPath}/my/projects" class="nav-link">我的项目</a>
+                <a href="${pageContext.request.contextPath}/orders" class="nav-link">订单</a>
+                <a href="${pageContext.request.contextPath}/wallet" class="nav-link">钱包</a>
+                <a href="${pageContext.request.contextPath}/dashboard" class="nav-link">看板</a>
+                <a href="${pageContext.request.contextPath}/logout" class="nav-link">退出登录</a>
             </div>
         </div>
-        <% if (reviews != null && !reviews.isEmpty()) { %>
-            <div class="card shadow-sm">
-                <div class="card-header"><h5 class="mb-0">收到的评价</h5></div>
-                <div class="card-body">
-                    <% for (Review r : reviews) { %>
-                        <div class="border-bottom pb-2 mb-2">
-                            <strong><%= r.getFromUserName() %></strong>
-                            <span class="text-warning ms-2"><%= "★".repeat(r.getScore()) %></span>
-                            <p class="mb-0 mt-1"><%= r.getComment() != null ? r.getComment() : "" %></p>
-                            <small class="text-muted"><%= r.getCreatedAt() %></small>
-                        </div>
+    </nav>
+
+    <div class="profile-header text-center">
+        <div class="container">
+            <div class="avatar">
+                <%= profileUser.getDisplayName() != null && !profileUser.getDisplayName().isEmpty() ?
+                    profileUser.getDisplayName().substring(0, 1).toUpperCase() : "U" %>
+            </div>
+            <h3 class="mt-3"><%= profileUser.getDisplayName() != null && !profileUser.getDisplayName().isEmpty() ? profileUser.getDisplayName() : "未设置昵称" %></h3>
+            <p>
+                <span class="badge bg-light text-dark"><%= "employer".equals(profileUser.getRole()) ? "雇主" : "自由职业者" %></span>
+                <span class="ms-2">
+                    <% int fullStars = (int) profileUser.getRating(); %>
+                    <% for (int i = 0; i < 5; i++) { %>
+                        <i class="bi bi-star<%= i < fullStars ? "-fill" : "" %> star"></i>
+                    <% } %>
+                    <small><%= profileUser.getRating() %></small>
+                </span>
+            </p>
+        </div>
+    </div>
+
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+
+                <%-- 技能 --%>
+                <div class="card p-4 mb-3">
+                    <h5 class="fw-bold mb-3"><i class="bi bi-tools"></i> 技能</h5>
+                    <% if (profileUser.getSkills() != null && !profileUser.getSkills().isEmpty()) { %>
+                        <% for (String skill : profileUser.getSkills().split(",")) { %>
+                            <span class="skill-badge"><%= skill.trim() %></span>
+                        <% } %>
+                    <% } else { %>
+                        <p class="text-muted">暂未设置</p>
                     <% } %>
                 </div>
+
+                <%-- 编辑按钮 --%>
+                <% if (isOwnProfile) { %>
+                    <a href="${pageContext.request.contextPath}/profile/edit" class="btn btn-gradient w-100 mb-3">
+                        <i class="bi bi-pencil"></i> 编辑资料
+                    </a>
+
+                    <%-- 切换角色 --%>
+                    <div class="card p-3 mb-3">
+                        <h5 class="fw-bold mb-3"><i class="bi bi-people"></i> 当前身份</h5>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <span class="badge" style="background: var(--accent-dim); color: var(--accent); font-size: 0.9rem; padding: 6px 14px;">
+                                    <%= "employer".equals(profileUser.getRole()) ? "👔 雇主" : "💻 自由职业者" %>
+                                </span>
+                                <p class="text-muted small mt-2 mb-0">
+                                    <%= "employer".equals(profileUser.getRole()) ? "发布项目需要雇主身份，投竞标需要自由职业者身份" : "投竞标需要自由职业者身份，发布项目需要雇主身份" %>
+                                </p>
+                            </div>
+                            <form action="${pageContext.request.contextPath}/profile/switchRole" method="post" style="display: inline;">
+                                <input type="hidden" name="role" value="<%= "employer".equals(profileUser.getRole()) ? "freelancer" : "employer" %>">
+                                <button type="submit" class="btn btn-outline-primary" style="white-space: nowrap;">
+                                    <i class="bi bi-arrow-left-right"></i> 切换为<%= "employer".equals(profileUser.getRole()) ? "自由职业者" : "雇主" %>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <%-- 查看竞标记录 --%>
+                    <a href="${pageContext.request.contextPath}/my/bids" class="btn btn-outline-primary w-100 mb-3">
+                        <i class="bi bi-send"></i> 我的竞标记录
+                    </a>
+                <% } %>
+
             </div>
-        <% } %>
+        </div>
     </div>
+    <style>
+        .btn-outline-primary {
+            border: 1.5px solid var(--accent); color: var(--accent);
+            border-radius: 8px; padding: 10px; font-weight: 600;
+        }
+        .btn-outline-primary:hover { background: var(--accent); color: white; }
+    </style>
+<jsp:include page="/WEB-INF/tags/chatWidget.jsp" />
 </body>
 </html>

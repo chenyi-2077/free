@@ -1,43 +1,189 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="java.util.List, com.freelite.model.Project, com.freelite.model.User" %>
+<%@ page import="java.util.List, chen_kai_bo.Project, chen_yi_an.User" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
-    User mpUser = (User) session.getAttribute("user");
-    if (mpUser == null) { response.sendRedirect(request.getContextPath() + "/login"); return; }
-    List<Project> mpList = (List<Project>) request.getAttribute("projects");
+    User loginUser = (User) session.getAttribute("user");
+    if (loginUser == null) {
+        response.sendRedirect(request.getContextPath() + "/login");
+        return;
+    }
+    List<Project> myProjects = (List<Project>) request.getAttribute("myProjects");
+    List<Project> biddedProjects = (List<Project>) request.getAttribute("biddedProjects");
+    String activeTab = request.getParameter("tab");
+    if (activeTab == null) activeTab = "my";
 %>
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>我的项目 - Freelite</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/freelite.css">
+    <style>
+        .nav-tabs .nav-link {
+            color: #6b7280;
+            border: none;
+            padding: 10px 20px;
+            font-weight: 500;
+        }
+        .nav-tabs .nav-link:hover {
+            color: #111827;
+            border: none;
+        }
+        .nav-tabs .nav-link.active {
+            color: #00C897;
+            background: none;
+            border: none;
+            border-bottom: 2px solid #00C897;
+        }
+        .nav-tabs {
+            border-bottom: 1px solid #e5e7eb;
+        }
+    </style>
 </head>
-<body class="bg-light">
-    <%@ include file="/navbar.jsp" %>
-    <div class="container py-4">
-        <h4 class="mb-4">我的项目</h4>
-        <a href="${pageContext.request.contextPath}/project/post" class="btn btn-primary mb-3">发布新项目</a>
-        <div class="row">
-            <% if (mpList != null) for (Project p : mpList) { %>
-                <div class="col-md-6 mb-3">
-                    <div class="card shadow-sm">
-                        <div class="card-body">
-                            <h5><a href="${pageContext.request.contextPath}/project/detail?id=<%= p.getId() %>"><%= p.getTitle() %></a></h5>
-                            <p class="text-muted small">预算：¥<%= String.format("%.0f", p.getBudget()) %> | 状态：<%= p.getStatus() %></p>
-                            <a href="${pageContext.request.contextPath}/project/edit?id=<%= p.getId() %>" class="btn btn-outline-primary btn-sm">编辑</a>
-                            <form method="post" action="${pageContext.request.contextPath}/project/delete" style="display:inline">
-                                <input type="hidden" name="id" value="<%= p.getId() %>">
-                                <button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('确定删除？')">删除</button>
-                            </form>
-                        </div>
-                    </div>
+<body>
+    <jsp:include page="/WEB-INF/tags/navbar.jsp" />
+
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4 class="fw-bold mb-0">📁 我的项目</h4>
+            <a href="${pageContext.request.contextPath}/project/post" class="btn btn-gradient">
+                <i class="bi bi-plus-lg"></i> 发布新项目
+            </a>
+        </div>
+
+        <!-- Tab 导航 -->
+        <ul class="nav nav-tabs mb-3">
+            <li class="nav-item">
+                <a class="nav-link <%= "my".equals(activeTab) ? "active" : "" %>" 
+                   href="?tab=my">我开发的项目</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link <%= "bidded".equals(activeTab) ? "active" : "" %>" 
+                   href="?tab=bidded">我竞标的项目</a>
+            </li>
+        </ul>
+
+        <% if ("my".equals(activeTab)) { %>
+            <!-- 我开发的项目 -->
+            <% if (myProjects == null || myProjects.isEmpty()) { %>
+                <div class="card p-5 text-center">
+                    <div style="font-size: 3rem;">📋</div>
+                    <p class="text-muted mt-3 mb-3">你还没有发布过项目</p>
+                    <a href="${pageContext.request.contextPath}/project/post" class="btn btn-gradient" style="width: auto; align-self: center;">发布第一个项目</a>
+                </div>
+            <% } else { %>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead style="background: var(--okx-bg-secondary);">
+                            <tr>
+                                <th>标题</th>
+                                <th>分类</th>
+                                <th>预算</th>
+                                <th>状态</th>
+                                <th>发布日期</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% for (Project p : myProjects) { %>
+                                <tr>
+                                    <td>
+                                        <a href="${pageContext.request.contextPath}/project/<%= p.getId() %>" class="text-decoration-none fw-bold" style="color: #111827;">
+                                            <%= p.getTitle() %>
+                                        </a>
+                                    </td>
+                                    <td><%= p.getCategoryName() != null ? p.getCategoryName() : "未分类" %></td>
+                                    <td style="color: #00C897; font-weight: 600;">¥<%= String.format("%.2f", p.getBudget()) %></td>
+                                    <td>
+                                        <% String status = p.getStatus();
+                                           String badgeClass = "bg-secondary";
+                                           if ("open".equals(status)) badgeClass = "bg-success";
+                                           else if ("in_progress".equals(status)) badgeClass = "bg-primary";
+                                           else if ("completed".equals(status)) badgeClass = "bg-info";
+                                           else if ("cancelled".equals(status)) badgeClass = "bg-secondary";
+                                        %>
+                                        <span class="badge <%= badgeClass %>">
+                                            <% if ("open".equals(status)) { %>开放中
+                                            <% } else if ("in_progress".equals(status)) { %>进行中
+                                            <% } else if ("completed".equals(status)) { %>已完成
+                                            <% } else if ("cancelled".equals(status)) { %>已取消
+                                            <% } else { %><%= status %><% } %>
+                                        </span>
+                                    </td>
+                                    <td style="color: #6b7280;"><%= p.getCreatedAt() != null ? p.getCreatedAt().toLocalDate().toString() : "-" %></td>
+                                    <td>
+                                        <a href="${pageContext.request.contextPath}/project/<%= p.getId() %>" class="btn btn-sm btn-outline-light" style="color: #111827 !important;">查看</a>
+                                        <a href="${pageContext.request.contextPath}/project/edit?id=<%= p.getId() %>" class="btn btn-sm btn-outline-light" style="color: #111827 !important;">编辑</a>
+                                    </td>
+                                </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
                 </div>
             <% } %>
-            <% if (mpList == null || mpList.isEmpty()) { %>
-                <div class="col-12"><p class="text-muted">您还没有发布项目</p></div>
+        <% } else { %>
+            <!-- 我竞标的项目 -->
+            <% if (biddedProjects == null || biddedProjects.isEmpty()) { %>
+                <div class="card p-5 text-center">
+                    <div style="font-size: 3rem;">📩</div>
+                    <p class="text-muted mt-3 mb-3">还没有竞标过任何项目</p>
+                    <a href="${pageContext.request.contextPath}/projects" class="btn btn-gradient" style="width: auto; align-self: center;">去看看项目</a>
+                </div>
+            <% } else { %>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead style="background: var(--okx-bg-secondary);">
+                            <tr>
+                                <th>项目标题</th>
+                                <th>雇主</th>
+                                <th>预算</th>
+                                <th>状态</th>
+                                <th>发布日期</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% for (Project p : biddedProjects) { %>
+                                <tr>
+                                    <td>
+                                        <a href="${pageContext.request.contextPath}/bid/place?projectId=<%= p.getId() %>" class="text-decoration-none fw-bold" style="color: #111827;">
+                                            <%= p.getTitle() %>
+                                        </a>
+                                    </td>
+                                    <td style="color: #6b7280;"><%= p.getEmployerName() != null ? p.getEmployerName() : "未知" %></td>
+                                    <td style="color: #00C897; font-weight: 600;">¥<%= String.format("%.2f", p.getBudget()) %></td>
+                                    <td>
+                                        <% String status = p.getStatus();
+                                           String badgeClass = "bg-secondary";
+                                           if ("open".equals(status)) badgeClass = "bg-success";
+                                           else if ("in_progress".equals(status)) badgeClass = "bg-primary";
+                                           else if ("completed".equals(status)) badgeClass = "bg-info";
+                                           else if ("cancelled".equals(status)) badgeClass = "bg-secondary";
+                                        %>
+                                        <span class="badge <%= badgeClass %>">
+                                            <% if ("open".equals(status)) { %>开放中
+                                            <% } else if ("in_progress".equals(status)) { %>进行中
+                                            <% } else if ("completed".equals(status)) { %>已完成
+                                            <% } else if ("cancelled".equals(status)) { %>已取消
+                                            <% } else { %><%= status %><% } %>
+                                        </span>
+                                    </td>
+                                    <td style="color: #6b7280;"><%= p.getCreatedAt() != null ? p.getCreatedAt().toLocalDate().toString() : "-" %></td>
+                                    <td>
+                                        <a href="${pageContext.request.contextPath}/bid/place?projectId=<%= p.getId() %>" class="btn btn-sm btn-outline-light">查看竞标</a>
+                                    </td>
+                                </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
             <% } %>
-        </div>
+        <% } %>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<jsp:include page="/WEB-INF/tags/chatWidget.jsp" />
 </body>
 </html>

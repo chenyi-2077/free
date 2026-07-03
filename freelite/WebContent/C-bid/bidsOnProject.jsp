@@ -1,48 +1,68 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="java.util.List, com.freelite.model.Bid, com.freelite.model.User" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="java.util.List, chen_yi_an.User, chen_xi_rui.Bid" %>
 <%
+    User loginUser = (User) session.getAttribute("user");
     List<Bid> bids = (List<Bid>) request.getAttribute("bids");
-    Integer bpProjectId = (Integer) request.getAttribute("projectId");
-    User bpUser = (User) session.getAttribute("user");
+    int projectId = (int) request.getAttribute("projectId");
 %>
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>项目竞标 - Freelite</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>竞标列表 - Freelite</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/freelite.css">
+    <style>
+        body { background: #ffffff; }
+        .navbar { background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .card { border: none; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    </style>
 </head>
-<body class="bg-light">
-    <%@ include file="/navbar.jsp" %>
-    <div class="container py-4">
-        <h4 class="mb-4">项目竞标列表</h4>
-        <a href="${pageContext.request.contextPath}/bid/place?projectId=<%= bpProjectId %>" class="btn btn-primary mb-3">提交竞标</a>
-        <a href="${pageContext.request.contextPath}/project/detail?id=<%= bpProjectId %>" class="btn btn-outline-secondary mb-3">返回项目详情</a>
-        <div class="row">
-            <% if (bids != null) for (Bid b : bids) { %>
-                <div class="col-md-6 mb-3">
-                    <div class="card shadow-sm">
-                        <div class="card-body">
-                            <h6><%= b.getFreelancerName() != null ? b.getFreelancerName() : "未知" %></h6>
-                            <p class="mb-1"><strong>报价：</strong>¥<%= String.format("%.2f", b.getAmount()) %></p>
-                            <p class="mb-1"><strong>工期：</strong><%= b.getDays() %> 天</p>
-                            <p class="mb-1"><strong>方案：</strong><%= b.getProposal() %></p>
-                            <span class="badge <%= "pending".equals(b.getStatus()) ? "bg-warning" : "bg-success" %>"><%= b.getStatus() %></span>
-                            <% if (bpUser != null && "pending".equals(b.getStatus())) { %>
-                                <form method="post" action="${pageContext.request.contextPath}/bid/award" class="mt-2">
-                                    <input type="hidden" name="bidId" value="<%= b.getId() %>">
-                                    <button type="submit" class="btn btn-success btn-sm">授标</button>
-                                </form>
-                            <% } %>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="<%= request.getContextPath() %>/projects" style="color: var(--accent);">Freelite</a>
+            <a href="<%= request.getContextPath() %>/project/<%= projectId %>" class="text-decoration-none text-muted">← 返回项目</a>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <h4 class="fw-bold mb-4">📩 项目 #<%= projectId %> 的竞标</h4>
+
+        <% if (bids == null || bids.isEmpty()) { %>
+            <div class="text-center py-5">
+                <div style="font-size: 3rem;">📭</div>
+                <p class="text-muted mt-3">暂无竞标</p>
+            </div>
+        <% } else { %>
+            <% for (Bid bid : bids) { %>
+                <div class="card p-3 mb-2">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong><%= bid.getFreelancerName() %></strong>
+                            <span class="badge bg-light text-dark ms-2">⭐ <%= bid.getFreelancerRating() %></span>
+                            <p class="text-muted small mt-1 mb-0"><%= bid.getProposal() != null ? bid.getProposal() : "无方案描述" %></p>
+                        </div>
+                        <div class="text-end">
+                            <span class="fw-bold" style="color: var(--accent);">¥<%= String.format("%.0f", bid.getAmount()) %></span>
+                            <small class="text-muted ms-1"><%= bid.getDays() %> 天</small>
+                            <div class="mt-1">
+                                <% if ("pending".equals(bid.getStatus())) { %>
+                                    <span class="badge bg-warning text-dark">等待中</span>
+                                <% } else if ("accepted".equals(bid.getStatus())) { %>
+                                    <span class="badge bg-success">已中标</span>
+                                <% } else { %>
+                                    <span class="badge bg-secondary">未选中</span>
+                                <% } %>
+                            </div>
                         </div>
                     </div>
                 </div>
             <% } %>
-            <% if (bids == null || bids.isEmpty()) { %>
-                <div class="col-12"><p class="text-muted">暂无竞标</p></div>
-            <% } %>
-        </div>
+        <% } %>
     </div>
+<jsp:include page="/WEB-INF/tags/chatWidget.jsp" />
 </body>
 </html>
