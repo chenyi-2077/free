@@ -1,16 +1,12 @@
 # Freelite 🚀
 
-> 自由职业项目竞标平台 — 轻量版 Freelancer  
-> **让自由协作，如此简单**
+> 自由职业项目竞标平台 — 轻量版 Freelancer
 
 ---
 
 ## 📋 项目简介
 
-Freelite 是一个 B/S 架构的 Web 应用，对标 Freelancer.com 的核心功能：
-雇主发布项目，自由职业者竞标接单，完成后评价评分。
-
-完整业务闭环：**发布 → 竞标 → 授标 → 担保支付 → 交付 → 资金释放 → 评价**
+Freelite 是一个 B/S 架构的 Web 应用，对标 Freelancer.com 的核心功能。
 
 **技术栈**：JSP + Bootstrap 5 + Java Servlet + JDBC + MySQL 5.7 + Tomcat 8.5
 
@@ -18,242 +14,125 @@ Freelite 是一个 B/S 架构的 Web 应用，对标 Freelancer.com 的核心功
 
 ## 👥 团队与分工
 
-| 学号 | 姓名 | 程序模块分工 | 说明书分工 |
+| 学号 | 姓名 | 程序模块 | 分包目录 |
 |---|---|---|---|
-| 24030505 | **陈怡安** | 用户注册模块、JWT 认证鉴权模块、个人资料管理模块、用户信息编辑模块、会话管理模块、权限控制模块、AuthFilter 权限过滤、结算系统模块（钱包/充值/担保支付/资金释放/退款）、交付与沟通模块、交付物文件管理模块 | 绪论、系统需求分析、说明书格式整合、目录、参考文献 |
-| 24030503 | **陈凯博** | 项目发布模块、项目列表模块、项目详情模块、项目搜索模块、项目分类筛选模块、我的项目列表模块、项目状态管理模块、项目编辑模块、项目删除模块 | 程序相应的模块及流程图、功能模块图、概念结构设计 |
-| 24030504 | **陈僖睿** | 竞标提交模块、项目竞标列表展示模块、雇主授标处理模块、我的竞标记录模块、竞标消息沟通模块 | 程序相应的模块及流程图、致谢、功能总结 |
-| 24030506 | **陈子豪** | 订单创建模块、订单列表模块、订单详情模块、订单完成确认模块、评价模块、数据看板模块 | 程序相应的模块及流程图、三线表 |
-
-> **选题**：自由职业任务集市
+| 24030505 | **陈怡安** | 用户注册/登录/认证/个人资料 | `A-package/` |
+| 24030503 | **陈凯博** | 项目发布/列表/搜索/详情/编辑 | `B-package/` |
+| 24030504 | **陈僖睿** | 竞标提交/列表/授标/我的竞标 | `C-package/` |
+| 24030506 | **陈子豪** | 订单创建/管理/评价/数据看板 | `D-package/` |
 
 ---
 
-## 各模块对应源码
+## 🗂️ 包结构
 
-### 🧑 陈怡安 — 用户系统 + 结算系统 + 交付与沟通
+每个分包是**独立的 Eclipse Dynamic Web Project**，可直接导入运行。
 
-| 模块 | Servlet | DAO | 页面 |
-|---|---|---|---|
-| 用户注册 | `RegisterServlet.java` | `UserDao.java` | `A-user/register.jsp` |
-| 用户登录与JWT认证 | `LoginServlet.java` | | `A-user/login.jsp` |
-| 会话管理/注销 | `LogoutServlet.java` | | |
-| 个人资料 | `ProfileServlet.java` | | `A-user/profile.jsp` |
-| 信息编辑 | `EditProfileServlet.java` | | `A-user/editProfile.jsp` |
-| 通用工具 | | `DBUtil.java` `AuthUtil.java` | `index.jsp` |
-| 数据库脚本 | | | `docs/database.sql` |
-| **权限过滤** | `AuthFilter.java` | | |
-| **钱包** | `WalletServlet.java` | `WalletDao.java` | `wallet.jsp` |
-| **充值** | `RechargeServlet.java` | | |
-| **担保支付服务** | | `EscrowService.java` | |
-| 交易流水 | | `TransactionLogDao.java` | |
-| 实体模型 | `Wallet.java` `TransactionLog.java` | | |
-| **交付与沟通** | `DeliveryChatServlet.java` | `DeliveryDao.java` `ProjectMessageDao.java` | `deliveryChat.jsp` |
-| **交付物下载** | `DeliveryDownloadServlet.java` | | |
-| 交付/消息实体 | `Delivery.java` `ProjectMessage.java` | | |
-
-### 📋 陈凯博 — 项目发布与浏览
-
-| 模块 | Servlet | DAO | 页面 |
-|---|---|---|---|
-| 项目发布 | `PostProjectServlet.java` | `ProjectDao.java` `CategoryDao.java` | `B-project/postProject.jsp` |
-| 项目列表 | `ProjectListServlet.java` | | `B-project/projectList.jsp` |
-| 项目详情 | `ProjectDetailServlet.java` | | `B-project/projectDetail.jsp` |
-| 项目编辑 | `EditProjectServlet.java` | | `B-project/editProject.jsp` |
-| 项目删除 | `DeleteProjectServlet.java` | | |
-| 项目状态管理 | `UpdateProjectStatusServlet.java` | | |
-| 我的项目列表 | `MyProjectsServlet.java` | | `B-project/myProjects.jsp` |
-| 实体模型 | `Project.java` `Category.java` | | |
-
-### 💰 陈僖睿 — 竞标系统
-
-| 模块 | Servlet | DAO | 页面 |
-|---|---|---|---|
-| 竞标提交 | `PlaceBidServlet.java` | `BidDao.java` | `C-bid/bidForm.jsp` |
-| 竞标列表展示 | `BidListServlet.java` | | `C-bid/bidsOnProject.jsp` |
-| 雇主授标处理 | `AwardBidServlet.java` | | |
-| 我的竞标记录 | `MyBidsServlet.java` | | `C-bid/myBids.jsp` |
-| 竞标消息沟通 | `ProjectMessageServlet.java` | | `projectMessages.jsp` |
-| 实体模型 | `Bid.java` | | |
-
-### 📦 陈子豪 — 订单与评价
-
-| 模块 | Servlet | DAO | 页面 |
-|---|---|---|---|
-| 订单创建 | `AwardBidServlet.java` | `OrderDao.java` | |
-| 订单列表 | `OrderListServlet.java` | | `D-order/orderList.jsp` |
-| 订单详情 | `OrderDetailServlet.java` | | `D-order/orderDetail.jsp` |
-| 自由职业者标记完成 | `CompleteOrderServlet.java` | | |
-| 雇主确认完成 | `ConfirmOrderServlet.java` | | |
-| 评价提交/列表 | `ReviewServlet.java` | `ReviewDao.java` | |
-| 数据看板 | `DashboardServlet.java` | | `D-order/dashboard.jsp` |
-| 实体模型 | `Order.java` `Review.java` | | |
-
----
-
-## 🏗️ 完整功能模块
-
-### A — 🧑 用户系统
-
-- 用户注册（雇主/自由职业者双角色）、登录、注销
-- 个人资料查看与编辑（头像、技能标签、评分展示）
-- Session 会话管理 + AuthFilter 权限拦截
-
-### B — 📋 项目发布与浏览
-
-- 项目发布（标题/描述/预算/截止/分类）、编辑、删除
-- 项目市场列表（分页、关键字搜索、分类筛选）
-- 项目详情页、项目状态管理（关闭/重新开放）
-- 我的项目列表
-
-### C — 💰 竞标系统
-
-- 自由职业者提交竞标（报价/工期/方案）
-- 项目竞标列表展示（按金额/工期排序）
-- 雇主授标处理（→ 自动创建订单 + 担保冻结雇主余额）
-- 我的竞标记录、竞标消息沟通
-
-### D — 📦 订单与评价
-
-- 中标后订单自动创建
-- 订单列表（雇主与自由职业者分视角）
-- 订单详情（含状态流转、托管金额展示）
-- 自由职业者标记完成、雇主确认完成
-- 评价提交与评价列表
-- 数据看板统计（项目/竞标/订单/评价数量）
-
-### E — 💳 结算系统
-
-- 钱包管理（余额/冻结金额展示）
-- 充值功能
-- **担保支付**：授标时冻结雇主余额（`fundEscrow`）
-- **资金释放**：雇主确认完成后释放到自由职业者钱包（`releaseToFreelancer`）
-- **退款**：项目取消时解冻退还雇主（`refundToEmployer`）
-- 交易流水记录（recharge / freeze / release / refund / income）
-
-### F — 💬 交付与沟通
-
-- **统一交付沟通页**：项目和沟通消息 + 交付物管理双 Tab
-- **消息系统**：项目参与方可发送文本消息
-- **交付物上传**：自由职业者上传交付文件（UUID 命名 / 日期分目录 / 类型白名单 / 文件大小限制 / 磁盘空间检查）
-- **交付物下载**：雇主下载交付文件（回退友好提示）
-- **30 天自动清理**：启动时异步清理过期文件
-- **权限控制**：仅项目雇主和中标自由职业者可访问
+```
+Freelite/
+├── A-package/       ← 用户系统（陈怡安）
+│   ├── src/         ← Java 源码
+│   ├── WebContent/  ← JSP 页面
+│   ├── lib/         ← MySQL Connector
+│   ├── .project     ← Eclipse 项目配置
+│   └── .classpath   ← 编译路径
+├── B-package/       ← 项目模块（陈凯博）
+├── C-package/       ← 竞标模块（陈僖睿）
+├── D-package/       ← 订单模块（陈子豪）
+├── full-package/    ← 完整整合版
+├── docs/            ← 说明书、数据库脚本
+└── README.md
+```
 
 ---
 
 ## ⚙️ 快速开始
 
 ### 环境要求
-
 - JDK 8+
 - Apache Tomcat 8.5+
 - MySQL 5.7+
-- IDE：Eclipse 2026-03（或任意支持 Dynamic Web Project 的 IDE）
+- IDE：Eclipse 2026-03
 
 ### 运行步骤
 
 **1. Clone 项目**
-
 ```bash
-git clone https://github.com/chenyi-2077/Freelite.git
+git clone https://github.com/chenyi-2077/free.git
 ```
 
-**2. 导入 Eclipse**
-
-File → Import → General → Existing Projects into Workspace → 选择 Freelite 文件夹
-
-> 确保 Eclipse 已配置 Tomcat Server：Window → Preferences → Server → Runtime Environments
-
-**3. 创建数据库**
-
+**2. 创建数据库**
 ```bash
 mysql -u root -p < docs/database.sql
 ```
 
-**4. 修改数据库连接配置**
-
-打开 `src/com/freelite/util/DBUtil.java`，按实际环境修改：
-
+**3. 修改数据库连接**
+打开 `你的包目录/src/com/freelite/util/DBUtil.java`，修改：
 ```java
-private static final String DB_URL = "jdbc:mysql://localhost:3306/freelite?useSSL=false&serverTimezone=Asia/Shanghai&characterEncoding=UTF-8&allowPublicKeyRetrieval=true";
+private static final String DB_URL = "jdbc:mysql://localhost:3306/freelite?...";
 private static final String DB_USER = "root";
-private static final String DB_PASSWORD = "***";
+private static final String DB_PASSWORD = "你的密码";
 ```
 
-**5. 部署运行**
+**4. 导入 Eclipse**
+File → Import → General → Existing Projects into Workspace
+选择你自己的分包目录（如 `B-package/`）
 
-右键项目 → Run As → Run on Server → 选择 Tomcat → 浏览器打开 `http://localhost:8080/`
+**5. 运行**
+右键项目 → Run As → Run on Server → 选择 Tomcat 8.5
+
+> 每个分包已默认**注释掉登录验证过滤器**，可直接独立测试。
+> 完整权限验证在 `full-package/`（整合版）中开启。
 
 ---
 
-## 🗂️ 项目文件结构
+## 📄 各模块对应文件
 
-```
-Freelite/
-├── README.md
-├── Dockerfile
-├── docs/
-│   ├── database.sql
-│   └── 说明书分工.md
-├── WebContent/
-│   ├── WEB-INF/
-│   │   ├── web.xml
-│   │   └── tags/navbar.jsp
-│   ├── A-user/          ← 用户模块
-│   ├── B-project/       ← 项目模块
-│   ├── C-bid/           ← 竞标模块
-│   ├── D-order/         ← 订单模块
-│   ├── deliveryChat.jsp ← 交付与沟通
-│   ├── wallet.jsp       ← 钱包
-│   └── index.jsp
-├── src/com/freelite/
-│   ├── model/           ← 实体类
-│   ├── dao/             ← 数据访问层
-│   ├── servlet/         ← 控制层（27 个 Servlet）
-│   ├── service/         ← 业务层（EscrowService）
-│   ├── filter/          ← 过滤器（AuthFilter）
-│   └── util/            ← 工具类（DBUtil、AuthUtil）
-├── lib/                 ← JDBC 驱动
-└── .gitignore
-```
+### A — 用户系统（陈怡安）
+- `A-package/WebContent/A-user/login.jsp`
+- `A-package/WebContent/A-user/register.jsp`
+- `A-package/WebContent/A-user/profile.jsp`
+- `A-package/WebContent/A-user/editProfile.jsp`
+- `A-package/src/.../servlet/LoginServlet.java`
+- `A-package/src/.../servlet/RegisterServlet.java`
+- `A-package/src/.../servlet/ProfileServlet.java`
+- `A-package/src/.../servlet/EditProfileServlet.java`
 
----
+### B — 项目发布与浏览（陈凯博）
+- `B-package/WebContent/B-project/projectList.jsp`
+- `B-package/WebContent/B-project/projectDetail.jsp`
+- `B-package/WebContent/B-project/postProject.jsp`
+- `B-package/WebContent/B-project/editProject.jsp`
+- `B-package/WebContent/B-project/myProjects.jsp`
+- `B-package/src/.../servlet/ProjectListServlet.java`
+- `B-package/src/.../servlet/ProjectDetailServlet.java`
+- `B-package/src/.../servlet/PostProjectServlet.java`
+- `B-package/src/.../servlet/EditProjectServlet.java`
 
-## 🔐 业务关键逻辑
+### C — 竞标系统（陈僖睿）
+- `C-package/WebContent/C-bid/bidForm.jsp`
+- `C-package/WebContent/C-bid/bidsOnProject.jsp`
+- `C-package/WebContent/C-bid/myBids.jsp`
+- `C-package/src/.../servlet/PlaceBidServlet.java`
+- `C-package/src/.../servlet/BidListServlet.java`
+- `C-package/src/.../servlet/MyBidsServlet.java`
+- `C-package/src/.../servlet/AwardBidServlet.java`
 
-### 担保支付流程
-
-```
-雇主发布项目 → 自由职业者竞标 → 雇主授标
-  ├── ① 冻结雇主余额（fundEscrow）
-  ├── ② 创建订单（in_progress）
-  └── ③ 自由职业者可上传交付物
-
-自由职业者标记完成 → 雇主确认完成
-  ├── ① 订单状态：in_progress → awaiting_confirm → completed
-  ├── ② 释放冻结资金到自由职业者钱包
-  └── ③ 可选：双方互评
-```
-
-### 交付物流程
-
-```
-自由职业者上传（类型白名单/UUID命名/磁盘检查）
-  → 文件存储到 uploads/yyyy/MM/
-  → 雇主下载（文件路径回退友好提示）
-  → 30天自动清理旧文件
-```
-
-### 项目状态转换
-
-```
-open ──→ in_progress ──→ completed
-  │                        ↑
-  ├──→ cancelled ──────→ open (重新开放)
-  └──→ (通过按钮取消)
-```
+### D — 订单与评价（陈子豪）
+- `D-package/WebContent/D-order/orderList.jsp`
+- `D-package/WebContent/D-order/orderDetail.jsp`
+- `D-package/WebContent/D-order/dashboard.jsp`
+- `D-package/src/.../servlet/OrderListServlet.java`
+- `D-package/src/.../servlet/OrderDetailServlet.java`
+- `D-package/src/.../servlet/DashboardServlet.java`
+- `D-package/src/.../servlet/ReviewServlet.java`
 
 ---
 
-*Freelite — 让自由协作，如此简单* 🚀
+## 🔧 常见问题
+
+### 数据库连接失败？
+修改对应包的 `src/com/freelite/util/DBUtil.java` 中的 `DB_USER` 和 `DB_PASSWORD`。
+
+### 登录验证挡住了？
+独立分包（A/B/C/D）的 `web.xml` 中 **AuthFilter 已注释**，直接访问即可。
+
