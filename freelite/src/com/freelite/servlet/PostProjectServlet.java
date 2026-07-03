@@ -24,6 +24,12 @@ public class PostProjectServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
+        User user = (User) req.getSession().getAttribute("user");
+        if (user == null) {
+            resp.sendRedirect(req.getContextPath() + "/login");
+            return;
+        }
+
         List<Category> categories = categoryDao.findAll();
         req.setAttribute("categories", categories);
         req.getRequestDispatcher("/B-project/postProject.jsp").forward(req, resp);

@@ -17,90 +17,98 @@ public class WalletDao {
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, userId);
             try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) return mapWallet(rs);
+                if (rs.next()) {
+                    return mapWallet(rs);
+                }
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
-        String insert = "INSERT INTO wallet (user_id, balance, frozen) VALUES (?, 0, 0)";
+        // create new wallet
+        String insertSql = "INSERT INTO wallet (user_id, balance, frozen, created_at, updated_at) VALUES (?, 0, 0, ?, ?)";
         try (Connection conn = DBUtil.getConnection();
-             PreparedStatement ps = conn.prepareStatement(insert, Statement.RETURN_GENERATED_KEYS)) {
+             PreparedStatement ps = conn.prepareStatement(insertSql)) {
             ps.setInt(1, userId);
+            ps.setTimestamp(2, Timestamp.valueOf(LocalDateTime.now()));
+            ps.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now()));
             ps.executeUpdate();
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return getOrCreate(userId);
     }
 
-    public boolean recharge(int userId, double amount) {
-        String sql = "UPDATE wallet SET balance = balance + ? WHERE user_id = ?";
+    public void recharge(int userId, double amount) {
+        String sql = "UPDATE wallet SET balance = balance + ?, updated_at = ? WHERE user_id = ?";
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setDouble(1, amount);
-            ps.setInt(2, userId);
-            return ps.executeUpdate() > 0;
-        } catch (Exception e) {
-            e.printStackTrace();
+            ps.setTimestamp(2, Timestamp.valueOf(LocalDateTime.now()));
+            ps.setInt(3, userId);
+            ps.executeUpdate();
         }
-        return false;
+        addTransactionLog(userId, amount, "recharge", "充值 " + amount);
     }
 
-    public boolean freeze(int userId, double amount) {
-        String sql = "UPDATE wallet SET balance = balance - ?, frozen = frozen + ? WHERE user_id = ? AND balance >= ?";
+    public void freeze(int userId, double amount) {
+        String sql = "UPDATE wallet SET balance = balance - ?, frozen = frozen + ?, updated_at = ? WHERE user_id = ?";
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setDouble(1, amount);
             ps.setDouble(2, amount);
-            ps.setInt(3, userId);
-            ps.setDouble(4, amount);
-            return ps.executeUpdate() > 0;
-        } catch (Exception e) {
-            e.printStackTrace();
+            ps.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now()));
+            ps.setInt(4, userId);
+            ps.executeUpdate();
         }
-        return false;
     }
 
-    public boolean release(int userId, double amount) {
-        String sql = "UPDATE wallet SET frozen = frozen - ? WHERE user_id = ? AND frozen >= ?";
-        try (Connection conn = DBUtil.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setDouble(1, amount);
-            ps.setInt(2, userId);
-            ps.setDouble(3, amount);
-            return ps.executeUpdate() > 0;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    public boolean refund(int userId, double amount) {
-        String sql = "UPDATE wallet SET balance = balance + ?, frozen = frozen - ? WHERE user_id = ? AND frozen >= ?";
+    public void release(int userId, double amount) {
+        String sql = "UPDATE wallet SET frozen = frozen - ?, balance = balance + ?, updated_at = ? WHERE user_id = ?";
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setDouble(1, amount);
             ps.setDouble(2, amount);
-            ps.setInt(3, userId);
-            ps.setDouble(4, amount);
-            return ps.executeUpdate() > 0;
-        } catch (Exception e) {
-            e.printStackTrace();
+            ps.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now()));
+            ps.setInt(4, userId);
+            ps.executeUpdate();
         }
-        return false;
     }
 
-    public boolean income(int userId, double amount) {
-        String sql = "UPDATE wallet SET balance = balance + ? WHERE user_id = ?";
+    public void refund(int userId, double amount) {
+        String sql = "UPDATE wallet SET frozen = frozen - ?, balance = balance + ?, updated_at = ? WHERE user_id = ?";
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setDouble(1, amount);
-            ps.setInt(2, userId);
-            return ps.executeUpdate() > 0;
-        } catch (Exception e) {
-            e.printStackTrace();
+            ps.setDouble(2, amount);
+            ps.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now()));
+            ps.setInt(4, userId);
+            ps.executeUpdate();
         }
-        return false;
+        addTransactionLog(userId, amount, "refund", "退款 " + amount);
+    }
+
+    public void income(int userId, double amount, String description) {
+        String sql = "UPDATE wallet SET balance = balance + ?, updated_at = ? WHERE user_id = ?";
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setDouble(1, amount);
+            ps.setTimestamp(2, Timestamp.valueOf(LocalDateTime.now()));
+            ps.setInt(3, userId);
+            ps.executeUpdate();
+        }
+        addTransactionLog(userId, amount, "income", description);
+    }
+
+    public void payment(int userId, double amount, String description) {
+        String sql = "UPDATE wallet SET balance = balance - ?, updated_at = ? WHERE user_id = ?";
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setDouble(1, amount);
+            ps.setTimestamp(2, Timestamp.valueOf(LocalDateTime.now()));
+            ps.setInt(3, userId);
+            ps.executeUpdate();
+        }
+        addTransactionLog(userId, -amount, "payment", description);
     }
 
     public List<TransactionLog> findTransactionLogs(int userId) {
@@ -128,7 +136,7 @@ public class WalletDao {
         return list;
     }
 
-    public void logTransaction(int userId, double amount, String type, String description) {
+    private void addTransactionLog(int userId, double amount, String type, String description) {
         String sql = "INSERT INTO transaction_log (user_id, amount, type, description, created_at) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {

@@ -28,7 +28,12 @@ public class ProfileServlet extends HttpServlet {
         User profileUser = null;
         if (idParam != null && !idParam.trim().isEmpty()) {
             profileUser = userDao.findById(Integer.parseInt(idParam));
-        } else if (sessionUser != null) {
+        } else {
+            // viewing own profile requires login
+            if (sessionUser == null) {
+                resp.sendRedirect(req.getContextPath() + "/login");
+                return;
+            }
             profileUser = userDao.findById(sessionUser.getId());
         }
 

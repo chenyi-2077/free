@@ -19,7 +19,9 @@ public class ProjectMessageDao {
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, projectId);
             try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) list.add(mapMessage(rs));
+                while (rs.next()) {
+                    list.add(mapMessage(rs));
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();

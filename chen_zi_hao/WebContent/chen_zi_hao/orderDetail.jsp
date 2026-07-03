@@ -1,5 +1,12 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page import="com.freelite.model.Order, com.freelite.model.Review, com.freelite.model.User, java.util.List" %>
+<%
+    String ctx = request.getContextPath();
+    Order od = (Order) request.getAttribute("order");
+    if (od == null) { response.sendRedirect(ctx + "/orders"); return; }
+    List<Review> odReviews = (List<Review>) request.getAttribute("reviews");
+    User odUser = (User) session.getAttribute("user");
+%>
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -9,128 +16,62 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body class="bg-light">
-
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-    <div class="container">
-        <a class="navbar-brand" href="${pageContext.request.contextPath}/orders">Freelite</a>
-        <div class="collapse navbar-collapse">
-            <ul class="navbar-nav me-auto">
-                <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/orders">订单列表</a></li>
-                <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/dashboard">数据看板</a></li>
-            </ul>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+        <div class="container">
+            <a class="navbar-brand" href="<%= ctx %>/">Freelite</a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" href="<%= ctx %>/orders">订单列表</a></li>
+                    <li class="nav-item"><a class="nav-link" href="<%= ctx %>/dashboard">数据看板</a></li>
+                </ul>
+            </div>
         </div>
-    </div>
-</nav>
-
-<div class="container py-4">
-
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="${pageContext.request.contextPath}/orders">订单列表</a></li>
-            <li class="breadcrumb-item active">订单详情</li>
-        </ol>
     </nav>
-
-    <div class="card shadow-sm border-0 mb-4">
-        <div class="card-header bg-white py-3">
-            <h4 class="card-title mb-0">${order.projectTitle}</h4>
+    <div class="container py-4">
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h4><%= od.getProjectTitle() != null ? od.getProjectTitle() : "订单#" + od.getId() %></h4>
+                <span class="badge <%= "in_progress".equals(od.getStatus()) ? "bg-warning text-dark" : ("awaiting_confirm".equals(od.getStatus()) ? "bg-info text-dark" : "bg-success") %>"><%= od.getStatus() %></span>
+                <hr>
+                <div class="row">
+                    <div class="col-md-4"><strong>金额：</strong>&yen;<%= String.format("%.2f", od.getAmount()) %></div>
+                    <div class="col-md-4"><strong>雇主：</strong><%= od.getEmployerName() %></div>
+                    <div class="col-md-4"><strong>自由职业者：</strong><%= od.getFreelancerName() %></div>
+                </div>
+                <% if (odUser != null) { %>
+                    <hr>
+                    <% if ("in_progress".equals(od.getStatus())) { %>
+                        <form method="post" action="<%= ctx %>/order/complete" style="display:inline">
+                            <input type="hidden" name="id" value="<%= od.getId() %>">
+                            <button type="submit" class="btn btn-success btn-sm">标记完成</button>
+                        </form>
+                    <% } %>
+                    <% if ("awaiting_confirm".equals(od.getStatus())) { %>
+                        <form method="post" action="<%= ctx %>/order/confirm" style="display:inline">
+                            <input type="hidden" name="id" value="<%= od.getId() %>">
+                            <button type="submit" class="btn btn-primary btn-sm">确认完成</button>
+                        </form>
+                    <% } %>
+                    <% if ("completed".equals(od.getStatus())) { %>
+                        <a href="<%= ctx %>/review?orderId=<%= od.getId() %>&toUserId=<%= od.getFreelancerId() %>" class="btn btn-outline-warning btn-sm">评价</a>
+                    <% } %>
+                <% } %>
+            </div>
         </div>
-        <div class="card-body">
-            <div class="row">
-                <div class="col-md-6">
-                    <table class="table table-borderless">
-                        <tr>
-                            <th style="width:120px;">订单编号</th>
-                            <td>#${order.id}</td>
-                        </tr>
-                        <tr>
-                            <th>项目名称</th>
-                            <td>${order.projectTitle}</td>
-                        </tr>
-                        <tr>
-                            <th>雇主</th>
-                            <td>${order.employerName}</td>
-                        </tr>
-                        <tr>
-                            <th>自由职业者</th>
-                            <td>${order.freelancerName}</td>
-                        </tr>
-                        <tr>
-                            <th>金额</th>
-                            <td><strong>¥${order.amount}</strong></td>
-                        </tr>
-                        <tr>
-                            <th>状态</th>
-                            <td>
-                                <span class="badge
-                                    <c:choose>
-                                        <c:when test="${order.status == 'in_progress'}">bg-warning text-dark</c:when>
-                                        <c:when test="${order.status == 'awaiting_confirm'}">bg-info text-dark</c:when>
-                                        <c:when test="${order.status == 'completed'}">bg-success</c:when>
-                                        <c:otherwise>bg-secondary</c:otherwise>
-                                    </c:choose>
-                                ">${order.status}</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>创建时间</th>
-                            <td>${order.createdAt}</td>
-                        </tr>
-                    </table>
+        <% if (odReviews != null && !odReviews.isEmpty()) { %>
+            <div class="card shadow-sm">
+                <div class="card-header"><h5 class="mb-0">评价</h5></div>
+                <div class="card-body">
+                    <% for (Review r : odReviews) { %>
+                        <div class="border-bottom pb-2 mb-2">
+                            <strong><%= r.getFromUserName() %></strong>
+                            <span class="text-warning"><% for(int i=0;i<r.getScore();i++){ %>★<% } %></span>
+                            <p class="mb-0"><%= r.getComment() != null ? r.getComment() : "" %></p>
+                        </div>
+                    <% } %>
                 </div>
             </div>
-
-            <!-- 操作按钮 -->
-            <div class="mt-3">
-                <c:if test="${order.status == 'in_progress'}">
-                    <form action="${pageContext.request.contextPath}/order/complete" method="post" style="display:inline;">
-                        <input type="hidden" name="id" value="${order.id}">
-                        <button type="submit" class="btn btn-success">标记完成（待确认）</button>
-                    </form>
-                </c:if>
-                <c:if test="${order.status == 'awaiting_confirm'}">
-                    <form action="${pageContext.request.contextPath}/order/confirm" method="post" style="display:inline;">
-                        <input type="hidden" name="id" value="${order.id}">
-                        <button type="submit" class="btn btn-primary">确认完成</button>
-                    </form>
-                </c:if>
-                <c:if test="${order.status == 'completed' && empty review}">
-                    <a href="${pageContext.request.contextPath}/review?orderId=${order.id}" class="btn btn-outline-warning">发表评价</a>
-                </c:if>
-                <a href="${pageContext.request.contextPath}/orders" class="btn btn-outline-secondary">返回列表</a>
-            </div>
-        </div>
+        <% } %>
     </div>
-
-    <!-- 评价信息 -->
-    <c:if test="${not empty review}">
-        <div class="card shadow-sm border-0">
-            <div class="card-header bg-white py-3">
-                <h5 class="card-title mb-0">订单评价</h5>
-            </div>
-            <div class="card-body">
-                <p><strong>评价人：</strong>${review.fromUserName}</p>
-                <p><strong>评分：</strong>
-                    <c:forEach begin="1" end="5" var="i">
-                        <span class="text-warning" style="font-size:1.2rem;">
-                            <c:choose>
-                                <c:when test="${i <= review.score}">&#9733;</c:when>
-                                <c:otherwise>&#9734;</c:otherwise>
-                            </c:choose>
-                        </span>
-                    </c:forEach>
-                    <span class="ms-2">${review.score}/5</span>
-                </p>
-                <c:if test="${not empty review.comment}">
-                    <p><strong>评语：</strong></p>
-                    <p class="text-muted">${review.comment}</p>
-                </c:if>
-                <p class="text-muted small">${review.createdAt}</p>
-            </div>
-        </div>
-    </c:if>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

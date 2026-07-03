@@ -22,8 +22,7 @@ public class MyProjectsServlet extends HttpServlet {
             throws ServletException, IOException {
         User user = (User) req.getSession().getAttribute("user");
         if (user == null) {
-            req.setAttribute("projects", null);
-            req.getRequestDispatcher("/B-project/myProjects.jsp").forward(req, resp);
+            resp.sendRedirect(req.getContextPath() + "/login");
             return;
         }
 

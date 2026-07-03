@@ -19,7 +19,9 @@ public class DeliveryDao {
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, projectId);
             try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) list.add(mapDelivery(rs));
+                while (rs.next()) {
+                    list.add(mapDelivery(rs));
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();

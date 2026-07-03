@@ -22,8 +22,7 @@ public class MyBidsServlet extends HttpServlet {
             throws ServletException, IOException {
         User user = (User) req.getSession().getAttribute("user");
         if (user == null) {
-            req.setAttribute("bids", null);
-            req.getRequestDispatcher("/C-bid/myBids.jsp").forward(req, resp);
+            resp.sendRedirect(req.getContextPath() + "/login");
             return;
         }
 

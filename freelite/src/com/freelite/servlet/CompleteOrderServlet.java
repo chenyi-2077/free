@@ -1,9 +1,9 @@
 package com.freelite.servlet;
 
 import com.freelite.dao.OrderDao;
+import com.freelite.model.Order;
 import com.freelite.model.User;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -17,7 +17,7 @@ public class CompleteOrderServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
+            throws IOException {
         User user = (User) req.getSession().getAttribute("user");
         if (user == null) {
             resp.sendRedirect(req.getContextPath() + "/login");
@@ -30,8 +30,11 @@ public class CompleteOrderServlet extends HttpServlet {
             return;
         }
 
-        int id = Integer.parseInt(idStr);
-        orderDao.updateStatus(id, "awaiting_confirm");
-        resp.sendRedirect(req.getContextPath() + "/order/detail?id=" + id);
+        Order order = orderDao.findById(Integer.parseInt(idStr));
+        if (order != null && order.getFreelancerId() == user.getId()) {
+            orderDao.updateStatus(order.getId(), "completed");
+        }
+
+        resp.sendRedirect(req.getContextPath() + "/order/detail?id=" + idStr);
     }
 }

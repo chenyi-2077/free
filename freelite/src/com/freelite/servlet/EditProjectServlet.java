@@ -24,6 +24,12 @@ public class EditProjectServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
+        User user = (User) req.getSession().getAttribute("user");
+        if (user == null) {
+            resp.sendRedirect(req.getContextPath() + "/login");
+            return;
+        }
+
         String idStr = req.getParameter("id");
         if (idStr == null || idStr.trim().isEmpty()) {
             resp.sendRedirect(req.getContextPath() + "/my/projects");
@@ -31,7 +37,7 @@ public class EditProjectServlet extends HttpServlet {
         }
 
         Project project = projectDao.findById(Integer.parseInt(idStr));
-        if (project == null) {
+        if (project == null || project.getEmployerId() != user.getId()) {
             resp.sendRedirect(req.getContextPath() + "/my/projects");
             return;
         }
