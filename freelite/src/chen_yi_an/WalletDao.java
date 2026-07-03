@@ -32,7 +32,17 @@ public class WalletDao {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return getOrCreate(userId);
+        // 重新查询新创建的 wallet
+        try (Connection conn2 = DBUtil.getConnection();
+             PreparedStatement ps2 = conn2.prepareStatement("SELECT * FROM wallet WHERE user_id = ?")) {
+            ps2.setInt(1, userId);
+            try (ResultSet rs2 = ps2.executeQuery()) {
+                if (rs2.next()) return mapWallet(rs2);
+            }
+        } catch (SQLException e2) {
+            e2.printStackTrace();
+        }
+        return null;
     }
 
     public void recharge(int userId, double amount) {
