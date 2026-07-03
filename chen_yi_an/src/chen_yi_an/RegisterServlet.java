@@ -46,7 +46,7 @@ public class RegisterServlet extends HttpServlet {
             user.setId(id);
             HttpSession session = request.getSession();
             session.setAttribute("user", user);
-            response.sendRedirect(request.getContextPath() + "/projects");
+            response.sendRedirect(request.getContextPath() + "/profile");
         } else {
             request.setAttribute("error", "注册失败，请重试");
             request.getRequestDispatcher("/chen_yi_an/register.jsp").forward(request, response);
