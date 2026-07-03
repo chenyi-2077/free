@@ -1,4 +1,4 @@
-<%@ page import="java.util.List, chen_yi_an.User, chen_xi_rui.ProjectMessage" %>
+<%@ page import="java.util.List, chen_yi_an.User, chen_yi_an.ProjectMessage" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
     User loginUser = (User) session.getAttribute("user");
