@@ -1,0 +1,70 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="chen_yi_an.User" %>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>个人资料 - 自由人平台</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <div class="container">
+        <div class="row justify-content-center mt-5">
+            <div class="col-md-6">
+                <div class="card shadow-sm">
+                    <div class="card-body p-4">
+                        <h3 class="card-title text-center mb-4">个人资料</h3>
+                        <%
+                            User profileUser = (User) request.getAttribute("profileUser");
+                            if (profileUser != null) {
+                        %>
+                        <div class="mb-3">
+                            <label class="form-label text-muted">邮箱</label>
+                            <p class="form-control-plaintext"><%= profileUser.getEmail() != null ? profileUser.getEmail() : "" %></p>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-muted">显示名</label>
+                            <p class="form-control-plaintext"><%= profileUser.getDisplayName() != null ? profileUser.getDisplayName() : "" %></p>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-muted">角色</label>
+                            <p class="form-control-plaintext"><%= profileUser.getRole() != null ? profileUser.getRole() : "" %></p>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-muted">技能</label>
+                            <p class="form-control-plaintext">
+                            <%
+                                String skills = profileUser.getSkills();
+                                if (skills != null && !skills.isEmpty()) {
+                                    String[] skillArr = skills.split(",");
+                                    for (String skill : skillArr) {
+                            %>
+                                <span class="badge bg-primary me-1"><%= skill.trim() %></span>
+                            <%
+                                    }
+                                }
+                            %>
+                            </p>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-muted">评分</label>
+                            <p class="form-control-plaintext"><%= String.format("%.1f", profileUser.getRating()) %> / 5.0</p>
+                        </div>
+                        <div class="d-grid">
+                            <a href="${pageContext.request.contextPath}/profile/edit" class="btn btn-primary">编辑资料</a>
+                        </div>
+                        <% } else { %>
+                        <p class="text-muted text-center">请先登录</p>
+                        <div class="d-grid">
+                            <a href="${pageContext.request.contextPath}/login" class="btn btn-primary">去登录</a>
+                        </div>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
