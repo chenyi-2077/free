@@ -10,10 +10,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>订单列表 - Freelite</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/freelite.css">
 </head>
 <body class="bg-light">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+    <nav class="navbar-custom">
         <div class="container">
             <a class="navbar-brand" href="<%= ctx %>/">Freelite</a>
             <div class="collapse navbar-collapse">
@@ -41,8 +43,6 @@
             <% } %>
             <% if (orders == null || orders.isEmpty()) { %>
                 <div class="col-12"><p class="text-muted">暂无订单</p></div>
-            <% } %>
-        </div>
     </div>
 </body>
 </html>

@@ -10,7 +10,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>我的项目 - FreeLite</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/freelite.css">
 </head>
 <body class="bg-light">
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
@@ -31,7 +33,6 @@
 
     <div class="container py-4">
         <h3 class="mb-4">我的项目</h3>
-
         <%
             if (projects != null && !projects.isEmpty()) {
                 for (Project p : projects) {
@@ -51,30 +52,20 @@
                     <span>💰 ¥<%= String.format("%.2f", p.getBudget()) %></span>
                     <span>📂 <%= p.getCategoryName() != null ? p.getCategoryName() : "未分类" %></span>
                     <span>📅 截止: <%= p.getDeadline() != null ? p.getDeadline().toString() : "未设置" %></span>
-                </div>
                 <div class="mt-2">
                     <a href="${pageContext.request.contextPath}/project/edit?id=<%= p.getId() %>" class="btn btn-sm btn-warning">编辑</a>
                     <form action="${pageContext.request.contextPath}/project/delete" method="post" class="d-inline" onsubmit="return confirm('确定要删除此项目吗？')">
                         <input type="hidden" name="id" value="<%= p.getId() %>">
                         <button type="submit" class="btn btn-sm btn-danger">删除</button>
                     </form>
-                </div>
-            </div>
-        </div>
-        <%
                 }
             } else {
-        %>
         <div class="alert alert-info text-center">
             你还没有发布项目
             <br>
-            <a href="${pageContext.request.contextPath}/project/post" class="btn btn-primary mt-2">发布第一个项目</a>
-        </div>
-        <%
+            <a href="${pageContext.request.contextPath}/project/post" class="btn btn-gradient mt-2">发布第一个项目</a>
             }
-        %>
     </div>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

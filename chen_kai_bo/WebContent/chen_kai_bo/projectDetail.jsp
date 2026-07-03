@@ -17,7 +17,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><%= project.getTitle() %> - FreeLite</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/freelite.css">
 </head>
 <body class="bg-light">
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
@@ -49,7 +51,6 @@
                             <h6 class="text-muted">项目描述</h6>
                             <p class="mb-0" style="white-space: pre-wrap;"><%= project.getDescription() != null ? project.getDescription() : "暂无描述" %></p>
                         </div>
-
                         <div class="row mb-3">
                             <div class="col-md-6 mb-2">
                                 <div class="border rounded p-3 bg-white">
@@ -57,26 +58,12 @@
                                     <strong>¥ <%= String.format("%.2f", project.getBudget()) %></strong>
                                 </div>
                             </div>
-                            <div class="col-md-6 mb-2">
-                                <div class="border rounded p-3 bg-white">
                                     <small class="text-muted d-block">截止日期</small>
                                     <strong><%= project.getDeadline() != null ? project.getDeadline().toString() : "未设置" %></strong>
-                                </div>
-                            </div>
-                            <div class="col-md-6 mb-2">
-                                <div class="border rounded p-3 bg-white">
                                     <small class="text-muted d-block">分类</small>
                                     <strong><%= project.getCategoryName() != null ? project.getCategoryName() : "未分类" %></strong>
-                                </div>
-                            </div>
-                            <div class="col-md-6 mb-2">
-                                <div class="border rounded p-3 bg-white">
                                     <small class="text-muted d-block">雇主</small>
                                     <strong><%= project.getEmployerName() != null ? project.getEmployerName() : "未知" %></strong>
-                                </div>
-                            </div>
-                        </div>
-
                         <% if (isOwner) { %>
                         <hr>
                         <div class="d-flex gap-2">
@@ -92,21 +79,12 @@
                                 <button type="submit" class="btn <%= btnClass %>"><%= nextLabel %></button>
                             </form>
                             <form action="${pageContext.request.contextPath}/project/delete" method="post" class="d-inline" onsubmit="return confirm('确定要删除此项目吗？')">
-                                <input type="hidden" name="id" value="<%= project.getId() %>">
                                 <button type="submit" class="btn btn-danger">删除项目</button>
-                            </form>
-                        </div>
                         <% } %>
-
                         <div class="mt-3">
                             <a href="${pageContext.request.contextPath}/projects" class="btn btn-outline-secondary">← 返回列表</a>
-                        </div>
-                    </div>
                 </div>
-            </div>
-        </div>
     </div>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

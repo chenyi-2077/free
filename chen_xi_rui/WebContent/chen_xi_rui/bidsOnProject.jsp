@@ -12,10 +12,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>项目竞标 - Freelite</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/freelite.css">
 </head>
 <body class="bg-light">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+    <nav class="navbar-custom">
         <div class="container">
             <a class="navbar-brand" href="<%= ctx %>/">Freelite</a>
             <div class="collapse navbar-collapse">
@@ -28,7 +30,7 @@
     </nav>
     <div class="container py-4">
         <h4 class="mb-4">项目竞标列表</h4>
-        <a href="<%= ctx %>/bid/place?projectId=<%= bpProjectId %>" class="btn btn-primary mb-3">提交竞标</a>
+        <a href="<%= ctx %>/bid/place?projectId=<%= bpProjectId %>" class="btn btn-gradient mb-3">提交竞标</a>
         <a href="<%= ctx %>/project/detail?id=<%= bpProjectId %>" class="btn btn-outline-secondary mb-3">返回项目详情</a>
         <% if (bids == null || bids.isEmpty()) { %>
             <p class="text-muted">暂无竞标</p>
@@ -53,7 +55,6 @@
                         </div>
                     </div>
                 <% } %>
-            </div>
         <% } %>
     </div>
 </body>

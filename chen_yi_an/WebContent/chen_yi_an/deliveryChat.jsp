@@ -8,7 +8,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>交付沟通 - 自由人平台</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/freelite.css">
 </head>
 <body class="bg-light">
     <div class="container">
@@ -23,19 +25,15 @@
                         %>
                         <p class="text-muted text-center">请先登录</p>
                         <div class="d-grid">
-                            <a href="${pageContext.request.contextPath}/login" class="btn btn-primary">去登录</a>
+                            <a href="${pageContext.request.contextPath}/login" class="btn btn-gradient">去登录</a>
                         </div>
                         <% } else { %>
                         <p class="text-muted text-center mb-4">您好，<%= chatUser.getDisplayName() != null ? chatUser.getDisplayName() : chatUser.getEmail() %></p>
-                        <%
                             List<Map<String, Object>> projects = (List<Map<String, Object>>) request.getAttribute("projects");
                             if (projects != null && !projects.isEmpty()) {
-                        %>
                         <div class="list-group mb-4">
-                        <%
                             for (Map<String, Object> project : projects) {
                                 int progress = (int) project.get("progress");
-                        %>
                             <div class="list-group-item">
                                 <div class="d-flex w-100 justify-content-between">
                                     <h6 class="mb-1"><%= project.get("title") %></h6>
@@ -44,28 +42,19 @@
                                 <p class="mb-1 text-muted small"><%= project.get("description") != null ? project.get("description") : "" %></p>
                                 <div class="progress mt-2" style="height: 8px;">
                                     <div class="progress-bar" role="progressbar" style="width: <%= progress %>%" aria-valuenow="<%= progress %>" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
                                 <small class="text-muted">进度：<%= progress %>%</small>
                             </div>
                         <% } %>
-                        </div>
 
                         <div class="card">
                             <div class="card-body">
                                 <h6 class="card-subtitle mb-3 text-muted">消息</h6>
                                 <div class="mb-3" style="max-height: 300px; overflow-y: auto; border: 1px solid #e9ecef; border-radius: 0.375rem; padding: 1rem;">
                                     <p class="text-muted text-center small">暂无消息，开始沟通吧</p>
-                                </div>
                                 <div class="input-group">
                                     <input type="text" class="form-control" placeholder="输入消息...">
-                                    <button class="btn btn-primary" type="button">发送</button>
-                                </div>
-                            </div>
-                        </div>
-                        <% } else { %>
+                                    <button class="btn btn-gradient" type="button">发送</button>
                         <p class="text-muted text-center">暂无参与的项目</p>
-                        <% } %>
-                        <% } %>
                     </div>
                 </div>
             </div>
