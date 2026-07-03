@@ -15,7 +15,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body class="bg-light">
-    <%@ include file="navbar.jsp" %>
+    <%@ include file="/navbar.jsp" %>
     <div class="container py-4">
         <h4 class="mb-4">项目市场</h4>
         <form class="row g-2 mb-4" method="get">
