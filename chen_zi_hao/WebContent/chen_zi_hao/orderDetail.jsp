@@ -50,10 +50,16 @@
                     <% } %>
                     <% if ("awaiting_confirm".equals(od.getStatus())) { %>
                         <form method="post" action="<%= ctx %>/order/confirm" style="display:inline">
+                            <input type="hidden" name="id" value="<%= od.getId() %>">
                             <button type="submit" class="btn btn-gradient btn-sm">确认完成</button>
+                        </form>
+                    <% } %>
                     <% if ("completed".equals(od.getStatus())) { %>
                         <a href="<%= ctx %>/review?orderId=<%= od.getId() %>&toUserId=<%= od.getFreelancerId() %>" class="btn btn-outline-warning btn-sm">评价</a>
+                    <% } %>
                 <% } %>
+            </div>
+        </div>
         <% if (odReviews != null && !odReviews.isEmpty()) { %>
             <div class="card shadow-sm">
                 <div class="card-header"><h5 class="mb-0">评价</h5></div>
@@ -64,7 +70,11 @@
                             <span class="text-warning"><% for(int i=0;i<r.getScore();i++){ %>★<% } %></span>
                             <p class="mb-0"><%= r.getComment() != null ? r.getComment() : "" %></p>
                         </div>
+                    <% } %>
+                </div>
+            </div>
         <% } %>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

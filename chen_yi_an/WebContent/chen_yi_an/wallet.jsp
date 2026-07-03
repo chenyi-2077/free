@@ -1,6 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Map" %>
+<%
+    List<Map<String, Object>> transactions = (List<Map<String, Object>>) request.getAttribute("transactions");
+%>
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -33,24 +36,31 @@
                                     </h4>
                                 </div>
                             </div>
+                            <div class="col-6">
                                 <div class="p-3 bg-warning bg-opacity-10 rounded">
                                     <small class="text-muted">冻结金额</small>
                                     <h4 class="text-warning mb-0">
                                         ¥<%= String.format("%.2f", request.getAttribute("frozen") != null ? (double) request.getAttribute("frozen") : 0.0) %>
+                                    </h4>
+                                </div>
+                            </div>
                         </div>
                         <form action="${pageContext.request.contextPath}/recharge" method="post">
                             <div class="input-group mb-3">
                                 <span class="input-group-text">¥</span>
                                 <input type="number" class="form-control" name="amount" placeholder="充值金额" step="0.01" min="0.01" required>
                                 <button type="submit" class="btn btn-success">充值</button>
+                            </div>
                         </form>
                     </div>
                 </div>
 
                 <div class="card shadow-sm">
+                    <div class="card-body">
                         <h4 class="mb-3">交易流水</h4>
-                            List<Map<String, Object>> transactions = (List<Map<String, Object>>) request.getAttribute("transactions");
+                        <%
                             if (transactions != null && !transactions.isEmpty()) {
+                        %>
                         <div class="table-responsive">
                             <table class="table table-sm">
                                 <thead>
@@ -65,17 +75,23 @@
                                 <%
                                     for (Map<String, Object> txn : transactions) {
                                 %>
+                                    <tr>
                                         <td class="<%= "recharge".equals(txn.get("type")) ? "text-success" : "text-danger" %>">
                                             <%= "recharge".equals(txn.get("type")) ? "+" : "-" %>¥<%= String.format("%.2f", txn.get("amount")) %>
                                         </td>
                                         <td><%= txn.get("type") %></td>
                                         <td><%= txn.get("description") %></td>
                                         <td><small class="text-muted"><%= txn.get("createdAt") %></small></td>
-                                    }
+                                    </tr>
+                                <% } %>
                                 </tbody>
                             </table>
+                        </div>
                         <% } else { %>
                         <p class="text-muted text-center">暂无交易记录</p>
+                        <% } %>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

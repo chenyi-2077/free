@@ -52,19 +52,28 @@
                     <span>💰 ¥<%= String.format("%.2f", p.getBudget()) %></span>
                     <span>📂 <%= p.getCategoryName() != null ? p.getCategoryName() : "未分类" %></span>
                     <span>📅 截止: <%= p.getDeadline() != null ? p.getDeadline().toString() : "未设置" %></span>
+                </div>
                 <div class="mt-2">
                     <a href="${pageContext.request.contextPath}/project/edit?id=<%= p.getId() %>" class="btn btn-sm btn-warning">编辑</a>
                     <form action="${pageContext.request.contextPath}/project/delete" method="post" class="d-inline" onsubmit="return confirm('确定要删除此项目吗？')">
                         <input type="hidden" name="id" value="<%= p.getId() %>">
                         <button type="submit" class="btn btn-sm btn-danger">删除</button>
                     </form>
+                </div>
+            </div>
+        </div>
+        <%
                 }
             } else {
+        %>
         <div class="alert alert-info text-center">
             你还没有发布项目
             <br>
             <a href="${pageContext.request.contextPath}/project/post" class="btn btn-gradient mt-2">发布第一个项目</a>
+        </div>
+        <%
             }
+        %>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

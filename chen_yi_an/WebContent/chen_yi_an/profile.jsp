@@ -25,10 +25,15 @@
                             <label class="form-label text-muted">邮箱</label>
                             <p class="form-control-plaintext"><%= profileUser.getEmail() != null ? profileUser.getEmail() : "" %></p>
                         </div>
+                        <div class="mb-3">
                             <label class="form-label text-muted">显示名</label>
                             <p class="form-control-plaintext"><%= profileUser.getDisplayName() != null ? profileUser.getDisplayName() : "" %></p>
+                        </div>
+                        <div class="mb-3">
                             <label class="form-label text-muted">角色</label>
                             <p class="form-control-plaintext"><%= profileUser.getRole() != null ? profileUser.getRole() : "" %></p>
+                        </div>
+                        <div class="mb-3">
                             <label class="form-label text-muted">技能</label>
                             <p class="form-control-plaintext">
                             <%
@@ -38,16 +43,24 @@
                                     for (String skill : skillArr) {
                             %>
                                 <span class="badge bg-primary me-1"><%= skill.trim() %></span>
+                            <%
                                     }
                                 }
+                            %>
                             </p>
+                        </div>
+                        <div class="mb-3">
                             <label class="form-label text-muted">评分</label>
                             <p class="form-control-plaintext"><%= String.format("%.1f", profileUser.getRating()) %> / 5.0</p>
+                        </div>
                         <div class="d-grid">
                             <a href="${pageContext.request.contextPath}/profile/edit" class="btn btn-gradient">编辑资料</a>
+                        </div>
                         <% } else { %>
                         <p class="text-muted text-center">请先登录</p>
+                        <div class="d-grid">
                             <a href="${pageContext.request.contextPath}/login" class="btn btn-gradient">去登录</a>
+                        </div>
                         <% } %>
                     </div>
                 </div>

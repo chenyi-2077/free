@@ -33,6 +33,7 @@ public class Order {
     public void setFreelancerId(int freelancerId) { this.freelancerId = freelancerId; }
 
     public double getAmount() { return amount; }
+    public double getEscrowAmount() { return amount; }
     public void setAmount(double amount) { this.amount = amount; }
 
     public String getStatus() { return status; }

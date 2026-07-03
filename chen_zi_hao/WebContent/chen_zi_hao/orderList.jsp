@@ -43,6 +43,9 @@
             <% } %>
             <% if (orders == null || orders.isEmpty()) { %>
                 <div class="col-12"><p class="text-muted">暂无订单</p></div>
+            <% } %>
+        </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
