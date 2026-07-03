@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 public class UserDao {
 
     public User findByEmail(String email) {
-        String sql = "SELECT * FROM users WHERE email = ?";
+        String sql = "SELECT * FROM user WHERE email = ?";
         Connection conn = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -29,7 +29,7 @@ public class UserDao {
     }
 
     public User findById(int id) {
-        String sql = "SELECT * FROM users WHERE id = ?";
+        String sql = "SELECT * FROM user WHERE id = ?";
         Connection conn = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -50,7 +50,7 @@ public class UserDao {
     }
 
     public int insert(User user) {
-        String sql = "INSERT INTO users (email, password, role, display_name, skills) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO user (email, password, role, display_name, skills) VALUES (?, ?, ?, ?, ?)";
         Connection conn = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -78,7 +78,7 @@ public class UserDao {
     }
 
     public boolean update(User user) {
-        String sql = "UPDATE users SET display_name = ?, skills = ? WHERE id = ?";
+        String sql = "UPDATE user SET display_name = ?, skills = ? WHERE id = ?";
         Connection conn = null;
         PreparedStatement ps = null;
         try {

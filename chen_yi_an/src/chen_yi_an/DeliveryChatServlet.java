@@ -32,7 +32,7 @@ public class DeliveryChatServlet extends HttpServlet {
                 try {
                     conn = DBUtil.getConnection();
                     String sql = "SELECT p.id, p.title, p.description, p.progress, p.status " +
-                                 "FROM projects p " +
+                                 "FROM project p " +
                                  "JOIN project_members pm ON p.id = pm.project_id " +
                                  "WHERE pm.user_id = ? " +
                                  "ORDER BY p.updated_at DESC";
