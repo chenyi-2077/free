@@ -14,7 +14,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body class="bg-light">
-    <%@ include file="/WEB-INF/tags/navbar.jsp" %>
+    <%@ include file="navbar.jsp" %>
     <div class="container py-4">
         <h4 class="mb-4">项目竞标列表</h4>
         <a href="${pageContext.request.contextPath}/bid/place?projectId=<%= bpProjectId %>" class="btn btn-primary mb-3">提交竞标</a>

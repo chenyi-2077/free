@@ -17,14 +17,11 @@ public class WalletDao {
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, userId);
             try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return mapWallet(rs);
-                }
+                if (rs.next()) return mapWallet(rs);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        // create new wallet
         String insertSql = "INSERT INTO wallet (user_id, balance, frozen, created_at, updated_at) VALUES (?, 0, 0, ?, ?)";
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement ps = conn.prepareStatement(insertSql)) {
@@ -46,6 +43,8 @@ public class WalletDao {
             ps.setTimestamp(2, Timestamp.valueOf(LocalDateTime.now()));
             ps.setInt(3, userId);
             ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         addTransactionLog(userId, amount, "recharge", "充值 " + amount);
     }
@@ -59,6 +58,8 @@ public class WalletDao {
             ps.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now()));
             ps.setInt(4, userId);
             ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
@@ -71,6 +72,8 @@ public class WalletDao {
             ps.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now()));
             ps.setInt(4, userId);
             ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
@@ -83,6 +86,8 @@ public class WalletDao {
             ps.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now()));
             ps.setInt(4, userId);
             ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         addTransactionLog(userId, amount, "refund", "退款 " + amount);
     }
@@ -95,6 +100,8 @@ public class WalletDao {
             ps.setTimestamp(2, Timestamp.valueOf(LocalDateTime.now()));
             ps.setInt(3, userId);
             ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         addTransactionLog(userId, amount, "income", description);
     }
@@ -107,6 +114,8 @@ public class WalletDao {
             ps.setTimestamp(2, Timestamp.valueOf(LocalDateTime.now()));
             ps.setInt(3, userId);
             ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         addTransactionLog(userId, -amount, "payment", description);
     }

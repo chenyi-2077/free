@@ -14,7 +14,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body class="bg-light">
-    <%@ include file="/WEB-INF/tags/navbar.jsp" %>
+    <%@ include file="navbar.jsp" %>
     <div class="container py-4">
         <h4>我的竞标记录</h4>
         <div class="row">
