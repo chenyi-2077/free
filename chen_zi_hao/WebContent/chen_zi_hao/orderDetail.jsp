@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="com.freelite.model.Order, com.freelite.model.Review, com.freelite.model.User, java.util.List" %>
+<%@ page import="chen_zi_hao.Order, chen_zi_hao.Review, chen_zi_hao.User, java.util.List" %>
 <%
     String ctx = request.getContextPath();
     Order od = (Order) request.getAttribute("order");

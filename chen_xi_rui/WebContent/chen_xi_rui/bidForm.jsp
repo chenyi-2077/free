@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="com.freelite.model.User" %>
+<%@ page import="chen_xi_rui.User" %>
 <%
     User bfu = (User) session.getAttribute("user");
     if (bfu == null) { response.sendRedirect(request.getContextPath() + "/login"); return; }

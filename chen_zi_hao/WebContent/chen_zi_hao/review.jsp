@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="com.freelite.model.User" %>
+<%@ page import="chen_zi_hao.User" %>
 <%
     String ctx = request.getContextPath();
     User rvUser = (User) session.getAttribute("user");
