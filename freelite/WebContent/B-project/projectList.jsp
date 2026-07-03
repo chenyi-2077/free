@@ -4,10 +4,10 @@
     User loginUser = (User) session.getAttribute("user");
     List<Project> projects = (List<Project>) request.getAttribute("projects");
     List<Category> categories = (List<Category>) request.getAttribute("categories");
-    int currentPage = (int) request.getAttribute("currentPage");
-    int totalPages = (int) request.getAttribute("totalPages");
+    int currentPage = request.getAttribute("currentPage") != null ? (int) request.getAttribute("currentPage") : 1;
+    int totalPages = request.getAttribute("totalPages") != null ? (int) request.getAttribute("totalPages") : 1;
     String keyword = (String) request.getAttribute("keyword");
-    int selectedCategory = (int) request.getAttribute("selectedCategory");
+    int selectedCategory = request.getAttribute("selectedCategory") != null ? (int) request.getAttribute("selectedCategory") : 0;
     String successMsg = (String) session.getAttribute("successMsg");
     if (successMsg != null) { session.removeAttribute("successMsg"); }
     String errorMsg = (String) session.getAttribute("errorMsg");
