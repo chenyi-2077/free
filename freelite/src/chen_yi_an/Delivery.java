@@ -40,4 +40,9 @@ public class Delivery {
 
     public String getSenderName() { return senderName; }
     public void setSenderName(String senderName) { this.senderName = senderName; }
+
+    // Aliases for JSP compatibility
+    public String getTitle() { return getFileName(); }
+    public String getDescription() { return getContent(); }
+    public String getUserName() { return getSenderName(); }
 }
