@@ -103,7 +103,7 @@
             <% } else { %>
                 <% for (Project p : projects) { %>
                     <div class="col-md-6 mb-3">
-                        <a href="${pageContext.request.contextPath}/project/<%= p.getId() %>" class="card-project-link">
+                        <a href="${pageContext.request.contextPath}/project/detail?id=<%= p.getId() %>" class="card-project-link">
                             <div class="card card-project p-3">
                                 <div class="d-flex justify-content-between">
                                     <div style="flex: 1;">
