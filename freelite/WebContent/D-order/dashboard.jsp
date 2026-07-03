@@ -40,7 +40,7 @@
             <a class="navbar-brand fw-bold" href="<%= request.getContextPath() %>/projects" style="color: var(--accent);">Freelite</a>
             <div class="d-flex">
                 <a href="<%= request.getContextPath() %>/projects" class="text-decoration-none text-muted me-3">项目</a>
-                <a href="<%= request.getContextPath() %>/profile" class="text-decoration-none text-muted"><%= loginUser.getDisplayName() %></a>
+                <a href="<%= request.getContextPath() %>/profile" class="text-decoration-none text-muted"><%= loginUser != null ? loginUser.getDisplayName() : "用户" %></a>
             </div>
         </div>
     </nav>

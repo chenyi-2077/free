@@ -41,7 +41,7 @@
             <a class="navbar-brand" href="${pageContext.request.contextPath}/projects">Freelite</a>
             <div class="d-flex gap-3 align-items-center">
                 <span class="text-muted" style="font-size: 0.9rem;">
-                    <%= loginUser.getDisplayName() != null ? loginUser.getDisplayName() : loginUser.getEmail() %>
+                    <%= loginUser != null ? (loginUser.getDisplayName() != null ? loginUser.getDisplayName() : loginUser.getEmail()) : "访客" %>
                 </span>
                 <a href="${pageContext.request.contextPath}/my/projects" class="nav-link">我的项目</a>
                 <a href="${pageContext.request.contextPath}/profile" class="nav-link">个人主页</a>
