@@ -94,54 +94,12 @@ CREATE TABLE review (
     order_id INT NOT NULL UNIQUE,
     from_user_id INT NOT NULL,
     to_user_id INT NOT NULL,
-    score INT,
+    score INT CHECK(score >= 1 AND score <= 5),
     comment TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (order_id) REFERENCES task_order(id),
     FOREIGN KEY (from_user_id) REFERENCES user(id),
     FOREIGN KEY (to_user_id) REFERENCES user(id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- -----------------------------------------------------------
--- 7. 钱包表
--- -----------------------------------------------------------
-CREATE TABLE wallet (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT NOT NULL UNIQUE,
-    balance DECIMAL(12,2) DEFAULT 0.00,
-    frozen DECIMAL(12,2) DEFAULT 0.00,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES user(id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- -----------------------------------------------------------
--- 8. 交易流水表
--- -----------------------------------------------------------
-CREATE TABLE transaction_log (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT NOT NULL,
-    type VARCHAR(20) NOT NULL COMMENT 'recharge/freeze/release/refund/income',
-    amount DECIMAL(12,2) NOT NULL,
-    description VARCHAR(255),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES user(id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- -----------------------------------------------------------
--- 9. 项目消息表
--- -----------------------------------------------------------
-CREATE TABLE project_message (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    project_id INT NOT NULL,
-    sender_id INT NOT NULL,
-    content TEXT,
-    is_delivery BOOLEAN DEFAULT FALSE,
-    file_name VARCHAR(255),
-    file_path VARCHAR(500),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (project_id) REFERENCES project(id),
-    FOREIGN KEY (sender_id) REFERENCES user(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- -----------------------------------------------------------
@@ -152,11 +110,6 @@ INSERT INTO user (email, password, role, display_name, skills, rating) VALUES
 ('alice@test.com', '123456', 'employer', 'Alice 科技公司', NULL, 4.5),
 ('bob@test.com', '123456', 'freelancer', 'Bob 全栈开发', 'Java, Spring, MySQL, Vue.js', 4.8),
 ('carol@test.com', '123456', 'freelancer', 'Carol UI 设计师', 'Figma, Photoshop, Sketch', 4.2);
-
-INSERT INTO wallet (user_id, balance, frozen) VALUES
-(1, 10000.00, 0.00),
-(2, 0.00, 0.00),
-(3, 0.00, 0.00);
 
 INSERT INTO project (title, description, budget, deadline, category_id, employer_id, status) VALUES
 ('开发一个博客系统', '需要一个支持 Markdown 的个人博客系统，包含后台管理', 5000.00, '2026-08-01', 1, 1, 'open'),
