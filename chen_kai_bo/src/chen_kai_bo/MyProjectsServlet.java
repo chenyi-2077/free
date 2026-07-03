@@ -16,15 +16,17 @@ public class MyProjectsServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        // 独立版本：session有 user 就用，无则查雇主ID=0（演示用）
         HttpSession session = request.getSession(false);
         User user = (User) (session != null ? session.getAttribute("user") : null);
 
-        if (user == null) {
-            response.sendRedirect(request.getContextPath() + "/login");
-            return;
+        List<Project> projects;
+        if (user != null) {
+            projects = projectDao.findByEmployerId(user.getId());
+        } else {
+            projects = projectDao.findAll();
         }
 
-        List<Project> projects = projectDao.findByEmployerId(user.getId());
         request.setAttribute("projects", projects);
         request.getRequestDispatcher("/chen_kai_bo/myProjects.jsp").forward(request, response);
     }

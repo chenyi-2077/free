@@ -20,15 +20,13 @@ public class EditProfileServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        // 独立版本：如果session有user就更新，无则提示
         HttpSession session = request.getSession(false);
-        if (session == null) {
-            response.sendRedirect(request.getContextPath() + "/login");
-            return;
-        }
+        User user = (User) (session != null ? session.getAttribute("user") : null);
 
-        User user = (User) session.getAttribute("user");
         if (user == null) {
-            response.sendRedirect(request.getContextPath() + "/login");
+            request.setAttribute("error", "请先登录后再编辑资料");
+            request.getRequestDispatcher("/chen_yi_an/editProfile.jsp").forward(request, response);
             return;
         }
 

@@ -9,6 +9,7 @@ import java.io.IOException;
 
 /**
  * 提交竞标（自由职业者报价）
+ * 独立版本：无需登录，session无user时用模拟用户
  */
 public class PlaceBidServlet extends HttpServlet {
 
@@ -35,7 +36,7 @@ public class PlaceBidServlet extends HttpServlet {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
         if (user == null) {
-            // 无登录场景：模拟一个自由职业者用户
+            // 独立版本：模拟一个自由职业者用户
             user = new User(2, "自由职业者", "freelancer", 4.5);
             session.setAttribute("user", user);
         }

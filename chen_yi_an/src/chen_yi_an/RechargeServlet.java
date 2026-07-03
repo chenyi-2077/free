@@ -16,15 +16,13 @@ public class RechargeServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        // 独立版本：如果session有user就充值，无则提示
         HttpSession session = request.getSession(false);
-        if (session == null) {
-            response.sendRedirect(request.getContextPath() + "/login");
-            return;
-        }
+        User user = (User) (session != null ? session.getAttribute("user") : null);
 
-        User user = (User) session.getAttribute("user");
         if (user == null) {
-            response.sendRedirect(request.getContextPath() + "/login");
+            request.setAttribute("error", "请先登录后再充值");
+            request.getRequestDispatcher("/chen_yi_an/wallet.jsp").forward(request, response);
             return;
         }
 
@@ -48,7 +46,7 @@ public class RechargeServlet extends HttpServlet {
             conn.setAutoCommit(false);
 
             // Update wallet balance
-            String updateSql = "UPDATE wallets SET balance = balance + ? WHERE user_id = ?";
+            String updateSql = "UPDATE wallet SET balance = balance + ? WHERE user_id = ?";
             ps = conn.prepareStatement(updateSql);
             ps.setDouble(1, amount);
             ps.setInt(2, user.getId());
@@ -56,7 +54,7 @@ public class RechargeServlet extends HttpServlet {
             if (rows == 0) {
                 // Wallet doesn't exist, create one
                 DBUtil.close(ps);
-                String insertSql = "INSERT INTO wallets (user_id, balance, frozen) VALUES (?, ?, 0)";
+                String insertSql = "INSERT INTO wallet (user_id, balance, frozen) VALUES (?, ?, 0)";
                 ps = conn.prepareStatement(insertSql);
                 ps.setInt(1, user.getId());
                 ps.setDouble(2, amount);

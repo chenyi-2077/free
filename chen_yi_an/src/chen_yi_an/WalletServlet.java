@@ -19,15 +19,16 @@ public class WalletServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        // 独立版本：如果session有user就查钱包，无则显示空数据
         HttpSession session = request.getSession(false);
-        if (session == null) {
-            response.sendRedirect(request.getContextPath() + "/login");
-            return;
-        }
+        User user = (User) (session != null ? session.getAttribute("user") : null);
 
-        User user = (User) session.getAttribute("user");
         if (user == null) {
-            response.sendRedirect(request.getContextPath() + "/login");
+            request.setAttribute("balance", 0.0);
+            request.setAttribute("frozen", 0.0);
+            request.setAttribute("transactions", new ArrayList<>());
+            request.setAttribute("info", "请先登录以查看钱包");
+            request.getRequestDispatcher("/chen_yi_an/wallet.jsp").forward(request, response);
             return;
         }
 
@@ -38,7 +39,7 @@ public class WalletServlet extends HttpServlet {
             conn = DBUtil.getConnection();
 
             // Query wallet
-            String walletSql = "SELECT balance, frozen FROM wallets WHERE user_id = ?";
+            String walletSql = "SELECT balance, frozen FROM wallet WHERE user_id = ?";
             ps = conn.prepareStatement(walletSql);
             ps.setInt(1, user.getId());
             rs = ps.executeQuery();

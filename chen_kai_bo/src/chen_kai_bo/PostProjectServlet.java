@@ -19,14 +19,6 @@ public class PostProjectServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession(false);
-        User user = (User) (session != null ? session.getAttribute("user") : null);
-
-        if (user == null) {
-            response.sendRedirect(request.getContextPath() + "/login");
-            return;
-        }
-
         List<Category> categories = categoryDao.findAll();
         request.setAttribute("categories", categories);
         request.getRequestDispatcher("/chen_kai_bo/postProject.jsp").forward(request, response);
@@ -35,13 +27,10 @@ public class PostProjectServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        // 独立版本：session有 user 就用，无则用 employer_id=0（演示用）
         HttpSession session = request.getSession(false);
         User user = (User) (session != null ? session.getAttribute("user") : null);
-
-        if (user == null) {
-            response.sendRedirect(request.getContextPath() + "/login");
-            return;
-        }
+        int employerId = (user != null) ? user.getId() : 0;
 
         String title = request.getParameter("title");
         String description = request.getParameter("description");
@@ -52,7 +41,7 @@ public class PostProjectServlet extends HttpServlet {
         Project project = new Project();
         project.setTitle(title);
         project.setDescription(description);
-        project.setEmployerId(user.getId());
+        project.setEmployerId(employerId);
         project.setStatus("open");
         project.setCreatedAt(LocalDateTime.now());
 
