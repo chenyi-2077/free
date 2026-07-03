@@ -26,7 +26,7 @@ public class ConfirmOrderServlet extends HttpServlet {
             return;
         }
 
-        String idStr = req.getParameter("id");
+        String idStr = req.getParameter("orderId");
         if (idStr == null || idStr.trim().isEmpty()) {
             resp.sendRedirect(req.getContextPath() + "/orders");
             return;
