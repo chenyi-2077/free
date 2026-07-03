@@ -4,7 +4,8 @@
     User loginUser = (User) session.getAttribute("user");
     Project project = (Project) request.getAttribute("project");
     List<Bid> bids = (List<Bid>) request.getAttribute("bids");
-    boolean isOwner = (boolean) request.getAttribute("isOwner");
+    Boolean isOwnerObj = (Boolean) request.getAttribute("isOwner");
+    boolean isOwner = isOwnerObj != null && isOwnerObj;
     String successMsg = (String) session.getAttribute("successMsg");
     if (successMsg != null) { session.removeAttribute("successMsg"); }
 %>
