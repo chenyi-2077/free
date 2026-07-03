@@ -21,7 +21,7 @@
     boolean isFreelancer = "freelancer".equals(myRole);
 
     // 进度计算
-    String orderStatus = order != null ? order.getStatus() : project.getStatus();
+    String orderStatus = order != null ? order.getStatus() : (project != null ? project.getStatus() : "");
     int progressPct = 0;
     String progressLabel = "";
     if (order != null) {

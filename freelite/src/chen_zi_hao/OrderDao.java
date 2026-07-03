@@ -71,6 +71,25 @@ public class OrderDao {
         return list;
     }
 
+    public Order findByProjectId(int projectId) {
+        String sql = "SELECT o.*, p.title as project_title, u1.display_name as employer_name, u2.display_name as freelancer_name "
+                   + "FROM task_order o "
+                   + "JOIN user u1 ON o.employer_id = u1.id "
+                   + "JOIN user u2 ON o.freelancer_id = u2.id "
+                   + "LEFT JOIN project p ON o.project_id = p.id "
+                   + "WHERE o.project_id = ? ORDER BY o.created_at DESC LIMIT 1";
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, projectId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) return mapOrder(rs);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public List<Order> findByFreelancerId(int freelancerId) {
         List<Order> list = new ArrayList<>();
         String sql = "SELECT o.*, p.title as projectTitle, e.display_name as employerName, f.display_name as freelancerName " +

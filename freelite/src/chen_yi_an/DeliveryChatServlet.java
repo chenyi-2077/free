@@ -5,6 +5,10 @@ import chen_yi_an.ProjectMessageDao;
 import chen_yi_an.Delivery;
 import chen_yi_an.ProjectMessage;
 import chen_yi_an.User;
+import chen_kai_bo.Project;
+import chen_kai_bo.ProjectDao;
+import chen_zi_hao.Order;
+import chen_zi_hao.OrderDao;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -39,7 +43,23 @@ public class DeliveryChatServlet extends HttpServlet {
         List<Delivery> deliveries = deliveryDao.findByProjectId(projectId);
         List<ProjectMessage> messages = messageDao.findByProjectId(projectId);
 
+        ProjectDao projectDao = new ProjectDao();
+        OrderDao orderDao = new OrderDao();
+
+        Project project = projectDao.findById(projectId);
+        Order order = orderDao.findByProjectId(projectId);
+        String myRole = "viewer";
+        if (project != null && user.getId() == project.getEmployerId()) {
+            myRole = "employer";
+        } else if (order != null && user.getId() == order.getFreelancerId()) {
+            myRole = "freelancer";
+        }
+
         req.setAttribute("projectId", projectId);
+        req.setAttribute("project", project);
+        req.setAttribute("projectTitle", project != null ? project.getTitle() : "");
+        req.setAttribute("order", order);
+        req.setAttribute("myRole", myRole);
         req.setAttribute("deliveries", deliveries);
         req.setAttribute("messages", messages);
         req.getRequestDispatcher("/A-user/deliveryChat.jsp").forward(req, resp);
