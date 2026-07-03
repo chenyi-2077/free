@@ -79,7 +79,7 @@ CREATE TABLE task_order (
     employer_id INT NOT NULL,
     freelancer_id INT NOT NULL,
     amount DECIMAL(10,2),
-    status ENUM('in_progress', 'completed', 'cancelled') DEFAULT 'in_progress',
+    status ENUM('in_progress', 'awaiting_confirm', 'completed', 'cancelled') DEFAULT 'in_progress',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (project_id) REFERENCES project(id),
     FOREIGN KEY (employer_id) REFERENCES user(id),
@@ -94,12 +94,66 @@ CREATE TABLE review (
     order_id INT NOT NULL UNIQUE,
     from_user_id INT NOT NULL,
     to_user_id INT NOT NULL,
-    score INT CHECK(score >= 1 AND score <= 5),
+    score INT,
     comment TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (order_id) REFERENCES task_order(id),
     FOREIGN KEY (from_user_id) REFERENCES user(id),
     FOREIGN KEY (to_user_id) REFERENCES user(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- -----------------------------------------------------------
+-- 7. 钱包表
+-- -----------------------------------------------------------
+CREATE TABLE wallet (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL UNIQUE,
+    balance DECIMAL(12,2) DEFAULT 0.00,
+    frozen DECIMAL(12,2) DEFAULT 0.00,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES user(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- -----------------------------------------------------------
+-- 8. 交易流水表
+-- -----------------------------------------------------------
+CREATE TABLE transaction_log (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    amount DECIMAL(12,2) NOT NULL,
+    type VARCHAR(20) NOT NULL COMMENT 'recharge/freeze/release/refund/income',
+    description VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES user(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- -----------------------------------------------------------
+-- 9. 交付表
+-- -----------------------------------------------------------
+CREATE TABLE delivery (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    project_id INT NOT NULL,
+    sender_id INT NOT NULL,
+    content TEXT,
+    file_name VARCHAR(255),
+    file_path VARCHAR(500),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (project_id) REFERENCES project(id),
+    FOREIGN KEY (sender_id) REFERENCES user(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- -----------------------------------------------------------
+-- 10. 项目消息表
+-- -----------------------------------------------------------
+CREATE TABLE project_message (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    project_id INT NOT NULL,
+    sender_id INT NOT NULL,
+    content TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (project_id) REFERENCES project(id),
+    FOREIGN KEY (sender_id) REFERENCES user(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- -----------------------------------------------------------
@@ -115,3 +169,8 @@ INSERT INTO project (title, description, budget, deadline, category_id, employer
 ('开发一个博客系统', '需要一个支持 Markdown 的个人博客系统，包含后台管理', 5000.00, '2026-08-01', 1, 1, 'open'),
 ('设计 App 首页', '为我们的健身 App 设计一个全新的首页 UI', 2000.00, '2026-07-15', 3, 1, 'open'),
 ('数据清洗脚本', '每天自动清洗和整理 CSV 数据，输出标准格式', 1500.00, '2026-07-10', 5, 1, 'open');
+
+INSERT INTO wallet (user_id, balance, frozen) VALUES
+(1, 10000.00, 0.00),
+(2, 0.00, 0.00),
+(3, 0.00, 0.00);
