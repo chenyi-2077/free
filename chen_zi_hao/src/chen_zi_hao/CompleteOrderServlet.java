@@ -14,12 +14,27 @@ public class CompleteOrderServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        User loginUser = (User) request.getSession().getAttribute("user");
+        if (loginUser == null) {
+            response.sendRedirect(request.getContextPath() + "/login");
+            return;
+        }
+
         String idStr = request.getParameter("id");
         if (idStr == null || idStr.trim().isEmpty()) {
             response.sendRedirect(request.getContextPath() + "/orders");
             return;
         }
         int id = Integer.parseInt(idStr);
+        Order order = orderDao.findById(id);
+        if (order == null || order.getFreelancerId() != loginUser.getId()) {
+            response.sendRedirect(request.getContextPath() + "/orders");
+            return;
+        }
+        if (!"in_progress".equals(order.getStatus())) {
+            response.sendRedirect(request.getContextPath() + "/order/detail?id=" + id);
+            return;
+        }
         orderDao.updateStatus(id, "awaiting_confirm");
         response.sendRedirect(request.getContextPath() + "/order/detail?id=" + id);
     }

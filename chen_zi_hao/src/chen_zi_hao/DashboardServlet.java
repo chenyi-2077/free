@@ -15,6 +15,11 @@ public class DashboardServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        User loginUser = (User) request.getSession().getAttribute("user");
+        if (loginUser == null) {
+            response.sendRedirect(request.getContextPath() + "/login");
+            return;
+        }
         Map<String, Integer> stats = orderDao.getDashboardStats();
         request.setAttribute("stats", stats);
         request.getRequestDispatcher("/chen_zi_hao/dashboard.jsp").forward(request, response);

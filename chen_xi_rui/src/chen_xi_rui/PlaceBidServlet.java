@@ -4,13 +4,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-/**
- * 提交竞标（自由职业者报价）
- * 独立版本：无需登录，session无user时用模拟用户
- */
 public class PlaceBidServlet extends HttpServlet {
 
     private BidDao bidDao = new BidDao();
@@ -18,13 +13,12 @@ public class PlaceBidServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        // 未登录可查看竞标表单
         String projectIdParam = request.getParameter("projectId");
         if (projectIdParam == null || projectIdParam.trim().isEmpty()) {
             response.sendRedirect(request.getContextPath());
             return;
         }
-
         request.setAttribute("projectId", Integer.parseInt(projectIdParam));
         request.getRequestDispatcher("/chen_xi_rui/bidForm.jsp").forward(request, response);
     }
@@ -33,12 +27,10 @@ public class PlaceBidServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
-        if (user == null) {
-            // 独立版本：模拟一个自由职业者用户
-            user = new User(2, "自由职业者", "freelancer", 4.5);
-            session.setAttribute("user", user);
+        User loginUser = (User) request.getSession().getAttribute("user");
+        if (loginUser == null) {
+            response.sendRedirect(request.getContextPath() + "/login");
+            return;
         }
 
         String projectIdParam = request.getParameter("projectId");
@@ -46,25 +38,25 @@ public class PlaceBidServlet extends HttpServlet {
         String daysParam = request.getParameter("days");
         String proposal = request.getParameter("proposal");
 
-        if (projectIdParam == null || amountParam == null || daysParam == null || proposal == null ||
-            projectIdParam.trim().isEmpty() || amountParam.trim().isEmpty() ||
-            daysParam.trim().isEmpty() || proposal.trim().isEmpty()) {
-            request.setAttribute("error", "所有字段均为必填");
-            request.setAttribute("projectId", Integer.parseInt(projectIdParam));
-            request.getRequestDispatcher("/chen_xi_rui/bidForm.jsp").forward(request, response);
+        if (projectIdParam == null || amountParam == null || daysParam == null) {
+            response.sendRedirect(request.getContextPath());
             return;
         }
 
+        int projectId = Integer.parseInt(projectIdParam);
+        double amount = Double.parseDouble(amountParam);
+        int days = Integer.parseInt(daysParam);
+
         Bid bid = new Bid();
-        bid.setProjectId(Integer.parseInt(projectIdParam));
-        bid.setFreelancerId(user.getId());
-        bid.setAmount(Double.parseDouble(amountParam));
-        bid.setDays(Integer.parseInt(daysParam));
-        bid.setProposal(proposal);
+        bid.setProjectId(projectId);
+        bid.setFreelancerId(loginUser.getId());
+        bid.setAmount(amount);
+        bid.setDays(days);
+        bid.setProposal(proposal != null ? proposal : "");
         bid.setStatus("pending");
 
         bidDao.insert(bid);
 
-        response.sendRedirect(request.getContextPath() + "/bids?projectId=" + projectIdParam);
+        response.sendRedirect(request.getContextPath() + "/projects");
     }
 }

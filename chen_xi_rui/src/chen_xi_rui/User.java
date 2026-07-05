@@ -1,17 +1,14 @@
 package chen_xi_rui;
 
-/**
- * 简化版用户实体
- */
 public class User {
-
     private int id;
+    private String email;
     private String displayName;
     private String role;
+    private String skills;
     private double rating;
 
-    public User() {
-    }
+    public User() {}
 
     public User(int id, String displayName, String role, double rating) {
         this.id = id;
@@ -20,35 +17,21 @@ public class User {
         this.rating = rating;
     }
 
-    public int getId() {
-        return id;
-    }
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 
-    public String getDisplayName() {
-        return displayName;
-    }
+    public String getDisplayName() { return displayName; }
+    public void setDisplayName(String displayName) { this.displayName = displayName; }
 
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
-    }
+    public String getRole() { return role; }
+    public void setRole(String role) { this.role = role; }
 
-    public String getRole() {
-        return role;
-    }
+    public String getSkills() { return skills; }
+    public void setSkills(String skills) { this.skills = skills; }
 
-    public void setRole(String role) {
-        this.role = role;
-    }
-
-    public double getRating() {
-        return rating;
-    }
-
-    public void setRating(double rating) {
-        this.rating = rating;
-    }
+    public double getRating() { return rating; }
+    public void setRating(double rating) { this.rating = rating; }
 }

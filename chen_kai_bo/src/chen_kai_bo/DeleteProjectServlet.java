@@ -12,17 +12,26 @@ public class DeleteProjectServlet extends HttpServlet {
     private ProjectDao projectDao = new ProjectDao();
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String idStr = request.getParameter("id");
-        if (idStr != null && !idStr.trim().isEmpty()) {
-            try {
-                int id = Integer.parseInt(idStr);
-                projectDao.deleteById(id);
-            } catch (NumberFormatException e) {
-                // ignore
-            }
+        User loginUser = (User) request.getSession().getAttribute("user");
+        if (loginUser == null) {
+            response.sendRedirect(request.getContextPath() + "/login");
+            return;
         }
+
+        String idStr = request.getParameter("id");
+        if (idStr == null || idStr.trim().isEmpty()) {
+            response.sendRedirect(request.getContextPath() + "/my/projects");
+            return;
+        }
+        int id = Integer.parseInt(idStr);
+        Project project = projectDao.findById(id);
+        if (project == null || project.getEmployerId() != loginUser.getId()) {
+            response.sendRedirect(request.getContextPath() + "/my/projects");
+            return;
+        }
+        projectDao.delete(id);
         response.sendRedirect(request.getContextPath() + "/my/projects");
     }
 }

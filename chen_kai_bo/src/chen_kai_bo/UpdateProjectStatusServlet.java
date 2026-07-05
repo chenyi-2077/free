@@ -14,19 +14,31 @@ public class UpdateProjectStatusServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        User loginUser = (User) request.getSession().getAttribute("user");
+        if (loginUser == null) {
+            response.sendRedirect(request.getContextPath() + "/login");
+            return;
+        }
+
         String idStr = request.getParameter("id");
         String status = request.getParameter("status");
+        String redirect = request.getParameter("redirect");
 
-        if (idStr != null && !idStr.trim().isEmpty() && status != null && !status.trim().isEmpty()) {
-            try {
-                int id = Integer.parseInt(idStr);
-                projectDao.updateStatus(id, status);
-                response.sendRedirect(request.getContextPath() + "/project/detail?id=" + id);
-                return;
-            } catch (NumberFormatException e) {
-                // ignore
-            }
+        if (idStr == null || status == null) {
+            response.sendRedirect(request.getContextPath() + "/my/projects");
+            return;
         }
-        response.sendRedirect(request.getContextPath() + "/projects");
+
+        int id = Integer.parseInt(idStr);
+        Project project = projectDao.findById(id);
+        if (project == null || project.getEmployerId() != loginUser.getId()) {
+            response.sendRedirect(request.getContextPath() + "/my/projects");
+            return;
+        }
+
+        projectDao.updateStatus(id, status);
+
+        String target = (redirect != null && !redirect.isEmpty()) ? redirect : "/my/projects";
+        response.sendRedirect(request.getContextPath() + target);
     }
 }

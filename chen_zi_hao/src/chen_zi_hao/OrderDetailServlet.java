@@ -15,6 +15,12 @@ public class OrderDetailServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        User loginUser = (User) request.getSession().getAttribute("user");
+        if (loginUser == null) {
+            response.sendRedirect(request.getContextPath() + "/login");
+            return;
+        }
+
         String idStr = request.getParameter("id");
         if (idStr == null || idStr.trim().isEmpty()) {
             response.sendRedirect(request.getContextPath() + "/orders");
@@ -26,9 +32,13 @@ public class OrderDetailServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/orders");
             return;
         }
-        Review review = reviewDao.findByOrderId(id);
         request.setAttribute("order", order);
+
+        Review review = reviewDao.findByOrderId(id);
         request.setAttribute("review", review);
+        request.setAttribute("isEmployer", loginUser.getId() == order.getEmployerId());
+        request.setAttribute("isFreelancer", loginUser.getId() == order.getFreelancerId());
+
         request.getRequestDispatcher("/chen_zi_hao/orderDetail.jsp").forward(request, response);
     }
 }

@@ -13,9 +13,6 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
-/**
- * 雇主授标：将竞标状态改为 accepted，同时创建 order（task_order）
- */
 public class AwardBidServlet extends HttpServlet {
 
     private BidDao bidDao = new BidDao();
@@ -23,6 +20,13 @@ public class AwardBidServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
+        // 获取当前登录用户
+        User loginUser = (User) request.getSession().getAttribute("user");
+        if (loginUser == null) {
+            response.sendRedirect(request.getContextPath() + "/login");
+            return;
+        }
 
         String bidIdParam = request.getParameter("bidId");
         if (bidIdParam == null || bidIdParam.trim().isEmpty()) {
@@ -37,31 +41,30 @@ public class AwardBidServlet extends HttpServlet {
             return;
         }
 
-        // 更新竞标状态为 accepted
+        // 更新竞标状态为 accepted，其他竞标设为 rejected
         bidDao.updateStatus(bidId, "accepted");
+        for (Bid other : bidDao.findByProjectId(bid.getProjectId())) {
+            if (other.getId() != bidId && "pending".equals(other.getStatus())) {
+                bidDao.updateStatus(other.getId(), "rejected");
+            }
+        }
 
-        // 创建 order（task_order）
-        createOrder(bid);
+        // 创建 order，使用真实雇主ID（而非硬编码1）
+        createOrder(bid, loginUser.getId());
 
-        // 重定向回竞标列表页
         response.sendRedirect(request.getContextPath() + "/bids?projectId=" + bid.getProjectId());
     }
 
-    /**
-     * 在 task_order 表中创建订单记录
-     */
-    private void createOrder(Bid bid) {
-        String sql = "INSERT INTO task_order (project_id, freelancer_id, employer_id, bid_id, amount, days, status, created_at) " +
-                     "VALUES (?, ?, ?, ?, ?, ?, 'pending', ?)";
+    private void createOrder(Bid bid, int employerId) {
+        String sql = "INSERT INTO task_order (project_id, freelancer_id, employer_id, amount, status, created_at) " +
+                     "VALUES (?, ?, ?, ?, 'in_progress', ?)";
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, bid.getProjectId());
             ps.setInt(2, bid.getFreelancerId());
-            ps.setInt(3, 1); // 默认雇主ID为1
-            ps.setInt(4, bid.getId());
-            ps.setDouble(5, bid.getAmount());
-            ps.setInt(6, bid.getDays());
-            ps.setTimestamp(7, Timestamp.valueOf(LocalDateTime.now()));
+            ps.setInt(3, employerId);
+            ps.setDouble(4, bid.getAmount());
+            ps.setTimestamp(5, Timestamp.valueOf(LocalDateTime.now()));
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
