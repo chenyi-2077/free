@@ -31,7 +31,7 @@ public class DeleteProjectServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/my/projects");
             return;
         }
-        projectDao.delete(id);
+        projectDao.deleteById(id);
         response.sendRedirect(request.getContextPath() + "/my/projects");
     }
 }
