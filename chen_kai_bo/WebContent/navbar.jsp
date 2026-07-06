@@ -1,4 +1,3 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="chen_kai_bo.User" %>
 <%
     User navUser = (User) session.getAttribute("user");
@@ -10,15 +9,12 @@
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav me-auto">
                 <li class="nav-item"><a class="nav-link" href="<%= ctx %>/projects">项目列表</a></li>
-                <li class="nav-item"><a class="nav-link" href="<%= ctx %>/bids">竞标</a></li>
                 <li class="nav-item"><a class="nav-link" href="<%= ctx %>/orders">订单</a></li>
                 <li class="nav-item"><a class="nav-link" href="<%= ctx %>/dashboard">数据看板</a></li>
-                <% if (navUser != null) { %>
-                    <li class="nav-item"><a class="nav-link" href="<%= ctx %>/project/post">发布项目</a></li>
-                    <li class="nav-item"><a class="nav-link" href="<%= ctx %>/my/projects">我的项目</a></li>
-                    <li class="nav-item"><a class="nav-link" href="<%= ctx %>/my/bids">我的竞标</a></li>
-                    <li class="nav-item"><a class="nav-link" href="<%= ctx %>/wallet">钱包</a></li>
-                <% } %>
+                <li class="nav-item"><a class="nav-link" href="<%= ctx %>/project/post">发布项目</a></li>
+                <li class="nav-item"><a class="nav-link" href="<%= ctx %>/my/projects">我的项目</a></li>
+                <li class="nav-item"><a class="nav-link" href="<%= ctx %>/my/bids">我的竞标</a></li>
+                <li class="nav-item"><a class="nav-link" href="<%= ctx %>/wallet">钱包</a></li>
             </ul>
             <ul class="navbar-nav">
                 <% if (navUser != null) { %>
