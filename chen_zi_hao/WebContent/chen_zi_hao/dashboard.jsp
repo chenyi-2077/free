@@ -3,6 +3,7 @@
 <%
     String ctx = request.getContextPath();
     Map<String, Integer> stats = (Map<String, Integer>) request.getAttribute("stats");
+    if (stats == null) stats = new java.util.HashMap<>();
 %>
 <!DOCTYPE html>
 <html lang="zh-CN">
