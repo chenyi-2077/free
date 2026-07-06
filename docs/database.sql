@@ -1,14 +1,13 @@
 -- ============================================================
--- Freelite 数据库建表脚本
+-- Freelite 数据库建表脚本（完整版，含所有模块需要的表）
 -- MySQL 5.7+
 -- ============================================================
 
 CREATE DATABASE IF NOT EXISTS freelite DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE freelite;
 
--- -----------------------------------------------------------
--- 1. 用户表
--- -----------------------------------------------------------
+-- ==================== 基础表 ====================
+
 CREATE TABLE user (
     id INT AUTO_INCREMENT PRIMARY KEY,
     email VARCHAR(100) UNIQUE NOT NULL,
@@ -21,25 +20,17 @@ CREATE TABLE user (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- -----------------------------------------------------------
--- 2. 分类表
--- -----------------------------------------------------------
 CREATE TABLE category (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO category (name) VALUES
-('Web 开发'),
-('移动开发'),
-('UI/UX 设计'),
-('文案写作'),
-('数据分析'),
-('其他');
+('Web 开发'), ('移动开发'), ('UI/UX 设计'),
+('文案写作'), ('数据分析'), ('其他');
 
--- -----------------------------------------------------------
--- 3. 项目表
--- -----------------------------------------------------------
+-- ==================== 项目模块（陈凯博） ====================
+
 CREATE TABLE project (
     id INT AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(200) NOT NULL,
@@ -54,9 +45,8 @@ CREATE TABLE project (
     FOREIGN KEY (employer_id) REFERENCES user(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- -----------------------------------------------------------
--- 4. 竞标表
--- -----------------------------------------------------------
+-- ==================== 竞标模块（陈僖睿） ====================
+
 CREATE TABLE bid (
     id INT AUTO_INCREMENT PRIMARY KEY,
     project_id INT NOT NULL,
@@ -70,25 +60,21 @@ CREATE TABLE bid (
     FOREIGN KEY (freelancer_id) REFERENCES user(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- -----------------------------------------------------------
--- 5. 订单表
--- -----------------------------------------------------------
+-- ==================== 订单模块（陈子豪） ====================
+
 CREATE TABLE task_order (
     id INT AUTO_INCREMENT PRIMARY KEY,
     project_id INT NOT NULL,
     employer_id INT NOT NULL,
     freelancer_id INT NOT NULL,
     amount DECIMAL(10,2),
-    status ENUM('in_progress', 'completed', 'cancelled') DEFAULT 'in_progress',
+    status VARCHAR(30) DEFAULT 'in_progress',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (project_id) REFERENCES project(id),
     FOREIGN KEY (employer_id) REFERENCES user(id),
     FOREIGN KEY (freelancer_id) REFERENCES user(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- -----------------------------------------------------------
--- 6. 评价表
--- -----------------------------------------------------------
 CREATE TABLE review (
     id INT AUTO_INCREMENT PRIMARY KEY,
     order_id INT NOT NULL UNIQUE,
@@ -102,9 +88,60 @@ CREATE TABLE review (
     FOREIGN KEY (to_user_id) REFERENCES user(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- -----------------------------------------------------------
--- 测试数据
--- -----------------------------------------------------------
+-- ==================== 用户系统补充表（陈怡安） ====================
+
+CREATE TABLE wallet (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT UNIQUE NOT NULL,
+    balance DECIMAL(12,2) NOT NULL DEFAULT 0.00,
+    frozen DECIMAL(12,2) NOT NULL DEFAULT 0.00,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES user(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE transaction_log (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    type VARCHAR(30) NOT NULL COMMENT 'recharge/freeze/release/refund/income',
+    amount DECIMAL(12,2) NOT NULL,
+    balance_before DECIMAL(12,2) DEFAULT 0.00,
+    balance_after DECIMAL(12,2) DEFAULT 0.00,
+    frozen_before DECIMAL(12,2) DEFAULT 0.00,
+    frozen_after DECIMAL(12,2) DEFAULT 0.00,
+    order_id INT,
+    description VARCHAR(255) DEFAULT '',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES user(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE delivery (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    order_id INT,
+    user_id INT NOT NULL,
+    title VARCHAR(200) DEFAULT '',
+    description TEXT,
+    file_name VARCHAR(255) DEFAULT '',
+    file_path VARCHAR(500) DEFAULT '',
+    file_size BIGINT DEFAULT 0,
+    file_type VARCHAR(50) DEFAULT '',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    project_id INT,
+    FOREIGN KEY (order_id) REFERENCES task_order(id),
+    FOREIGN KEY (user_id) REFERENCES user(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE project_message (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    project_id INT NOT NULL,
+    sender_id INT NOT NULL,
+    content TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (project_id) REFERENCES project(id),
+    FOREIGN KEY (sender_id) REFERENCES user(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ==================== 测试数据 ====================
 
 INSERT INTO user (email, password, role, display_name, skills, rating) VALUES
 ('alice@test.com', '123456', 'employer', 'Alice 科技公司', NULL, 4.5),

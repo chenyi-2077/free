@@ -1,13 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="java.util.List, com.freelite.model.*" %>
+<%@ page import="java.util.List, chen_yi_an.User, chen_kai_bo.Project, chen_kai_bo.Category" %>
 <%
     User loginUser = (User) session.getAttribute("user");
     List<Project> projects = (List<Project>) request.getAttribute("projects");
     List<Category> categories = (List<Category>) request.getAttribute("categories");
-    int currentPage = (int) request.getAttribute("currentPage");
-    int totalPages = (int) request.getAttribute("totalPages");
+    int currentPage = request.getAttribute("currentPage") != null ? (int) request.getAttribute("currentPage") : 1;
+    int totalPages = request.getAttribute("totalPages") != null ? (int) request.getAttribute("totalPages") : 1;
     String keyword = (String) request.getAttribute("keyword");
-    int selectedCategory = (int) request.getAttribute("selectedCategory");
+    int selectedCategory = request.getAttribute("selectedCategory") != null ? (int) request.getAttribute("selectedCategory") : 0;
     String successMsg = (String) session.getAttribute("successMsg");
     if (successMsg != null) { session.removeAttribute("successMsg"); }
     String errorMsg = (String) session.getAttribute("errorMsg");
@@ -41,7 +41,7 @@
             <a class="navbar-brand" href="${pageContext.request.contextPath}/projects">Freelite</a>
             <div class="d-flex gap-3 align-items-center">
                 <span class="text-muted" style="font-size: 0.9rem;">
-                    <%= loginUser.getDisplayName() != null ? loginUser.getDisplayName() : loginUser.getEmail() %>
+                    <%= loginUser != null ? (loginUser.getDisplayName() != null ? loginUser.getDisplayName() : loginUser.getEmail()) : "访客" %>
                 </span>
                 <a href="${pageContext.request.contextPath}/my/projects" class="nav-link">我的项目</a>
                 <a href="${pageContext.request.contextPath}/profile" class="nav-link">个人主页</a>
@@ -103,7 +103,7 @@
             <% } else { %>
                 <% for (Project p : projects) { %>
                     <div class="col-md-6 mb-3">
-                        <a href="${pageContext.request.contextPath}/project/<%= p.getId() %>" class="card-project-link">
+                        <a href="${pageContext.request.contextPath}/project/detail?id=<%= p.getId() %>" class="card-project-link">
                             <div class="card card-project p-3">
                                 <div class="d-flex justify-content-between">
                                     <div style="flex: 1;">

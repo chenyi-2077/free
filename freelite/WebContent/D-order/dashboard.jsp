@@ -1,11 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="java.util.List, com.freelite.model.*" %>
+<%@ page import="java.util.List, chen_zi_hao.*, chen_yi_an.User, chen_kai_bo.Project" %>
 <%
     User loginUser = (User) session.getAttribute("user");
-    int totalOrders = (int) request.getAttribute("totalOrders");
-    int completedOrders = (int) request.getAttribute("completedOrders");
-    int inProgressOrders = (int) request.getAttribute("inProgressOrders");
-    List<Order> recentOrders = (List<Order>) request.getAttribute("recentOrders");
+    long totalOrders = request.getAttribute("totalProjects") != null ? (long) request.getAttribute("totalProjects") : 0L;
+    long completedOrders = request.getAttribute("completedOrders") != null ? (long) request.getAttribute("completedOrders") : 0L;
+    long inProgressOrders = request.getAttribute("inProgressProjects") != null ? (long) request.getAttribute("inProgressProjects") : 0L;
+    List<chen_kai_bo.Project> recentOrders = (List) request.getAttribute("recentProjects") != null ? (List) request.getAttribute("recentProjects") : new java.util.ArrayList();
 %>
 <!DOCTYPE html>
 <html lang="zh-CN">
@@ -40,7 +40,7 @@
             <a class="navbar-brand fw-bold" href="<%= request.getContextPath() %>/projects" style="color: var(--accent);">Freelite</a>
             <div class="d-flex">
                 <a href="<%= request.getContextPath() %>/projects" class="text-decoration-none text-muted me-3">项目</a>
-                <a href="<%= request.getContextPath() %>/profile" class="text-decoration-none text-muted"><%= loginUser.getDisplayName() %></a>
+                <a href="<%= request.getContextPath() %>/profile" class="text-decoration-none text-muted"><%= loginUser != null ? loginUser.getDisplayName() : "用户" %></a>
             </div>
         </div>
     </nav>
@@ -94,16 +94,16 @@
                     <% if (recentOrders == null || recentOrders.isEmpty()) { %>
                         <p class="text-muted">暂无订单</p>
                     <% } else { %>
-                        <% for (Order o : recentOrders) { %>
+                        <% for (Project p : recentOrders) { %>
                             <div class="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom">
                                 <div>
-                                    <small class="fw-bold"><%= o.getProjectTitle() %></small><br>
-                                    <small class="text-muted">¥<%= String.format("%.0f", o.getAmount()) %></small>
+                                    <small class="fw-bold"><%= p.getTitle() %></small><br>
+                                    <small class="text-muted">¥<%= String.format("%.0f", p.getBudget()) %></small>
                                 </div>
                                 <small>
-                                    <% if ("completed".equals(o.getStatus())) { %>
+                                    <% if ("completed".equals(p.getStatus())) { %>
                                         <span class="badge bg-success">完成</span>
-                                    <% } else if ("in_progress".equals(o.getStatus())) { %>
+                                    <% } else if ("in_progress".equals(p.getStatus())) { %>
                                         <span class="badge bg-warning text-dark">进行中</span>
                                     <% } else { %>
                                         <span class="badge bg-secondary">取消</span>

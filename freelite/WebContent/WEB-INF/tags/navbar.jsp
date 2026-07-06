@@ -9,7 +9,7 @@
             <a href="${pageContext.request.contextPath}/wallet" class="text-decoration-none" style="color: #6b7280;">钱包</a>
             <a href="${pageContext.request.contextPath}/dashboard" class="text-decoration-none" style="color: #6b7280;">看板</a>
             <a href="${pageContext.request.contextPath}/profile" class="text-decoration-none" style="color: #6b7280;">个人主页</a>
-            <a href="${pageContext.request.contextPath}/logout" class="text-decoration-none" style="color: #6b7280;">退出登录</a>
+            <a href="${pageContext.request.contextPath}/logout" class="text-decoration-none" style="color: #6b7280;">退出</a>
         </div>
     </div>
 </nav>
