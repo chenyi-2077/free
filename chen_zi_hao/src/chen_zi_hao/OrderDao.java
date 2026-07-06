@@ -224,6 +224,139 @@ public class OrderDao {
         return stats;
     }
 
+    public List<Order> findByUserId(int userId) {
+        List<Order> list = new ArrayList<>();
+        String sql = "SELECT o.*, "
+                + "p.title AS project_title, "
+                + "e.display_name AS employer_name, "
+                + "f.display_name AS freelancer_name "
+                + "FROM task_order o "
+                + "LEFT JOIN project p ON o.project_id = p.id "
+                + "LEFT JOIN user e ON o.employer_id = e.id "
+                + "LEFT JOIN user f ON o.freelancer_id = f.id "
+                + "WHERE o.employer_id=? OR o.freelancer_id=? "
+                + "ORDER BY o.created_at DESC";
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            conn = DBUtil.getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, userId);
+            ps.setInt(2, userId);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(mapOrder(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DBUtil.close(rs, ps, conn);
+        }
+        return list;
+    }
+
+    public List<Order> findByProject(int projectId) {
+        List<Order> list = new ArrayList<>();
+        String sql = "SELECT o.*, p.title AS project_title, e.display_name AS employer_name, f.display_name AS freelancer_name "
+                + "FROM task_order o "
+                + "LEFT JOIN project p ON o.project_id = p.id "
+                + "LEFT JOIN user e ON o.employer_id = e.id "
+                + "LEFT JOIN user f ON o.freelancer_id = f.id "
+                + "WHERE o.project_id=? ORDER BY o.created_at DESC";
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            conn = DBUtil.getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, projectId);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(mapOrder(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DBUtil.close(rs, ps, conn);
+        }
+        return list;
+    }
+
+    public int countByUserId(int userId, String status) {
+        String sql = "SELECT COUNT(*) FROM task_order WHERE (employer_id=? OR freelancer_id=?) AND status=?";
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            conn = DBUtil.getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, userId);
+            ps.setInt(2, userId);
+            ps.setString(3, status);
+            rs = ps.executeQuery();
+            if (rs.next()) return rs.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DBUtil.close(rs, ps, conn);
+        }
+        return 0;
+    }
+
+    public int countByUserId(int userId) {
+        String sql = "SELECT COUNT(*) FROM task_order WHERE employer_id=? OR freelancer_id=?";
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            conn = DBUtil.getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, userId);
+            ps.setInt(2, userId);
+            rs = ps.executeQuery();
+            if (rs.next()) return rs.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DBUtil.close(rs, ps, conn);
+        }
+        return 0;
+    }
+
+    public List<Order> findRecentByUserId(int userId, int limit) {
+        List<Order> list = new ArrayList<>();
+        String sql = "SELECT o.*, "
+                + "p.title AS project_title, "
+                + "e.display_name AS employer_name, "
+                + "f.display_name AS freelancer_name "
+                + "FROM task_order o "
+                + "LEFT JOIN project p ON o.project_id = p.id "
+                + "LEFT JOIN user e ON o.employer_id = e.id "
+                + "LEFT JOIN user f ON o.freelancer_id = f.id "
+                + "WHERE o.employer_id=? OR o.freelancer_id=? "
+                + "ORDER BY o.created_at DESC LIMIT ?";
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            conn = DBUtil.getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, userId);
+            ps.setInt(2, userId);
+            ps.setInt(3, limit);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(mapOrder(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DBUtil.close(rs, ps, conn);
+        }
+        return list;
+    }
+
     // ---- 内部工具 ----
 
     private Order mapOrder(ResultSet rs) throws SQLException {

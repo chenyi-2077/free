@@ -222,6 +222,48 @@ public class ProjectDao {
         return list;
     }
 
+    public int count(String keyword, int categoryId) {
+        StringBuilder sql = new StringBuilder(
+                "SELECT COUNT(*) FROM project p WHERE p.status != 'cancelled' ");
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            sql.append(" AND (p.title LIKE ? OR p.description LIKE ?)");
+        }
+        if (categoryId > 0) {
+            sql.append(" AND p.category_id = ?");
+        }
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+            int idx = 1;
+            if (keyword != null && !keyword.trim().isEmpty()) {
+                String like = "%" + keyword.trim() + "%";
+                ps.setString(idx++, like);
+                ps.setString(idx++, like);
+            }
+            if (categoryId > 0) {
+                ps.setInt(idx++, categoryId);
+            }
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) return rs.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public void updateEscrow(int id, double amount, String status) {
+        String sql = "UPDATE project SET escrow_amount=?, escrow_status=? WHERE id=?";
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setDouble(1, amount);
+            ps.setString(2, status);
+            ps.setInt(3, id);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private Project mapProject(ResultSet rs) throws SQLException {
         Project p = new Project();
         p.setId(rs.getInt("id"));
