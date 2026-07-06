@@ -1,6 +1,6 @@
 package com.freelite.util;
 
-import com.freelite.model.User;
+import chen_yi_an.User;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
