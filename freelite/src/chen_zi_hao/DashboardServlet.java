@@ -1,19 +1,20 @@
 package chen_zi_hao;
+import chen_kai_bo.ProjectDao;
+import chen_yi_an.EscrowService;
+import chen_yi_an.UserDao;
+import chen_yi_an.User;
+import chen_kai_bo.Project;
 
 import chen_zi_hao.OrderDao;
 import chen_zi_hao.User;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-
 public class DashboardServlet extends HttpServlet {
-
     private OrderDao orderDao = new OrderDao();
-
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
@@ -22,12 +23,10 @@ public class DashboardServlet extends HttpServlet {
             resp.sendRedirect(req.getContextPath() + "/login");
             return;
         }
-
         int userId = loginUser.getId();
         int totalOrders = orderDao.countByUserId(userId);
         int completedOrders = orderDao.countByUserId(userId, "completed");
         int inProgressOrders = orderDao.countByUserId(userId, "in_progress");
-
         req.setAttribute("totalOrders", totalOrders);
         req.setAttribute("completedOrders", completedOrders);
         req.setAttribute("inProgressOrders", inProgressOrders);

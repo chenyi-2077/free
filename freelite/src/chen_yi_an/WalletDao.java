@@ -1,12 +1,16 @@
 package chen_yi_an;
+import chen_kai_bo.Project;
+import chen_kai_bo.Bid;
+import chen_kai_bo.ProjectDao;
+import chen_kai_bo.Category;
+import chen_xi_rui.BidDao;
+import chen_zi_hao.Order;
+import chen_zi_hao.OrderDao;
 
 import chen_yi_an.Wallet;
 import com.freelite.util.DBUtil;
-
 import java.sql.*;
-
 public class WalletDao {
-
     /**
      * 获取用户钱包，不存在则创建
      */
@@ -23,101 +27,32 @@ public class WalletDao {
         }
         // 创建钱包
         String insert = "INSERT INTO wallet (user_id, balance, frozen) VALUES (?, 0, 0)";
-        try (Connection conn = DBUtil.getConnection();
              PreparedStatement ps = conn.prepareStatement(insert, Statement.RETURN_GENERATED_KEYS)) {
-            ps.setInt(1, userId);
             ps.executeUpdate();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         return getOrCreate(userId);
     }
-
-    /**
      * 充值
-     */
     public boolean recharge(int userId, double amount) {
         String sql = "UPDATE wallet SET balance = balance + ? WHERE user_id=?";
-        try (Connection conn = DBUtil.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setDouble(1, amount);
             ps.setInt(2, userId);
             return ps.executeUpdate() > 0;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         return false;
-    }
-
-    /**
      * 冻结金额（担保支付托管）
-     */
     public boolean freeze(int userId, double amount) {
         String sql = "UPDATE wallet SET balance = balance - ?, frozen = frozen + ? WHERE user_id=? AND balance >= ?";
-        try (Connection conn = DBUtil.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setDouble(1, amount);
             ps.setDouble(2, amount);
             ps.setInt(3, userId);
             ps.setDouble(4, amount);
-            return ps.executeUpdate() > 0;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    /**
      * 释放冻结金额（确认完成）
-     */
     public boolean release(int userId, double amount) {
         String sql = "UPDATE wallet SET frozen = frozen - ? WHERE user_id=? AND frozen >= ?";
-        try (Connection conn = DBUtil.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setDouble(1, amount);
-            ps.setInt(2, userId);
             ps.setDouble(3, amount);
-            return ps.executeUpdate() > 0;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    /**
      * 退款（解冻并退回雇主）
-     */
     public boolean refund(int userId, double amount) {
         String sql = "UPDATE wallet SET balance = balance + ?, frozen = frozen - ? WHERE user_id=? AND frozen >= ?";
-        try (Connection conn = DBUtil.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setDouble(1, amount);
-            ps.setDouble(2, amount);
-            ps.setInt(3, userId);
-            ps.setDouble(4, amount);
-            return ps.executeUpdate() > 0;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    /**
      * 收入入账（自由职业者收到款）
-     */
     public boolean income(int userId, double amount) {
-        String sql = "UPDATE wallet SET balance = balance + ? WHERE user_id=?";
-        try (Connection conn = DBUtil.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setDouble(1, amount);
-            ps.setInt(2, userId);
-            return ps.executeUpdate() > 0;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
     private Wallet mapWallet(ResultSet rs) throws SQLException {
         Wallet w = new Wallet();
         w.setId(rs.getInt("id"));
@@ -129,5 +64,4 @@ public class WalletDao {
         ts = rs.getTimestamp("updated_at");
         if (ts != null) w.setUpdatedAt(ts.toLocalDateTime());
         return w;
-    }
 }

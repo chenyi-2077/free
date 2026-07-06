@@ -1,14 +1,16 @@
 package chen_zi_hao;
+import chen_kai_bo.ProjectDao;
+import chen_yi_an.EscrowService;
+import chen_yi_an.UserDao;
+import chen_yi_an.User;
+import chen_kai_bo.Project;
 
 import chen_zi_hao.Review;
 import com.freelite.util.DBUtil;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
 public class ReviewDao {
-
     public Review findByOrderId(int orderId) {
         String sql = "SELECT * FROM review WHERE order_id=?";
         try (Connection conn = DBUtil.getConnection();
@@ -22,25 +24,14 @@ public class ReviewDao {
         }
         return null;
     }
-
     public List<Review> findByUserId(int userId) {
         List<Review> list = new ArrayList<>();
         String sql = "SELECT * FROM review WHERE to_user_id=? ORDER BY created_at DESC";
-        try (Connection conn = DBUtil.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, userId);
-            try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) list.add(mapReview(rs));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         return list;
-    }
-
     public int insert(Review review) {
         String sql = "INSERT INTO review (order_id, from_user_id, to_user_id, score, comment) VALUES (?,?,?,?,?)";
-        try (Connection conn = DBUtil.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, review.getOrderId());
             ps.setInt(2, review.getFromUserId());
@@ -50,13 +41,7 @@ public class ReviewDao {
             ps.executeUpdate();
             try (ResultSet rs = ps.getGeneratedKeys()) {
                 if (rs.next()) return rs.getInt(1);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         return -1;
-    }
-
     private Review mapReview(ResultSet rs) throws SQLException {
         Review r = new Review();
         r.setId(rs.getInt("id"));
@@ -68,5 +53,4 @@ public class ReviewDao {
         Timestamp ts = rs.getTimestamp("created_at");
         if (ts != null) r.setCreatedAt(ts.toLocalDateTime());
         return r;
-    }
 }

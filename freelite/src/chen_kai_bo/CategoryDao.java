@@ -1,16 +1,18 @@
 package chen_kai_bo;
+import chen_xi_rui.BidDao;
+import chen_xi_rui.Bid;
+import chen_yi_an.EscrowService;
+import chen_zi_hao.Order;
+import chen_zi_hao.OrderDao;
 
 import chen_kai_bo.Category;
 import com.freelite.util.DBUtil;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
-
 public class CategoryDao {
-
     public List<Category> findAll() {
         List<Category> list = new ArrayList<>();
         String sql = "SELECT id, name FROM category ORDER BY id";
@@ -28,10 +30,8 @@ public class CategoryDao {
         }
         return list;
     }
-
     public Category findById(int id) {
         String sql = "SELECT id, name FROM category WHERE id=?";
-        try (Connection conn = DBUtil.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
@@ -41,10 +41,5 @@ public class CategoryDao {
                     c.setName(rs.getString("name"));
                     return c;
                 }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         return null;
-    }
 }

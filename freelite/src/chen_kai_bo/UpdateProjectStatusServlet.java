@@ -1,23 +1,22 @@
 package chen_kai_bo;
-
-import chen_kai_bo.*;
-import chen_kai_bo.*;
+import chen_xi_rui.BidDao;
+import chen_xi_rui.Bid;
 import chen_yi_an.EscrowService;
+import chen_zi_hao.Order;
+import chen_zi_hao.OrderDao;
 
+import chen_kai_bo.*;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
-
 public class UpdateProjectStatusServlet extends HttpServlet {
-
     private ProjectDao projectDao = new ProjectDao();
     private OrderDao orderDao = new OrderDao();
     private BidDao bidDao = new BidDao();
     private EscrowService escrowService = new EscrowService();
-
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
@@ -27,17 +26,12 @@ public class UpdateProjectStatusServlet extends HttpServlet {
             resp.sendRedirect(req.getContextPath() + "/login");
             return;
         }
-
         int projectId = Integer.parseInt(req.getParameter("id"));
         String newStatus = req.getParameter("status");
         String redirect = req.getParameter("redirect");
-
         Project project = projectDao.findById(projectId);
         if (project == null || project.getEmployerId() != loginUser.getId()) {
             resp.sendRedirect(req.getContextPath() + "/projects");
-            return;
-        }
-
         // 校验状态转换是否合法
         String current = project.getStatus();
         boolean valid = false;
@@ -47,16 +41,9 @@ public class UpdateProjectStatusServlet extends HttpServlet {
                 break;
             case "open":
                 if ("cancelled".equals(current)) valid = true;
-                break;
-        }
-
         if (!valid) {
             resp.sendRedirect(req.getContextPath() + "/project/" + projectId);
-            return;
-        }
-
         projectDao.updateStatus(projectId, newStatus);
-
         // 取消/恢复时处理关联订单
         List<Order> orders = orderDao.findByProject(projectId);
         if (orders != null) {
@@ -76,8 +63,6 @@ public class UpdateProjectStatusServlet extends HttpServlet {
                     orderDao.updateStatus(order.getId(), "cancelled");
                 }
             }
-        }
-
         // 重新开放时：把已中标的竞标改回 pending
         if ("open".equals(newStatus)) {
             List<com.freelite.model.Bid> bids = bidDao.findByProjectId(projectId);
@@ -85,15 +70,8 @@ public class UpdateProjectStatusServlet extends HttpServlet {
                 for (com.freelite.model.Bid b : bids) {
                     if ("accepted".equals(b.getStatus())) {
                         bidDao.updateStatus(b.getId(), "pending");
-                    }
-                }
-            }
-        }
-
         if (redirect != null && !redirect.isEmpty()) {
             resp.sendRedirect(req.getContextPath() + redirect);
         } else {
-            resp.sendRedirect(req.getContextPath() + "/project/" + projectId);
-        }
     }
 }

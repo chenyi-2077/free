@@ -1,14 +1,18 @@
 package chen_yi_an;
+import chen_kai_bo.Project;
+import chen_kai_bo.Bid;
+import chen_kai_bo.ProjectDao;
+import chen_kai_bo.Category;
+import chen_xi_rui.BidDao;
+import chen_zi_hao.Order;
+import chen_zi_hao.OrderDao;
 
 import chen_yi_an.TransactionLog;
 import com.freelite.util.DBUtil;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
 public class TransactionLogDao {
-
     public void insert(TransactionLog log) {
         String sql = "INSERT INTO transaction_log (user_id, type, amount, balance_before, balance_after, "
                 + "frozen_before, frozen_after, order_id, description) "
@@ -33,22 +37,13 @@ public class TransactionLogDao {
             e.printStackTrace();
         }
     }
-
     public List<TransactionLog> findByUserId(int userId) {
         List<TransactionLog> list = new ArrayList<>();
         String sql = "SELECT * FROM transaction_log WHERE user_id=? ORDER BY created_at DESC";
-        try (Connection conn = DBUtil.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, userId);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) list.add(mapLog(rs));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         return list;
-    }
-
     private TransactionLog mapLog(ResultSet rs) throws SQLException {
         TransactionLog log = new TransactionLog();
         log.setId(rs.getInt("id"));
@@ -65,5 +60,4 @@ public class TransactionLogDao {
         Timestamp ts = rs.getTimestamp("created_at");
         if (ts != null) log.setCreatedAt(ts.toLocalDateTime());
         return log;
-    }
 }

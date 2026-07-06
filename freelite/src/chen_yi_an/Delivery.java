@@ -1,7 +1,13 @@
 package chen_yi_an;
+import chen_kai_bo.Project;
+import chen_kai_bo.Bid;
+import chen_kai_bo.ProjectDao;
+import chen_kai_bo.Category;
+import chen_xi_rui.BidDao;
+import chen_zi_hao.Order;
+import chen_zi_hao.OrderDao;
 
 import java.time.LocalDateTime;
-
 public class Delivery {
     private int id;
     private int orderId;
@@ -14,15 +20,12 @@ public class Delivery {
     private long fileSize;
     private String fileType;
     private LocalDateTime createdAt;
-
     // 关联
     private String userName;
-
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
     public int getOrderId() { return orderId; }
     public void setOrderId(int orderId) { this.orderId = orderId; }
-
     public int getProjectId() { return projectId; }
     public void setProjectId(int projectId) { this.projectId = projectId; }
     public int getUserId() { return userId; }

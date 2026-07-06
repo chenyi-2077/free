@@ -1,7 +1,11 @@
 package chen_zi_hao;
+import chen_kai_bo.ProjectDao;
+import chen_yi_an.EscrowService;
+import chen_yi_an.UserDao;
+import chen_yi_an.User;
+import chen_kai_bo.Project;
 
 import java.time.LocalDateTime;
-
 public class Order {
     private int id;
     private int projectId;
@@ -11,43 +15,31 @@ public class Order {
     private double escrowAmount;
     private String status;       // "in_progress" | "awaiting_confirm" | "completed" | "cancelled"
     private LocalDateTime createdAt;
-
     // 关联字段
     private String projectTitle;
     private String employerName;
     private String freelancerName;
-
     // --- Getters / Setters ---
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
-
     public int getProjectId() { return projectId; }
     public void setProjectId(int projectId) { this.projectId = projectId; }
-
     public int getEmployerId() { return employerId; }
     public void setEmployerId(int employerId) { this.employerId = employerId; }
-
     public int getFreelancerId() { return freelancerId; }
     public void setFreelancerId(int freelancerId) { this.freelancerId = freelancerId; }
-
     public double getAmount() { return amount; }
     public void setAmount(double amount) { this.amount = amount; }
-
     public double getEscrowAmount() { return escrowAmount; }
     public void setEscrowAmount(double escrowAmount) { this.escrowAmount = escrowAmount; }
-
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
-
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
-
     public String getProjectTitle() { return projectTitle; }
     public void setProjectTitle(String projectTitle) { this.projectTitle = projectTitle; }
-
     public String getEmployerName() { return employerName; }
     public void setEmployerName(String employerName) { this.employerName = employerName; }
-
     public String getFreelancerName() { return freelancerName; }
     public void setFreelancerName(String freelancerName) { this.freelancerName = freelancerName; }
 }

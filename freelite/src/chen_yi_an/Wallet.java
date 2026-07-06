@@ -1,7 +1,13 @@
 package chen_yi_an;
+import chen_kai_bo.Project;
+import chen_kai_bo.Bid;
+import chen_kai_bo.ProjectDao;
+import chen_kai_bo.Category;
+import chen_xi_rui.BidDao;
+import chen_zi_hao.Order;
+import chen_zi_hao.OrderDao;
 
 import java.time.LocalDateTime;
-
 public class Wallet {
     private int id;
     private int userId;
@@ -9,7 +15,6 @@ public class Wallet {
     private double frozen;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
     public int getUserId() { return userId; }

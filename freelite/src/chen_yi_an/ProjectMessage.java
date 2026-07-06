@@ -1,17 +1,21 @@
 package chen_yi_an;
+import chen_kai_bo.Project;
+import chen_kai_bo.Bid;
+import chen_kai_bo.ProjectDao;
+import chen_kai_bo.Category;
+import chen_xi_rui.BidDao;
+import chen_zi_hao.Order;
+import chen_zi_hao.OrderDao;
 
 import java.time.LocalDateTime;
-
 public class ProjectMessage {
     private int id;
     private int projectId;
     private int senderId;
     private String content;
     private LocalDateTime createdAt;
-
     // 关联
     private String senderName;
-
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
     public int getProjectId() { return projectId; }

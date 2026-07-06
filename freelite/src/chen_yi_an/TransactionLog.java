@@ -1,7 +1,13 @@
 package chen_yi_an;
+import chen_kai_bo.Project;
+import chen_kai_bo.Bid;
+import chen_kai_bo.ProjectDao;
+import chen_kai_bo.Category;
+import chen_xi_rui.BidDao;
+import chen_zi_hao.Order;
+import chen_zi_hao.OrderDao;
 
 import java.time.LocalDateTime;
-
 public class TransactionLog {
     private int id;
     private int userId;
@@ -14,7 +20,6 @@ public class TransactionLog {
     private Integer orderId;
     private String description;
     private LocalDateTime createdAt;
-
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
     public int getUserId() { return userId; }
