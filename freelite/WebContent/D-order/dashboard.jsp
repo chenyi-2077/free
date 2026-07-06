@@ -2,10 +2,10 @@
 <%@ page import="java.util.List, com.freelite.model.*, com.freelite.model.User, com.freelite.model.Project" %>
 <%
     User loginUser = (User) session.getAttribute("user");
-    long totalOrders = request.getAttribute("totalProjects") != null ? (long) request.getAttribute("totalProjects") : 0L;
-    long completedOrders = request.getAttribute("completedOrders") != null ? (long) request.getAttribute("completedOrders") : 0L;
-    long inProgressOrders = request.getAttribute("inProgressProjects") != null ? (long) request.getAttribute("inProgressProjects") : 0L;
-    List<Project> recentOrders = (List) request.getAttribute("recentProjects") != null ? (List) request.getAttribute("recentProjects") : new java.util.ArrayList();
+    int totalOrders = request.getAttribute("totalOrders") != null ? ((Number) request.getAttribute("totalOrders")).intValue() : 0;
+    int completedOrders = request.getAttribute("completedOrders") != null ? ((Number) request.getAttribute("completedOrders")).intValue() : 0;
+    int inProgressOrders = request.getAttribute("inProgressOrders") != null ? ((Number) request.getAttribute("inProgressOrders")).intValue() : 0;
+    List<Project> recentOrders = (List) request.getAttribute("recentOrders") != null ? (List) request.getAttribute("recentOrders") : new java.util.ArrayList();
 %>
 <!DOCTYPE html>
 <html lang="zh-CN">
