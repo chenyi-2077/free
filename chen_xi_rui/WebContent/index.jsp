@@ -2,7 +2,6 @@
 <%@ page import="chen_xi_rui.User" %>
 <%
     User idxUser = (User) session.getAttribute("user");
-    String ctx = request.getContextPath();
 %>
 <!DOCTYPE html>
 <html lang="zh-CN">
