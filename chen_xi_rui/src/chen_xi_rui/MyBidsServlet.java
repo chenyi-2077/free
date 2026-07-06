@@ -19,12 +19,11 @@ public class MyBidsServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
+        HttpSession session = request.getSession(false);
+        User user = (User) (session != null ? session.getAttribute("user") : null);
         if (user == null) {
-            // 无登录场景：模拟一个自由职业者用户
-            user = new User(2, "自由职业者", "freelancer", 4.5);
-            session.setAttribute("user", user);
+            response.sendRedirect(request.getContextPath() + "/login");
+            return;
         }
 
         List<Bid> bids = bidDao.findByFreelancerId(user.getId());

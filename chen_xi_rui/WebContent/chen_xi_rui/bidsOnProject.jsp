@@ -17,17 +17,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/freelite.css">
 </head>
 <body class="bg-light">
-    <nav class="navbar-custom">
-        <div class="container">
-            <a class="navbar-brand" href="<%= ctx %>/">Freelite</a>
-            <div class="collapse navbar-collapse">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="<%= ctx %>/bids?projectId=<%= bpProjectId %>">竞标列表</a></li>
-                    <li class="nav-item"><a class="nav-link" href="<%= ctx %>/my/bids">我的竞标</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <%@ include file="/navbar.jsp" %>
     <div class="container py-4">
         <h4 class="mb-4">项目竞标列表</h4>
         <a href="<%= ctx %>/bid/place?projectId=<%= bpProjectId %>" class="btn btn-gradient mb-3">提交竞标</a>
@@ -55,6 +45,7 @@
                         </div>
                     </div>
                 <% } %>
+            </div>
         <% } %>
     </div>
 </body>

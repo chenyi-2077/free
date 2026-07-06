@@ -18,16 +18,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/freelite.css">
 </head>
 <body class="bg-light">
-    <nav class="navbar-custom">
-        <div class="container">
-            <a class="navbar-brand" href="<%= ctx %>/">Freelite</a>
-            <div class="collapse navbar-collapse">
-                <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link" href="<%= ctx %>/orders">订单列表</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <%@ include file="/navbar.jsp" %>
     <div class="container py-4">
         <div class="row justify-content-center">
             <div class="col-md-6">

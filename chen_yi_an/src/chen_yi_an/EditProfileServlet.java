@@ -14,6 +14,12 @@ public class EditProfileServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
+        User user = (User) (session != null ? session.getAttribute("user") : null);
+        if (user == null) {
+            response.sendRedirect(request.getContextPath() + "/login");
+            return;
+        }
         request.getRequestDispatcher("/chen_yi_an/editProfile.jsp").forward(request, response);
     }
 

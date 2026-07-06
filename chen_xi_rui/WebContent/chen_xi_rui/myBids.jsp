@@ -3,7 +3,6 @@
 <%
     String ctx = request.getContextPath();
     User mbUser = (User) session.getAttribute("user");
-    if (mbUser == null) { response.sendRedirect(ctx + "/login"); return; }
     List<Bid> mbList = (List<Bid>) request.getAttribute("bids");
 %>
 <!DOCTYPE html>
@@ -17,16 +16,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/freelite.css">
 </head>
 <body class="bg-light">
-    <nav class="navbar-custom">
-        <div class="container">
-            <a class="navbar-brand" href="<%= ctx %>/">Freelite</a>
-            <div class="collapse navbar-collapse">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="<%= ctx %>/bids">竞标列表</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <%@ include file="/navbar.jsp" %>
     <div class="container py-4">
         <h4>我的竞标记录</h4>
         <% if (mbList == null || mbList.isEmpty()) { %>
@@ -45,6 +35,7 @@
                         </div>
                     </div>
                 <% } %>
+            </div>
         <% } %>
     </div>
 </body>

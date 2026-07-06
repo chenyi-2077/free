@@ -15,11 +15,8 @@ public class OrderDetailServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        User loginUser = (User) request.getSession().getAttribute("user");
-        if (loginUser == null) {
-            response.sendRedirect(request.getContextPath() + "/login");
-            return;
-        }
+        javax.servlet.http.HttpSession session = request.getSession(false);
+        User loginUser = (User) (session != null ? session.getAttribute("user") : null);
 
         String idStr = request.getParameter("id");
         if (idStr == null || idStr.trim().isEmpty()) {
@@ -35,9 +32,11 @@ public class OrderDetailServlet extends HttpServlet {
         request.setAttribute("order", order);
 
         Review review = reviewDao.findByOrderId(id);
-        request.setAttribute("review", review);
-        request.setAttribute("isEmployer", loginUser.getId() == order.getEmployerId());
-        request.setAttribute("isFreelancer", loginUser.getId() == order.getFreelancerId());
+        // 独立版本：直接设单个review，JSP中用List包装便于兼容
+        java.util.List<Review> reviewList = review != null ? java.util.Collections.singletonList(review) : new java.util.ArrayList<>();
+        request.setAttribute("reviews", reviewList);
+        request.setAttribute("isEmployer", loginUser != null && loginUser.getId() == order.getEmployerId());
+        request.setAttribute("isFreelancer", loginUser != null && loginUser.getId() == order.getFreelancerId());
 
         request.getRequestDispatcher("/chen_zi_hao/orderDetail.jsp").forward(request, response);
     }

@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/freelite.css">
 </head>
 <body class="bg-light">
+    <%@ include file="/navbar.jsp" %>
     <div class="container">
         <div class="row justify-content-center mt-5">
             <div class="col-md-6">

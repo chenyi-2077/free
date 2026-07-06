@@ -15,11 +15,7 @@ public class OrderListServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        User loginUser = (User) request.getSession().getAttribute("user");
-        if (loginUser == null) {
-            response.sendRedirect(request.getContextPath() + "/login");
-            return;
-        }
+        // 独立版本：免登录也能查看订单列表
         List<Order> orders = orderDao.findAll();
         request.setAttribute("orders", orders);
         request.getRequestDispatcher("/chen_zi_hao/orderList.jsp").forward(request, response);

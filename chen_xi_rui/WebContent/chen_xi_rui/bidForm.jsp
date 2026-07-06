@@ -2,7 +2,6 @@
 <%@ page import="chen_xi_rui.User" %>
 <%
     User bfu = (User) session.getAttribute("user");
-    if (bfu == null) { response.sendRedirect(request.getContextPath() + "/login"); return; }
     String bfProjectId = String.valueOf(request.getAttribute("projectId"));
     String ctx = request.getContextPath();
 %>
@@ -17,17 +16,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/freelite.css">
 </head>
 <body class="bg-light">
-    <nav class="navbar-custom">
-        <div class="container">
-            <a class="navbar-brand" href="<%= ctx %>/">Freelite</a>
-            <div class="collapse navbar-collapse">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="<%= ctx %>/bids?projectId=<%= bfProjectId %>">竞标列表</a></li>
-                    <li class="nav-item"><a class="nav-link" href="<%= ctx %>/my/bids">我的竞标</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <%@ include file="/navbar.jsp" %>
     <div class="container py-4">
         <div class="row justify-content-center">
             <div class="col-md-6">
@@ -43,15 +32,21 @@
                                 <label class="form-label">报价 (¥)</label>
                                 <input type="number" name="amount" class="form-control" step="0.01" min="0" required>
                             </div>
+                            <div class="mb-3">
                                 <label class="form-label">工期 (天)</label>
                                 <input type="number" name="days" class="form-control" min="1" required>
+                            </div>
+                            <div class="mb-3">
                                 <label class="form-label">方案描述</label>
                                 <textarea name="proposal" class="form-control" rows="5" required></textarea>
+                            </div>
                             <button type="submit" class="btn btn-gradient">提交竞标</button>
                             <a href="<%= ctx %>/bids?projectId=<%= bfProjectId %>" class="btn btn-outline-secondary">返回</a>
                         </form>
                     </div>
                 </div>
+            </div>
+        </div>
     </div>
 </body>
 </html>

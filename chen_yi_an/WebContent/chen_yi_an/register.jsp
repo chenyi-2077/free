@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/auth-light.css">
 </head>
 <body>
+    <%@ include file="/navbar.jsp" %>
     <div class="container">
         <div class="row justify-content-center mt-5">
             <div class="col-md-6">
@@ -28,17 +29,25 @@
                                 <label for="email" class="form-label">邮箱</label>
                                 <input type="email" class="form-control" id="email" name="email" required>
                             </div>
+                            <div class="mb-3">
                                 <label for="password" class="form-label">密码</label>
                                 <input type="password" class="form-control" id="password" name="password" required>
+                            </div>
+                            <div class="mb-3">
                                 <label for="role" class="form-label">角色</label>
                                 <select class="form-select" id="role" name="role">
                                     <option value="freelancer">自由人</option>
                                     <option value="employer">雇主</option>
                                 </select>
+                            </div>
+                            <div class="mb-3">
                                 <label for="displayName" class="form-label">显示名</label>
                                 <input type="text" class="form-control" id="displayName" name="displayName">
+                            </div>
+                            <div class="mb-3">
                                 <label for="skills" class="form-label">技能</label>
                                 <textarea class="form-control" id="skills" name="skills" rows="3" placeholder="请描述您的技能，多个技能用逗号分隔"></textarea>
+                            </div>
                             <button type="submit" class="btn btn-gradient w-100">注册</button>
                         </form>
                         <div class="text-center mt-3">

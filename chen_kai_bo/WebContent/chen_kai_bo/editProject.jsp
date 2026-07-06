@@ -21,21 +21,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/freelite.css">
 </head>
 <body class="bg-light">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container">
-            <a class="navbar-brand" href="${pageContext.request.contextPath}/projects">FreeLite</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/projects">项目列表</a></li>
-                    <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/project/post">发布项目</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="${pageContext.request.contextPath}/my/projects">我的项目</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <%@ include file="/navbar.jsp" %>
 
     <div class="container py-4">
         <div class="row justify-content-center">
