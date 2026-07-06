@@ -357,6 +357,40 @@ public class OrderDao {
         return list;
     }
 
+    public int countAllByStatus(String status) {
+        String sql = "SELECT COUNT(*) FROM task_order WHERE status=?";
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, status);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public List<Order> findRecentAll(int limit) {
+        List<Order> list = new ArrayList<>();
+        String sql = "SELECT o.*, p.title AS project_title, e.display_name AS employer_name, f.display_name AS freelancer_name "
+                + "FROM task_order o "
+                + "LEFT JOIN project p ON o.project_id = p.id "
+                + "LEFT JOIN user e ON o.employer_id = e.id "
+                + "LEFT JOIN user f ON o.freelancer_id = f.id "
+                + "ORDER BY o.created_at DESC LIMIT ?";
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, limit);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) list.add(mapOrder(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
     // ---- 内部工具 ----
 
     private Order mapOrder(ResultSet rs) throws SQLException {

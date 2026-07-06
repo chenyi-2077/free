@@ -16,14 +16,12 @@ public class DashboardServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        // 独立版本：session有user就用，无则显示空数据
+        // 独立版本：session有user就用该用户的数据，无则显示全站统计数据
         HttpSession session = req.getSession(false);
         User user = (User) (session != null ? session.getAttribute("user") : null);
 
-        int totalOrders = 0;
-        int completedOrders = 0;
-        int inProgressOrders = 0;
-        List<Order> recentOrders = new java.util.ArrayList<>();
+        int totalOrders, completedOrders, inProgressOrders;
+        List<Order> recentOrders;
 
         if (user != null) {
             int userId = user.getId();
@@ -31,6 +29,13 @@ public class DashboardServlet extends HttpServlet {
             completedOrders = orderDao.countByUserId(userId, "completed");
             inProgressOrders = orderDao.countByUserId(userId, "in_progress");
             recentOrders = orderDao.findRecentByUserId(userId, 5);
+        } else {
+            // 未登录：显示全站统计数据
+            java.util.Map<String, Integer> stats = orderDao.getDashboardStats();
+            totalOrders = stats.getOrDefault("orderCount", 0);
+            completedOrders = orderDao.countAllByStatus("completed");
+            inProgressOrders = orderDao.countAllByStatus("in_progress");
+            recentOrders = orderDao.findRecentAll(5);
         }
 
         req.setAttribute("totalOrders", totalOrders);
