@@ -6,7 +6,7 @@
     int completedOrders = request.getAttribute("completedOrders") != null ? ((Number) request.getAttribute("completedOrders")).intValue() : 0;
     int inProgressOrders = request.getAttribute("inProgressOrders") != null ? ((Number) request.getAttribute("inProgressOrders")).intValue() : 0;
     List<Order> recentOrders = (List) request.getAttribute("recentOrders") != null ? (List) request.getAttribute("recentOrders") : new java.util.ArrayList();
-    String ctx = request.getContextPath();
+
 %>
 <!DOCTYPE html>
 <html lang="zh-CN">

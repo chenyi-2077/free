@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="chen_zi_hao.User" %>
 <%
-    String ctx = request.getContextPath();
+
     User rvUser = (User) session.getAttribute("user");
     if (rvUser == null) { response.sendRedirect(ctx + "/login"); return; }
     String rvOrderId = String.valueOf(request.getAttribute("orderId"));

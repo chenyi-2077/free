@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="chen_zi_hao.Order, chen_zi_hao.Review, chen_zi_hao.User, java.util.List" %>
 <%
-    String ctx = request.getContextPath();
+
     Order od = (Order) request.getAttribute("order");
     if (od == null) { response.sendRedirect(ctx + "/orders"); return; }
     List<Review> odReviews = (List<Review>) request.getAttribute("reviews");

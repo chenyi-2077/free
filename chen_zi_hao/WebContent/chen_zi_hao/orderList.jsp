@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.List, chen_zi_hao.Order" %>
 <%
-    String ctx = request.getContextPath();
+
     List<Order> orders = (List<Order>) request.getAttribute("orders");
 %>
 <!DOCTYPE html>

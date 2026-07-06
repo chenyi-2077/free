@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.List, chen_xi_rui.Bid, chen_xi_rui.User" %>
 <%
-    String ctx = request.getContextPath();
+
     List<Bid> bids = (List<Bid>) request.getAttribute("bids");
     Integer bpProjectId = (Integer) request.getAttribute("projectId");
     User bpUser = (User) session.getAttribute("user");

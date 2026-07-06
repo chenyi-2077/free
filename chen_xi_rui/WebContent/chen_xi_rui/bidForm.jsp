@@ -3,7 +3,7 @@
 <%
     User bfu = (User) session.getAttribute("user");
     String bfProjectId = String.valueOf(request.getAttribute("projectId"));
-    String ctx = request.getContextPath();
+
 %>
 <!DOCTYPE html>
 <html lang="zh-CN">
