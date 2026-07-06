@@ -8,9 +8,9 @@ import java.sql.SQLException;
  * 数据库连接工具 — 改 DB_PASSWORD 为你的 MySQL 密码
  */
 public class DBUtil {
-    private static final String DB_URL = "jdbc:mysql://mysql-lab:3306/freelite?useSSL=false&serverTimezone=Asia/Shanghai&characterEncoding=UTF-8&allowPublicKeyRetrieval=true";
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/freelite?useSSL=false&serverTimezone=Asia/Shanghai&characterEncoding=UTF-8&allowPublicKeyRetrieval=true";
     private static final String DB_USER = "root";
-    private static final String DB_PASSWORD = "root123";
+    private static final String DB_PASSWORD = "@Aa20185476";
 
     static {
         try {
