@@ -1,3 +1,4 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="chen_kai_bo.User" %>
 <%
     User navUser = (User) session.getAttribute("user");
