@@ -40,10 +40,6 @@
     <div class="container mt-4">
         <h4 class="fw-bold mb-4">📊 数据看板</h4>
 
-        <% if (loginUser == null) { %>
-            <div class="alert alert-info">请先<a href="<%= ctx %>/login" class="alert-link">登录</a>以查看数据看板</div>
-        <% } else { %>
-
         <div class="row mb-4">
             <div class="col-md-3 mb-3">
                 <div class="stat-card bg-purple">
@@ -111,7 +107,6 @@
             </div>
         </div>
 
-        <% } %>
     </div>
 
     <script>
