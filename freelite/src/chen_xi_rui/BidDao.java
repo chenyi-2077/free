@@ -1,10 +1,13 @@
 package chen_xi_rui;
-
 import com.freelite.util.DBUtil;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import chen_kai_bo.Project;
+
 public class BidDao {
+
     public List<Bid> findByProjectId(int projectId) {
         List<Bid> list = new ArrayList<>();
         String sql = "SELECT b.*, u.display_name AS freelancer_name, u.rating AS freelancer_rating "
@@ -21,17 +24,43 @@ public class BidDao {
         }
         return list;
     }
+
     public List<Bid> findByFreelancerId(int freelancerId) {
+        List<Bid> list = new ArrayList<>();
+        String sql = "SELECT b.*, u.display_name AS freelancer_name, u.rating AS freelancer_rating "
+                + "FROM bid b LEFT JOIN user u ON b.freelancer_id = u.id "
                 + "WHERE b.freelancer_id=? ORDER BY b.created_at DESC";
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, freelancerId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) list.add(mapBid(rs));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
     public Bid findById(int id) {
+        String sql = "SELECT b.*, u.display_name AS freelancer_name, u.rating AS freelancer_rating "
                 + "FROM bid b LEFT JOIN user u ON b.freelancer_id = u.id WHERE b.id=?";
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) return mapBid(rs);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return null;
+    }
+
     public int insert(Bid bid) {
         String sql = "INSERT INTO bid (project_id, freelancer_id, amount, days, proposal, status) "
                 + "VALUES (?,?,?,?,?,'pending')";
+        try (Connection conn = DBUtil.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, bid.getProjectId());
             ps.setInt(2, bid.getFreelancerId());
@@ -41,11 +70,25 @@ public class BidDao {
             ps.executeUpdate();
             try (ResultSet rs = ps.getGeneratedKeys()) {
                 if (rs.next()) return rs.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return -1;
+    }
+
     public void updateStatus(int id, String status) {
         String sql = "UPDATE bid SET status=? WHERE id=?";
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, status);
             ps.setInt(2, id);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private Bid mapBid(ResultSet rs) throws SQLException {
         Bid b = new Bid();
         b.setId(rs.getInt("id"));
@@ -60,4 +103,5 @@ public class BidDao {
         b.setFreelancerName(rs.getString("freelancer_name"));
         b.setFreelancerRating(rs.getDouble("freelancer_rating"));
         return b;
+    }
 }

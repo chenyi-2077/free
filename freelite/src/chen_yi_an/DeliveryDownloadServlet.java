@@ -1,5 +1,4 @@
 package chen_yi_an;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -9,6 +8,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLEncoder;
+import javax.servlet.annotation.WebServlet;
 
 /**
  * 下载交付物

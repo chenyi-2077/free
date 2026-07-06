@@ -1,6 +1,7 @@
 package chen_yi_an;
-
 import java.time.LocalDateTime;
+import chen_zi_hao.Order;
+
 public class TransactionLog {
     private int id;
     private int userId;
@@ -13,6 +14,7 @@ public class TransactionLog {
     private Integer orderId;
     private String description;
     private LocalDateTime createdAt;
+
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
     public int getUserId() { return userId; }

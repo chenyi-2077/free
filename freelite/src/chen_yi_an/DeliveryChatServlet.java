@@ -1,4 +1,6 @@
 package chen_yi_an;
+import chen_yi_an.*;
+import chen_yi_an.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -10,10 +12,16 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes; // not needed, use Files
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
+import chen_kai_bo.Project;
+import chen_kai_bo.ProjectDao;
+import chen_zi_hao.OrderDao;
+import chen_zi_hao.Order;
+
 /**
  * 统一的交付与沟通页面
  * GET  /deliveryChat?projectId=X — 展示页面
@@ -29,6 +37,7 @@ import java.util.UUID;
     maxRequestSize = 1024 * 1024 * 100    // 100MB
 )
 public class DeliveryChatServlet extends HttpServlet {
+
     private static final String DEFAULT_UPLOAD_DIR = "/home/admin/.openclaw/workspace/freelite-uploads";
     private static final long THIRTY_DAYS_MS = 30L * 24 * 60 * 60 * 1000;
     private static final double MAX_DISK_USAGE = 0.80; // 80% 磁盘使用上限
@@ -43,10 +52,12 @@ public class DeliveryChatServlet extends HttpServlet {
         ".psd", ".ai", ".fig", ".sketch",
         ".apk", ".ipa", ".exe"
     };
+
     private ProjectDao projectDao = new ProjectDao();
     private ProjectMessageDao messageDao = new ProjectMessageDao();
     private DeliveryDao deliveryDao = new DeliveryDao();
     private OrderDao orderDao = new OrderDao();
+
     private String getUploadBaseDir() {
         // 优先用外部路径
         File extDir = new File(DEFAULT_UPLOAD_DIR);
@@ -56,6 +67,7 @@ public class DeliveryChatServlet extends HttpServlet {
         // 回退到 webapp 内部（Docker 无外部 volume 时）
         return getServletContext().getRealPath("/WEB-INF/uploads");
     }
+
     @Override
     public void init() throws ServletException {
         // 启动时清理超过30天的旧文件
@@ -67,6 +79,8 @@ public class DeliveryChatServlet extends HttpServlet {
                 Thread.currentThread().interrupt();
             }
         }).start();
+    }
+
     private void cleanupOldFiles() {
         String baseDir = getUploadBaseDir();
         File base = new File(baseDir);
@@ -83,56 +97,110 @@ public class DeliveryChatServlet extends HttpServlet {
                     }
                 })
                 .forEach(p -> {
+                    try {
                         Files.delete(p);
                         System.out.println("[Cleanup] Deleted old file: " + p);
+                    } catch (IOException e) {
                         System.err.println("[Cleanup] Failed to delete: " + p);
+                    }
                 });
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         User loginUser = (User) req.getSession().getAttribute("user");
         if (loginUser == null) {
             resp.sendRedirect(req.getContextPath() + "/login");
             return;
+        }
+
         String projectIdStr = req.getParameter("projectId");
         if (projectIdStr == null || projectIdStr.isEmpty()) {
             resp.sendRedirect(req.getContextPath() + "/projects");
+            return;
+        }
+
         int projectId = Integer.parseInt(projectIdStr);
+
         // 获取项目信息
         Project project = projectDao.findById(projectId);
         if (project == null) {
+            resp.sendRedirect(req.getContextPath() + "/projects");
+            return;
+        }
+
         // 权限检查：只有雇主或中标自由职业者能看
         if (!hasAccess(loginUser, project)) {
             req.getSession().setAttribute("errorMsg", "❌ 您无权访问该项目的沟通与交付页面，只有项目雇主和中标自由职业者可查看。");
+            resp.sendRedirect(req.getContextPath() + "/projects");
+            return;
+        }
+
         List<ProjectMessage> messages = messageDao.findByProjectId(projectId);
         List<Delivery> deliveries = deliveryDao.findByProjectId(projectId);
+
         req.setAttribute("projectId", projectId);
         req.setAttribute("project", project);
         req.setAttribute("projectTitle", project.getTitle());
         req.setAttribute("messages", messages);
         req.setAttribute("deliveries", deliveries);
+
         // 订单信息
-        List<com.freelite.model.Order> projectOrders = orderDao.findByProject(projectId);
+        List<Order> projectOrders = orderDao.findByProject(projectId);
         if (projectOrders != null && !projectOrders.isEmpty()) {
             req.setAttribute("order", projectOrders.get(0));
+        }
+
         // 角色判断
         String myRole = "viewer";
         if (loginUser.getId() == project.getEmployerId()) {
             myRole = "employer";
         } else if (projectOrders != null) {
-            for (com.freelite.model.Order o : projectOrders) {
+            for (Order o : projectOrders) {
                 if (o.getFreelancerId() == loginUser.getId()) {
                     myRole = "freelancer";
                     break;
                 }
+            }
+        }
         req.setAttribute("myRole", myRole);
         req.getRequestDispatcher("/deliveryChat.jsp").forward(req, resp);
+    }
+
+    @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
+        User loginUser = (User) req.getSession().getAttribute("user");
+        if (loginUser == null) {
+            resp.sendRedirect(req.getContextPath() + "/login");
+            return;
+        }
+
+        String projectIdStr = req.getParameter("projectId");
         String action = req.getParameter("action");
+        if (projectIdStr == null || projectIdStr.isEmpty()) {
+            resp.sendRedirect(req.getContextPath() + "/projects");
+            return;
+        }
+        int projectId = Integer.parseInt(projectIdStr);
+
         // 权限检查：只有雇主或中标自由职业者能操作
+        Project project = projectDao.findById(projectId);
+        if (project == null) {
+            resp.sendRedirect(req.getContextPath() + "/projects");
+            return;
+        }
+        if (!hasAccess(loginUser, project)) {
             req.getSession().setAttribute("errorMsg", "❌ 您无权访问该项目的沟通与交付页面。");
+            resp.sendRedirect(req.getContextPath() + "/projects");
+            return;
+        }
+
         if ("message".equals(action)) {
             // 发送消息
             String content = req.getParameter("content");
@@ -142,15 +210,18 @@ public class DeliveryChatServlet extends HttpServlet {
                 msg.setSenderId(loginUser.getId());
                 msg.setContent(content.trim());
                 messageDao.insert(msg);
+            }
         } else if ("upload".equals(action)) {
             // 上传交付物
             String title = req.getParameter("title");
             String description = req.getParameter("description");
+
             Delivery delivery = new Delivery();
             delivery.setProjectId(projectId);
             delivery.setUserId(loginUser.getId());
             delivery.setTitle(title != null ? title : "");
             delivery.setDescription(description != null ? description : "");
+
             // 磁盘空间检查
             File baseDir = new File(getUploadBaseDir());
             long total = baseDir.getTotalSpace();
@@ -160,7 +231,10 @@ public class DeliveryChatServlet extends HttpServlet {
                 req.getSession().setAttribute("errorMsg", "❌ 上传失败：磁盘空间不足（已用 " + String.format("%.0f", usage * 100) + "%）");
                 resp.sendRedirect(req.getContextPath() + "/deliveryChat?projectId=" + projectId);
                 return;
+            }
+
             boolean uploaded = false;
+            try {
                 Part filePart = req.getPart("file");
                 if (filePart != null && filePart.getSize() > 0) {
                     String originalName = filePart.getSubmittedFileName();
@@ -177,25 +251,44 @@ public class DeliveryChatServlet extends HttpServlet {
                             req.getSession().setAttribute("errorMsg", "❌ 不支持的文件类型：" + ext + "。允许的类型：pdf/zip/rar/doc/jpg/png/txt/md/java/py 等常见格式");
                             resp.sendRedirect(req.getContextPath() + "/deliveryChat?projectId=" + projectId);
                             return;
+                        }
+
                         String safeName = UUID.randomUUID().toString() + ext;
+
                         String datePath = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM"));
                         String uploadDir = getUploadBaseDir() + "/" + datePath;
                         new File(uploadDir).mkdirs();
+
                         String filePath = datePath + "/" + safeName;
                         filePart.write(uploadDir + "/" + safeName);
+
                         delivery.setFileName(originalName);
                         delivery.setFilePath(filePath);
                         delivery.setFileSize(filePart.getSize());
                         delivery.setFileType(filePart.getContentType());
                         uploaded = true;
+                    }
+                }
             } catch (Exception e) {
                 e.printStackTrace();
                 req.getSession().setAttribute("errorMsg", "❌ 文件上传失败：" + e.getMessage());
+                resp.sendRedirect(req.getContextPath() + "/deliveryChat?projectId=" + projectId);
+                return;
+            }
+
             if (!uploaded) {
                 req.getSession().setAttribute("errorMsg", "❌ 上传失败：未选择文件或文件为空");
+                resp.sendRedirect(req.getContextPath() + "/deliveryChat?projectId=" + projectId);
+                return;
+            }
+
             deliveryDao.insert(delivery);
             req.getSession().setAttribute("successMsg", "✅ 交付物已上传");
+        }
+
         resp.sendRedirect(req.getContextPath() + "/deliveryChat?projectId=" + projectId);
+    }
+
     /**
      * 检查当前用户是否有权访问该项目的沟通/交付页面
      * 项目雇主和中标自由职业者有权限
@@ -205,9 +298,12 @@ public class DeliveryChatServlet extends HttpServlet {
         // 项目雇主
         if (user.getId() == project.getEmployerId()) return true;
         // 中标自由职业者——查 order 表
-        List<com.freelite.model.Order> orders = orderDao.findByProject(project.getId());
+        List<Order> orders = orderDao.findByProject(project.getId());
         if (orders != null) {
-            for (com.freelite.model.Order o : orders) {
+            for (Order o : orders) {
                 if (o.getFreelancerId() == user.getId()) return true;
+            }
+        }
         return false;
+    }
 }

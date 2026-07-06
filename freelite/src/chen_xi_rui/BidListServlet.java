@@ -1,13 +1,16 @@
 package chen_xi_rui;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import chen_kai_bo.Project;
+
 public class BidListServlet extends HttpServlet {
+
     private BidDao bidDao = new BidDao();
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
@@ -16,11 +19,14 @@ public class BidListServlet extends HttpServlet {
             resp.sendRedirect(req.getContextPath() + "/projects");
             return;
         }
+
         try {
             int projectId = Integer.parseInt(pathInfo.replace("/", ""));
             req.setAttribute("bids", bidDao.findByProjectId(projectId));
             req.setAttribute("projectId", projectId);
             req.getRequestDispatcher("/C-bid/bidsOnProject.jsp").forward(req, resp);
         } catch (NumberFormatException e) {
+            resp.sendRedirect(req.getContextPath() + "/projects");
+        }
     }
 }

@@ -1,14 +1,17 @@
 package chen_yi_an;
-
 import java.time.LocalDateTime;
+import chen_kai_bo.Project;
+
 public class ProjectMessage {
     private int id;
     private int projectId;
     private int senderId;
     private String content;
     private LocalDateTime createdAt;
+
     // 关联
     private String senderName;
+
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
     public int getProjectId() { return projectId; }

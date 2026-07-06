@@ -1,10 +1,14 @@
 package chen_yi_an;
-
 import com.freelite.util.DBUtil;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import chen_kai_bo.Project;
+import chen_zi_hao.Order;
+
 public class DeliveryDao {
+
     public int insert(Delivery d) {
         String sql = "INSERT INTO delivery (order_id, project_id, user_id, title, description, file_name, file_path, file_size, file_type) "
                 + "VALUES (?,?,?,?,?,?,?,?,?)";
@@ -26,29 +30,63 @@ public class DeliveryDao {
             ps.executeUpdate();
             try (ResultSet rs = ps.getGeneratedKeys()) {
                 if (rs.next()) return rs.getInt(1);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return -1;
     }
+
     public List<Delivery> findByProjectId(int projectId) {
         List<Delivery> list = new ArrayList<>();
         String sql = "SELECT d.*, u.display_name AS user_name FROM delivery d "
                 + "LEFT JOIN user u ON d.user_id = u.id "
                 + "WHERE d.project_id=? ORDER BY d.created_at DESC";
+        try (Connection conn = DBUtil.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, projectId);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) list.add(mapDelivery(rs));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return list;
+    }
+
     public List<Delivery> findByOrderId(int orderId) {
+        List<Delivery> list = new ArrayList<>();
+        String sql = "SELECT d.*, u.display_name AS user_name FROM delivery d "
+                + "LEFT JOIN user u ON d.user_id = u.id "
                 + "WHERE d.order_id=? ORDER BY d.created_at DESC";
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, orderId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) list.add(mapDelivery(rs));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
     public Delivery findById(int id) {
+        String sql = "SELECT d.*, u.display_name AS user_name FROM delivery d "
+                + "LEFT JOIN user u ON d.user_id = u.id "
                 + "WHERE d.id=?";
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) return mapDelivery(rs);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return null;
+    }
+
     private Delivery mapDelivery(ResultSet rs) throws SQLException {
         Delivery d = new Delivery();
         d.setId(rs.getInt("id"));
@@ -65,4 +103,5 @@ public class DeliveryDao {
         if (ts != null) d.setCreatedAt(ts.toLocalDateTime());
         d.setUserName(rs.getString("user_name"));
         return d;
+    }
 }

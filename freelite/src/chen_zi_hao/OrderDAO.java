@@ -1,14 +1,18 @@
 package chen_zi_hao;
-
 import com.freelite.util.DBUtil;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import chen_kai_bo.Project;
+import chen_yi_an.User;
+
 /**
  * 订单数据访问层
  * D负责
  */
 public class OrderDAO {
+
     /**
      * 按用户查订单列表（作为雇主或自由职业者）
      */
@@ -23,16 +27,30 @@ public class OrderDAO {
                 + "ORDER BY o.created_at DESC";
         return queryList(sql, userId, userId);
     }
+
+    /**
      * 按ID查订单
+     */
     public Order findById(int id) {
+        String sql = "SELECT o.*, p.title AS project_title, "
+                + "e.display_name AS employer_name, f.display_name AS freelancer_name "
+                + "FROM task_order o "
+                + "JOIN project p ON o.project_id = p.id "
+                + "JOIN user e ON o.employer_id = e.id "
+                + "JOIN user f ON o.freelancer_id = f.id "
                 + "WHERE o.id = ?";
         List<Order> list = queryList(sql, id);
         return list.isEmpty() ? null : list.get(0);
+    }
+
+    /**
      * 更新订单状态
+     */
     public boolean updateStatus(int id, String status) {
         String sql = "UPDATE task_order SET status = ? WHERE id = ?";
         Connection conn = null;
         PreparedStatement ps = null;
+
         try {
             conn = DBUtil.getConnection();
             ps = conn.prepareStatement(sql);
@@ -46,22 +64,60 @@ public class OrderDAO {
             DBUtil.closeStatement(ps);
             DBUtil.closeConnection(conn);
         }
+    }
+
+    /**
      * 查询所有订单（看板用）
+     */
     public List<Order> findAll() {
+        String sql = "SELECT o.*, p.title AS project_title, "
+                + "e.display_name AS employer_name, f.display_name AS freelancer_name "
+                + "FROM task_order o "
+                + "JOIN project p ON o.project_id = p.id "
+                + "JOIN user e ON o.employer_id = e.id "
+                + "JOIN user f ON o.freelancer_id = f.id "
+                + "ORDER BY o.created_at DESC";
         return queryList(sql);
+    }
+
+    /**
      * 统计各状态订单数量（看板用）
+     */
     public int countByStatus(String status) {
         String sql = "SELECT COUNT(*) FROM task_order WHERE status = ?";
+        Connection conn = null;
+        PreparedStatement ps = null;
         ResultSet rs = null;
+
+        try {
+            conn = DBUtil.getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, status);
             rs = ps.executeQuery();
             if (rs.next()) return rs.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
             DBUtil.closeResultSet(rs);
+            DBUtil.closeStatement(ps);
+            DBUtil.closeConnection(conn);
+        }
         return 0;
+    }
+
     private List<Order> queryList(String sql, Object... params) {
         List<Order> list = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            conn = DBUtil.getConnection();
+            ps = conn.prepareStatement(sql);
             for (int i = 0; i < params.length; i++) {
                 ps.setObject(i + 1, params[i]);
             }
+            rs = ps.executeQuery();
             while (rs.next()) {
                 Order o = new Order();
                 o.setId(rs.getInt("id"));
@@ -75,5 +131,14 @@ public class OrderDAO {
                 o.setStatus(rs.getString("status"));
                 o.setCreatedAt(rs.getString("created_at"));
                 list.add(o);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DBUtil.closeResultSet(rs);
+            DBUtil.closeStatement(ps);
+            DBUtil.closeConnection(conn);
+        }
         return list;
+    }
 }

@@ -1,6 +1,6 @@
 package chen_yi_an;
-
 import java.time.LocalDateTime;
+
 public class Wallet {
     private int id;
     private int userId;
@@ -8,6 +8,7 @@ public class Wallet {
     private double frozen;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
     public int getUserId() { return userId; }
