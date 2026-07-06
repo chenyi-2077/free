@@ -1,6 +1,5 @@
 package chen_yi_an;
 import java.time.LocalDateTime;
-import chen_kai_bo.Project;
 
 public class ProjectMessage {
     private int id;

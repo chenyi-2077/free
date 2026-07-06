@@ -1,4 +1,4 @@
-<%@ page import="chen_yi_an.User" %>
+<%@ page import="chen_zi_hao.User" %>
 <%
     User navUser = (User) session.getAttribute("user");
     String ctx = request.getContextPath();

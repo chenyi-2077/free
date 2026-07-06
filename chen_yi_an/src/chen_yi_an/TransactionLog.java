@@ -1,6 +1,5 @@
 package chen_yi_an;
 import java.time.LocalDateTime;
-import chen_zi_hao.Order;
 
 public class TransactionLog {
     private int id;

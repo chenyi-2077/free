@@ -9,10 +9,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import chen_kai_bo.Project;
-import chen_kai_bo.ProjectDao;
-import chen_zi_hao.Order;
-import chen_zi_hao.OrderDao;
 
 /**
  * GET /api/myChatProjects — 返回当前用户参与的所有项目（雇主 or 中标 freelancer）

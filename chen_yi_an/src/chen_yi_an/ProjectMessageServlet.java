@@ -5,7 +5,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
-import chen_kai_bo.Project;
 
 /**
  * 项目消息 — 发送和查看
