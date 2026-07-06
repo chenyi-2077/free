@@ -27,14 +27,14 @@ public class ProjectDetailServlet extends HttpServlet {
             return;
         }
 
-        String pathInfo = req.getPathInfo();
-        if (pathInfo == null || pathInfo.equals("/")) {
+        String idStr = req.getParameter("id");
+        if (idStr == null || idStr.isEmpty()) {
             resp.sendRedirect(req.getContextPath() + "/projects");
             return;
         }
 
         try {
-            int projectId = Integer.parseInt(pathInfo.replace("/", ""));
+            int projectId = Integer.parseInt(idStr);
             Project project = projectDao.findById(projectId);
             if (project == null) {
                 resp.sendRedirect(req.getContextPath() + "/projects");
