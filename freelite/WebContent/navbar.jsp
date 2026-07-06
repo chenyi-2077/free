@@ -1,4 +1,4 @@
-<%@ page import="chen_yi_an.User" %>
+<%@ page import="com.freelite.model.User" %>
 <%
     User navUser = (User) session.getAttribute("user");
     String ctx = request.getContextPath();

@@ -1,11 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="java.util.List, chen_zi_hao.*, chen_yi_an.User, chen_kai_bo.Project" %>
+<%@ page import="java.util.List, com.freelite.model.*, com.freelite.model.User, com.freelite.model.Project" %>
 <%
     User loginUser = (User) session.getAttribute("user");
     long totalOrders = request.getAttribute("totalProjects") != null ? (long) request.getAttribute("totalProjects") : 0L;
     long completedOrders = request.getAttribute("completedOrders") != null ? (long) request.getAttribute("completedOrders") : 0L;
     long inProgressOrders = request.getAttribute("inProgressProjects") != null ? (long) request.getAttribute("inProgressProjects") : 0L;
-    List<chen_kai_bo.Project> recentOrders = (List) request.getAttribute("recentProjects") != null ? (List) request.getAttribute("recentProjects") : new java.util.ArrayList();
+    List<Project> recentOrders = (List) request.getAttribute("recentProjects") != null ? (List) request.getAttribute("recentProjects") : new java.util.ArrayList();
 %>
 <!DOCTYPE html>
 <html lang="zh-CN">

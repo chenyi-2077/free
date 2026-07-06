@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="java.util.List, chen_yi_an.User, chen_kai_bo.Project, chen_xi_rui.Bid" %>
+<%@ page import="java.util.List, com.freelite.model.User, com.freelite.model.Project, com.freelite.model.Bid" %>
 <%
     User loginUser = (User) session.getAttribute("user");
     Project project = (Project) request.getAttribute("project");
