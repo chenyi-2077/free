@@ -1,4 +1,4 @@
-<%@ page import="java.util.List, com.freelite.model.*" %>
+<%@ page import="java.util.List, chen_yi_an.*" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
     User loginUser = (User) session.getAttribute("user");

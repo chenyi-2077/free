@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="java.util.List, com.freelite.model.User, com.freelite.model.Order" %>
+<%@ page import="java.util.List, chen_yi_an.User, chen_zi_hao.Order" %>
 <%
     User loginUser = (User) session.getAttribute("user");
     List<Order> orders = (List<Order>) request.getAttribute("orders");
