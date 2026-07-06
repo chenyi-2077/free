@@ -3,7 +3,7 @@
 <%
 
     Order od = (Order) request.getAttribute("order");
-    if (od == null) { response.sendRedirect(ctx + "/orders"); return; }
+    if (od == null) { response.sendRedirect(request.getContextPath() + "/orders"); return; }
     List<Review> odReviews = (List<Review>) request.getAttribute("reviews");
     User odUser = (User) session.getAttribute("user");
 %>

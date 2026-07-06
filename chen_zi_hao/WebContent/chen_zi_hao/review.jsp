@@ -3,7 +3,7 @@
 <%
 
     User rvUser = (User) session.getAttribute("user");
-    if (rvUser == null) { response.sendRedirect(ctx + "/login"); return; }
+    if (rvUser == null) { response.sendRedirect(request.getContextPath() + "/login"); return; }
     String rvOrderId = String.valueOf(request.getAttribute("orderId"));
     String rvToUserId = String.valueOf(request.getAttribute("toUserId"));
 %>
