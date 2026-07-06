@@ -15,7 +15,7 @@
     <!-- ==================== A - 用户模块 ==================== -->
     <servlet>
         <servlet-name>RegisterServlet</servlet-name>
-        <servlet-class>com.freelite.servlet.RegisterServlet</servlet-class>
+        <servlet-class>chen_yi_an.RegisterServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>RegisterServlet</servlet-name>
@@ -24,7 +24,7 @@
 
     <servlet>
         <servlet-name>LoginServlet</servlet-name>
-        <servlet-class>com.freelite.servlet.LoginServlet</servlet-class>
+        <servlet-class>chen_yi_an.LoginServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
@@ -33,7 +33,7 @@
 
     <servlet>
         <servlet-name>LogoutServlet</servlet-name>
-        <servlet-class>com.freelite.servlet.LogoutServlet</servlet-class>
+        <servlet-class>chen_yi_an.LogoutServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>LogoutServlet</servlet-name>
@@ -42,7 +42,7 @@
 
     <servlet>
         <servlet-name>ProfileServlet</servlet-name>
-        <servlet-class>com.freelite.servlet.ProfileServlet</servlet-class>
+        <servlet-class>chen_yi_an.ProfileServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>ProfileServlet</servlet-name>
@@ -51,7 +51,7 @@
 
     <servlet>
         <servlet-name>EditProfileServlet</servlet-name>
-        <servlet-class>com.freelite.servlet.EditProfileServlet</servlet-class>
+        <servlet-class>chen_yi_an.EditProfileServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>EditProfileServlet</servlet-name>
@@ -61,7 +61,7 @@
     <!-- ==================== B - 项目模块 ==================== -->
     <servlet>
         <servlet-name>ProjectListServlet</servlet-name>
-        <servlet-class>com.freelite.servlet.ProjectListServlet</servlet-class>
+        <servlet-class>chen_kai_bo.ProjectListServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>ProjectListServlet</servlet-name>
@@ -70,7 +70,7 @@
 
     <servlet>
         <servlet-name>MyProjectsServlet</servlet-name>
-        <servlet-class>com.freelite.servlet.MyProjectsServlet</servlet-class>
+        <servlet-class>chen_kai_bo.MyProjectsServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>MyProjectsServlet</servlet-name>
@@ -79,7 +79,7 @@
 
     <servlet>
         <servlet-name>PostProjectServlet</servlet-name>
-        <servlet-class>com.freelite.servlet.PostProjectServlet</servlet-class>
+        <servlet-class>chen_kai_bo.PostProjectServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>PostProjectServlet</servlet-name>
@@ -88,7 +88,7 @@
 
     <servlet>
         <servlet-name>ProjectDetailServlet</servlet-name>
-        <servlet-class>com.freelite.servlet.ProjectDetailServlet</servlet-class>
+        <servlet-class>chen_kai_bo.ProjectDetailServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>ProjectDetailServlet</servlet-name>
@@ -97,7 +97,7 @@
 
     <servlet>
         <servlet-name>EditProjectServlet</servlet-name>
-        <servlet-class>com.freelite.servlet.EditProjectServlet</servlet-class>
+        <servlet-class>chen_kai_bo.EditProjectServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>EditProjectServlet</servlet-name>
@@ -106,7 +106,7 @@
 
     <servlet>
         <servlet-name>DeleteProjectServlet</servlet-name>
-        <servlet-class>com.freelite.servlet.DeleteProjectServlet</servlet-class>
+        <servlet-class>chen_kai_bo.DeleteProjectServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>DeleteProjectServlet</servlet-name>
@@ -115,7 +115,7 @@
 
     <servlet>
         <servlet-name>UpdateProjectStatusServlet</servlet-name>
-        <servlet-class>com.freelite.servlet.UpdateProjectStatusServlet</servlet-class>
+        <servlet-class>chen_kai_bo.UpdateProjectStatusServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>UpdateProjectStatusServlet</servlet-name>
@@ -125,7 +125,7 @@
     <!-- ==================== C - 竞标模块 ==================== -->
     <servlet>
         <servlet-name>PlaceBidServlet</servlet-name>
-        <servlet-class>com.freelite.servlet.PlaceBidServlet</servlet-class>
+        <servlet-class>chen_xi_rui.PlaceBidServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>PlaceBidServlet</servlet-name>
@@ -134,7 +134,7 @@
 
     <servlet>
         <servlet-name>BidListServlet</servlet-name>
-        <servlet-class>com.freelite.servlet.BidListServlet</servlet-class>
+        <servlet-class>chen_xi_rui.BidListServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>BidListServlet</servlet-name>
@@ -143,7 +143,7 @@
 
     <servlet>
         <servlet-name>MyBidsServlet</servlet-name>
-        <servlet-class>com.freelite.servlet.MyBidsServlet</servlet-class>
+        <servlet-class>chen_xi_rui.MyBidsServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>MyBidsServlet</servlet-name>
@@ -152,7 +152,7 @@
 
     <servlet>
         <servlet-name>AwardBidServlet</servlet-name>
-        <servlet-class>com.freelite.servlet.AwardBidServlet</servlet-class>
+        <servlet-class>chen_xi_rui.AwardBidServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>AwardBidServlet</servlet-name>
@@ -162,7 +162,7 @@
     <!-- ==================== D - 订单/评价/看板模块 ==================== -->
     <servlet>
         <servlet-name>OrderListServlet</servlet-name>
-        <servlet-class>com.freelite.servlet.OrderListServlet</servlet-class>
+        <servlet-class>chen_zi_hao.OrderListServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>OrderListServlet</servlet-name>
@@ -171,7 +171,7 @@
 
     <servlet>
         <servlet-name>OrderDetailServlet</servlet-name>
-        <servlet-class>com.freelite.servlet.OrderDetailServlet</servlet-class>
+        <servlet-class>chen_zi_hao.OrderDetailServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>OrderDetailServlet</servlet-name>
@@ -180,7 +180,7 @@
 
     <servlet>
         <servlet-name>CompleteOrderServlet</servlet-name>
-        <servlet-class>com.freelite.servlet.CompleteOrderServlet</servlet-class>
+        <servlet-class>chen_zi_hao.CompleteOrderServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>CompleteOrderServlet</servlet-name>
@@ -189,7 +189,7 @@
 
     <servlet>
         <servlet-name>ReviewServlet</servlet-name>
-        <servlet-class>com.freelite.servlet.ReviewServlet</servlet-class>
+        <servlet-class>chen_zi_hao.ReviewServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>ReviewServlet</servlet-name>
@@ -198,7 +198,7 @@
 
     <servlet>
         <servlet-name>DashboardServlet</servlet-name>
-        <servlet-class>com.freelite.servlet.DashboardServlet</servlet-class>
+        <servlet-class>chen_zi_hao.DashboardServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>DashboardServlet</servlet-name>
@@ -208,7 +208,7 @@
     <!-- ==================== E - 结算系统 ==================== -->
     <servlet>
         <servlet-name>WalletServlet</servlet-name>
-        <servlet-class>com.freelite.servlet.WalletServlet</servlet-class>
+        <servlet-class>chen_yi_an.WalletServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>WalletServlet</servlet-name>
@@ -217,7 +217,7 @@
 
     <servlet>
         <servlet-name>RechargeServlet</servlet-name>
-        <servlet-class>com.freelite.servlet.RechargeServlet</servlet-class>
+        <servlet-class>chen_yi_an.RechargeServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>RechargeServlet</servlet-name>
@@ -226,7 +226,7 @@
 
     <servlet>
         <servlet-name>ConfirmOrderServlet</servlet-name>
-        <servlet-class>com.freelite.servlet.ConfirmOrderServlet</servlet-class>
+        <servlet-class>chen_zi_hao.ConfirmOrderServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>ConfirmOrderServlet</servlet-name>
@@ -236,7 +236,7 @@
     <!-- ==================== F - 交付与消息 ==================== -->
     <servlet>
         <servlet-name>DeliveryDownloadServlet</servlet-name>
-        <servlet-class>com.freelite.servlet.DeliveryDownloadServlet</servlet-class>
+        <servlet-class>chen_yi_an.DeliveryDownloadServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>DeliveryDownloadServlet</servlet-name>
@@ -245,7 +245,7 @@
 
     <servlet>
         <servlet-name>DeliveryChatServlet</servlet-name>
-        <servlet-class>com.freelite.servlet.DeliveryChatServlet</servlet-class>
+        <servlet-class>chen_yi_an.DeliveryChatServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>DeliveryChatServlet</servlet-name>
@@ -255,7 +255,7 @@
     <!-- ==================== 聊天弹窗 API ==================== -->
     <servlet>
         <servlet-name>MyChatProjectsServlet</servlet-name>
-        <servlet-class>com.freelite.servlet.MyChatProjectsServlet</servlet-class>
+        <servlet-class>chen_yi_an.MyChatProjectsServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>MyChatProjectsServlet</servlet-name>
@@ -264,7 +264,7 @@
 
     <servlet>
         <servlet-name>ChatMessageApiServlet</servlet-name>
-        <servlet-class>com.freelite.servlet.ChatMessageApiServlet</servlet-class>
+        <servlet-class>chen_yi_an.ChatMessageApiServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>ChatMessageApiServlet</servlet-name>
@@ -273,7 +273,7 @@
 
     <servlet>
         <servlet-name>ChatDeliveryApiServlet</servlet-name>
-        <servlet-class>com.freelite.servlet.ChatDeliveryApiServlet</servlet-class>
+        <servlet-class>chen_yi_an.ChatDeliveryApiServlet</servlet-class>
         <multipart-config>
             <max-file-size>52428800</max-file-size>
             <max-request-size>104857600</max-request-size>
@@ -288,7 +288,7 @@
     <!-- ==================== 切换角色 ==================== -->
     <servlet>
         <servlet-name>SwitchRoleServlet</servlet-name>
-        <servlet-class>com.freelite.servlet.SwitchRoleServlet</servlet-class>
+        <servlet-class>chen_yi_an.SwitchRoleServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>SwitchRoleServlet</servlet-name>
