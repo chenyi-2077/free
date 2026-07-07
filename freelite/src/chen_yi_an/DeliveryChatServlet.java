@@ -40,7 +40,7 @@ public class DeliveryChatServlet extends HttpServlet {
 
     private static final String DEFAULT_UPLOAD_DIR = "/home/admin/.openclaw/workspace/freelite-uploads";
     private static final long THIRTY_DAYS_MS = 30L * 24 * 60 * 60 * 1000;
-    private static final double MAX_DISK_USAGE = 0.95; // 95% 磁盘使用上限
+    private static final double MAX_DISK_USAGE = 0.99; // 99% 磁盘使用上限
     private static final String[] ALLOWED_EXTENSIONS = {
         ".pdf", ".zip", ".rar", ".7z", ".tar", ".gz",
         ".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx",
