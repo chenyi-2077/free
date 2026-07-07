@@ -1,7 +1,6 @@
 package chen_xi_rui;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -9,7 +8,7 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * 查看某个项目的竞标列表
+ * 查看竞标列表
  */
 public class BidListServlet extends HttpServlet {
 
@@ -20,16 +19,14 @@ public class BidListServlet extends HttpServlet {
             throws ServletException, IOException {
 
         String projectIdParam = request.getParameter("projectId");
-        if (projectIdParam == null || projectIdParam.trim().isEmpty()) {
-            response.sendRedirect(request.getContextPath());
-            return;
+        if (projectIdParam != null && !projectIdParam.trim().isEmpty()) {
+            int projectId = Integer.parseInt(projectIdParam);
+            request.setAttribute("projectId", projectId);
+            request.setAttribute("bids", bidDao.findByProjectId(projectId));
+            request.getRequestDispatcher("/chen_xi_rui/bidsOnProject.jsp").forward(request, response);
+        } else {
+            request.setAttribute("bids", bidDao.findAll());
+            request.getRequestDispatcher("/chen_xi_rui/bidsOnProject.jsp").forward(request, response);
         }
-
-        int projectId = Integer.parseInt(projectIdParam);
-        List<Bid> bids = bidDao.findByProjectId(projectId);
-
-        request.setAttribute("projectId", projectId);
-        request.setAttribute("bids", bids);
-        request.getRequestDispatcher("/chen_xi_rui/bidsOnProject.jsp").forward(request, response);
     }
 }

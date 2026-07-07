@@ -145,4 +145,20 @@ public class BidDao {
         bid.setFreelancerRating(rs.getDouble("freelancer_rating"));
         return bid;
     }
+
+    public List<Bid> findAll() {
+        List<Bid> list = new ArrayList<>();
+        String sql = "SELECT * FROM bids ORDER BY created_at DESC";
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                list.add(mapRow(rs));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
 }
+

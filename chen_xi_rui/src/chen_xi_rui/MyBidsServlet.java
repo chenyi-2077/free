@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * 查看我的竞标记录
+ * 我的竞标 / 所有竞标
  */
 public class MyBidsServlet extends HttpServlet {
 
@@ -21,13 +21,11 @@ public class MyBidsServlet extends HttpServlet {
 
         HttpSession session = request.getSession(false);
         User user = (User) (session != null ? session.getAttribute("user") : null);
-        if (user == null) {
-            response.sendRedirect(request.getContextPath() + "/login");
-            return;
+        if (user != null) {
+            request.setAttribute("bids", bidDao.findByFreelancerId(user.getId()));
+        } else {
+            request.setAttribute("bids", bidDao.findAll());
         }
-
-        List<Bid> bids = bidDao.findByFreelancerId(user.getId());
-        request.setAttribute("bids", bids);
         request.getRequestDispatcher("/chen_xi_rui/myBids.jsp").forward(request, response);
     }
 }
