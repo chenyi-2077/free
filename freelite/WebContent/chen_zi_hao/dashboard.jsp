@@ -1,11 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.util.List, chen_zi_hao.*, chen_yi_an.User, chen_kai_bo.Project" %>
+<%@ page import="chen_zi_hao.Order" %>
 <%
     User loginUser = (User) session.getAttribute("user");
     int totalOrders = request.getAttribute("totalOrders") != null ? ((Number) request.getAttribute("totalOrders")).intValue() : 0;
     int completedOrders = request.getAttribute("completedOrders") != null ? ((Number) request.getAttribute("completedOrders")).intValue() : 0;
     int inProgressOrders = request.getAttribute("inProgressOrders") != null ? ((Number) request.getAttribute("inProgressOrders")).intValue() : 0;
-    List<Project> recentOrders = (List) request.getAttribute("recentOrders") != null ? (List) request.getAttribute("recentOrders") : new java.util.ArrayList();
+    List<Order> recentOrders = (List) request.getAttribute("recentOrders") != null ? (List<Order>) request.getAttribute("recentOrders") : new java.util.ArrayList<Order>();
 %>
 <!DOCTYPE html>
 <html lang="zh-CN">
@@ -94,16 +95,16 @@
                     <% if (recentOrders == null || recentOrders.isEmpty()) { %>
                         <p class="text-muted">暂无订单</p>
                     <% } else { %>
-                        <% for (Project p : recentOrders) { %>
+                        <% for (Order o : recentOrders) { %>
                             <div class="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom">
                                 <div>
-                                    <small class="fw-bold"><%= p.getTitle() %></small><br>
-                                    <small class="text-muted">¥<%= String.format("%.0f", p.getBudget()) %></small>
+                                    <small class="fw-bold"><%= o.getProjectTitle() != null ? o.getProjectTitle() : "项目中" %></small><br>
+                                    <small class="text-muted">¥<%= String.format("%.0f", o.getAmount()) %></small>
                                 </div>
                                 <small>
-                                    <% if ("completed".equals(p.getStatus())) { %>
+                                    <% if ("completed".equals(o.getStatus())) { %>
                                         <span class="badge bg-success">完成</span>
-                                    <% } else if ("in_progress".equals(p.getStatus())) { %>
+                                    <% } else if ("in_progress".equals(o.getStatus())) { %>
                                         <span class="badge bg-warning text-dark">进行中</span>
                                     <% } else { %>
                                         <span class="badge bg-secondary">取消</span>
