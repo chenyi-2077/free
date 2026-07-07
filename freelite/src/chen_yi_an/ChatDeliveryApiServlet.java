@@ -152,7 +152,11 @@ public class ChatDeliveryApiServlet extends HttpServlet {
 
             String safeName = UUID.randomUUID().toString() + ext;
             String datePath = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM"));
-            String uploadBase = "/home/admin/.openclaw/workspace/freelite-uploads";
+            // 从 web.xml context-param 读取上传目录
+            String uploadBase = getServletContext().getInitParameter("uploadDir");
+            if (uploadBase == null || uploadBase.isEmpty()) {
+                uploadBase = "/home/admin/.openclaw/workspace/freelite-uploads";
+            }
             String uploadDir = uploadBase + "/" + datePath;
             new java.io.File(uploadDir).mkdirs();
 

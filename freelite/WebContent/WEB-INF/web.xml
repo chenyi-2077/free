@@ -7,6 +7,13 @@
 
     <display-name>Freelite</display-name>
 
+    <!-- ========== 全局配置 ========== -->
+    <context-param>
+        <param-name>uploadDir</param-name>
+        <param-value>/home/admin/.openclaw/workspace/freelite-uploads</param-value>
+        <description>交付物上传目录，部署时可改为本地路径，如 D:/freelite-uploads</description>
+    </context-param>
+
     <!-- 欢迎页 -->
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>

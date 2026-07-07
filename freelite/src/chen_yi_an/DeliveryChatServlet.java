@@ -37,8 +37,6 @@ import chen_zi_hao.Order;
     maxRequestSize = 1024 * 1024 * 100    // 100MB
 )
 public class DeliveryChatServlet extends HttpServlet {
-
-    private static final String DEFAULT_UPLOAD_DIR = "/home/admin/.openclaw/workspace/freelite-uploads";
     private static final long THIRTY_DAYS_MS = 30L * 24 * 60 * 60 * 1000;
     private static final double MAX_DISK_USAGE = 0.99; // 99% 磁盘使用上限
     private static final String[] ALLOWED_EXTENSIONS = {
@@ -59,12 +57,16 @@ public class DeliveryChatServlet extends HttpServlet {
     private OrderDao orderDao = new OrderDao();
 
     private String getUploadBaseDir() {
-        // 优先用外部路径
-        File extDir = new File(DEFAULT_UPLOAD_DIR);
-        if (extDir.exists() || extDir.mkdirs()) {
-            return DEFAULT_UPLOAD_DIR;
+        // 从 web.xml context-param 读取上传目录，不同环境各改各的
+        String dir = getServletContext().getInitParameter("uploadDir");
+        if (dir == null || dir.isEmpty()) {
+            dir = "/home/admin/.openclaw/workspace/freelite-uploads";
         }
-        // 回退到 webapp 内部（Docker 无外部 volume 时）
+        File f = new File(dir);
+        if (f.exists() || f.mkdirs()) {
+            return dir;
+        }
+        // 回退到 webapp 内部
         return getServletContext().getRealPath("/WEB-INF/uploads");
     }
 
