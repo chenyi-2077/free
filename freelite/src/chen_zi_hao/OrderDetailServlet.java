@@ -52,7 +52,7 @@ public class OrderDetailServlet extends HttpServlet {
             req.setAttribute("order", order);
             req.setAttribute("canReview", canReview);
             req.setAttribute("isEmployer", isEmployer);
-            req.getRequestDispatcher("/D-order/orderDetail.jsp").forward(req, resp);
+            req.getRequestDispatcher("/chen_zi_hao/orderDetail.jsp").forward(req, resp);
 
         } catch (NumberFormatException e) {
             resp.sendRedirect(req.getContextPath() + "/orders");

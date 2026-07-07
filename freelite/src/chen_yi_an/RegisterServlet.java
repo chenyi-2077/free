@@ -13,7 +13,7 @@ public class RegisterServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        req.getRequestDispatcher("/A-user/register.jsp").forward(req, resp);
+        req.getRequestDispatcher("/chen_yi_an/register.jsp").forward(req, resp);
     }
 
     @Override
@@ -28,7 +28,7 @@ public class RegisterServlet extends HttpServlet {
         // 检查邮箱是否已注册
         if (userDao.findByEmail(email) != null) {
             req.setAttribute("error", "该邮箱已被注册");
-            req.getRequestDispatcher("/A-user/register.jsp").forward(req, resp);
+            req.getRequestDispatcher("/chen_yi_an/register.jsp").forward(req, resp);
             return;
         }
 
@@ -41,7 +41,7 @@ public class RegisterServlet extends HttpServlet {
             resp.sendRedirect(req.getContextPath() + "/projects");
         } else {
             req.setAttribute("error", "注册失败，请重试");
-            req.getRequestDispatcher("/A-user/register.jsp").forward(req, resp);
+            req.getRequestDispatcher("/chen_yi_an/register.jsp").forward(req, resp);
         }
     }
 }

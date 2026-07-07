@@ -40,6 +40,6 @@ public class ProjectListServlet extends HttpServlet {
         req.setAttribute("totalPages", totalPages);
         req.setAttribute("keyword", keyword);
         req.setAttribute("selectedCategory", categoryId);
-        req.getRequestDispatcher("/B-project/projectList.jsp").forward(req, resp);
+        req.getRequestDispatcher("/chen_kai_bo/projectList.jsp").forward(req, resp);
     }
 }

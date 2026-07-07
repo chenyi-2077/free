@@ -27,6 +27,6 @@ public class MyProjectsServlet extends HttpServlet {
         // 我竞标的项目（作为自由职业者投过竞标的）
         req.setAttribute("biddedProjects", projectDao.findBiddedProjects(loginUser.getId()));
 
-        req.getRequestDispatcher("/B-project/myProjects.jsp").forward(req, resp);
+        req.getRequestDispatcher("/chen_kai_bo/myProjects.jsp").forward(req, resp);
     }
 }

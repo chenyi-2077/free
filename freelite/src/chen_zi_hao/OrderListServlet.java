@@ -23,6 +23,6 @@ public class OrderListServlet extends HttpServlet {
         }
 
         req.setAttribute("orders", orderDao.findByUserId(loginUser.getId()));
-        req.getRequestDispatcher("/D-order/orderList.jsp").forward(req, resp);
+        req.getRequestDispatcher("/chen_zi_hao/orderList.jsp").forward(req, resp);
     }
 }

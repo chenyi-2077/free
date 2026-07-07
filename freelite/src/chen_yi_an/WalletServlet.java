@@ -25,6 +25,6 @@ public class WalletServlet extends HttpServlet {
 
         req.setAttribute("wallet", wallet);
         req.setAttribute("logs", logs);
-        req.getRequestDispatcher("/wallet.jsp").forward(req, resp);
+        req.getRequestDispatcher("/chen_yi_an/wallet.jsp").forward(req, resp);
     }
 }

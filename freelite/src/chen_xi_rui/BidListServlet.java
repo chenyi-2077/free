@@ -24,7 +24,7 @@ public class BidListServlet extends HttpServlet {
             int projectId = Integer.parseInt(pathInfo.replace("/", ""));
             req.setAttribute("bids", bidDao.findByProjectId(projectId));
             req.setAttribute("projectId", projectId);
-            req.getRequestDispatcher("/C-bid/bidsOnProject.jsp").forward(req, resp);
+            req.getRequestDispatcher("/chen_xi_rui/bidsOnProject.jsp").forward(req, resp);
         } catch (NumberFormatException e) {
             resp.sendRedirect(req.getContextPath() + "/projects");
         }

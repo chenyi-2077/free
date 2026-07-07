@@ -31,6 +31,6 @@ public class DashboardServlet extends HttpServlet {
         req.setAttribute("completedOrders", completedOrders);
         req.setAttribute("inProgressOrders", inProgressOrders);
         req.setAttribute("recentOrders", orderDao.findRecentByUserId(userId, 5));
-        req.getRequestDispatcher("/D-order/dashboard.jsp").forward(req, resp);
+        req.getRequestDispatcher("/chen_zi_hao/dashboard.jsp").forward(req, resp);
     }
 }

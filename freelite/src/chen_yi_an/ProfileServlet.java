@@ -45,6 +45,6 @@ public class ProfileServlet extends HttpServlet {
 
         req.setAttribute("profileUser", profileUser);
         req.setAttribute("isOwnProfile", isOwnProfile);
-        req.getRequestDispatcher("/A-user/profile.jsp").forward(req, resp);
+        req.getRequestDispatcher("/chen_yi_an/profile.jsp").forward(req, resp);
     }
 }

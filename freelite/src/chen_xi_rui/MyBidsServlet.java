@@ -23,6 +23,6 @@ public class MyBidsServlet extends HttpServlet {
         }
 
         req.setAttribute("bids", bidDao.findByFreelancerId(loginUser.getId()));
-        req.getRequestDispatcher("/C-bid/myBids.jsp").forward(req, resp);
+        req.getRequestDispatcher("/chen_xi_rui/myBids.jsp").forward(req, resp);
     }
 }

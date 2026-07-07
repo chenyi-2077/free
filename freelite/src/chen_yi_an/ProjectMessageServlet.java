@@ -36,7 +36,7 @@ public class ProjectMessageServlet extends HttpServlet {
 
         req.setAttribute("messages", messages);
         req.setAttribute("projectId", projectId);
-        req.getRequestDispatcher("/projectMessages.jsp").forward(req, resp);
+        req.getRequestDispatcher("/chen_yi_an/projectMessages.jsp").forward(req, resp);
     }
 
     @Override

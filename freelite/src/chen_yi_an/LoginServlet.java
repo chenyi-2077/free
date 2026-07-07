@@ -18,7 +18,7 @@ public class LoginServlet extends HttpServlet {
             resp.sendRedirect(req.getContextPath() + "/projects");
             return;
         }
-        req.getRequestDispatcher("/A-user/login.jsp").forward(req, resp);
+        req.getRequestDispatcher("/chen_yi_an/login.jsp").forward(req, resp);
     }
 
     @Override
@@ -30,7 +30,7 @@ public class LoginServlet extends HttpServlet {
         User user = userDao.findByEmail(email);
         if (user == null || !user.getPassword().equals(password)) {
             req.setAttribute("error", "邮箱或密码错误");
-            req.getRequestDispatcher("/A-user/login.jsp").forward(req, resp);
+            req.getRequestDispatcher("/chen_yi_an/login.jsp").forward(req, resp);
             return;
         }
 

@@ -33,7 +33,7 @@ public class EditProjectServlet extends HttpServlet {
 
         req.setAttribute("project", project);
         req.setAttribute("categories", categoryDao.findAll());
-        req.getRequestDispatcher("/B-project/editProject.jsp").forward(req, resp);
+        req.getRequestDispatcher("/chen_kai_bo/editProject.jsp").forward(req, resp);
     }
 
     @Override
@@ -64,7 +64,7 @@ public class EditProjectServlet extends HttpServlet {
             req.setAttribute("error", "项目标题不能为空");
             req.setAttribute("project", project);
             req.setAttribute("categories", categoryDao.findAll());
-            req.getRequestDispatcher("/B-project/editProject.jsp").forward(req, resp);
+            req.getRequestDispatcher("/chen_kai_bo/editProject.jsp").forward(req, resp);
             return;
         }
 

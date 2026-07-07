@@ -168,7 +168,7 @@ public class DeliveryChatServlet extends HttpServlet {
             }
         }
         req.setAttribute("myRole", myRole);
-        req.getRequestDispatcher("/deliveryChat.jsp").forward(req, resp);
+        req.getRequestDispatcher("/chen_yi_an/deliveryChat.jsp").forward(req, resp);
     }
 
     @Override

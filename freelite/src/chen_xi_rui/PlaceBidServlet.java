@@ -41,7 +41,7 @@ public class PlaceBidServlet extends HttpServlet {
         }
 
         req.setAttribute("project", project);
-        req.getRequestDispatcher("/C-bid/bidForm.jsp").forward(req, resp);
+        req.getRequestDispatcher("/chen_xi_rui/bidForm.jsp").forward(req, resp);
     }
 
     @Override
@@ -69,7 +69,7 @@ public class PlaceBidServlet extends HttpServlet {
         if (loginUser.getId() == project.getEmployerId()) {
             req.setAttribute("project", project);
             req.setAttribute("error", "您不能给自己的项目投递竞标");
-            req.getRequestDispatcher("/C-bid/bidForm.jsp").forward(req, resp);
+            req.getRequestDispatcher("/chen_xi_rui/bidForm.jsp").forward(req, resp);
             return;
         }
 

@@ -24,7 +24,7 @@ public class PostProjectServlet extends HttpServlet {
             return;
         }
         req.setAttribute("categories", categoryDao.findAll());
-        req.getRequestDispatcher("/B-project/postProject.jsp").forward(req, resp);
+        req.getRequestDispatcher("/chen_kai_bo/postProject.jsp").forward(req, resp);
     }
 
     @Override
@@ -45,7 +45,7 @@ public class PostProjectServlet extends HttpServlet {
         if (title == null || title.trim().isEmpty()) {
             req.setAttribute("error", "项目标题不能为空");
             req.setAttribute("categories", categoryDao.findAll());
-            req.getRequestDispatcher("/B-project/postProject.jsp").forward(req, resp);
+            req.getRequestDispatcher("/chen_kai_bo/postProject.jsp").forward(req, resp);
             return;
         }
 

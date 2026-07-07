@@ -18,7 +18,7 @@ public class EditProfileServlet extends HttpServlet {
             resp.sendRedirect(req.getContextPath() + "/login");
             return;
         }
-        req.getRequestDispatcher("/A-user/editProfile.jsp").forward(req, resp);
+        req.getRequestDispatcher("/chen_yi_an/editProfile.jsp").forward(req, resp);
     }
 
     @Override
@@ -42,6 +42,6 @@ public class EditProfileServlet extends HttpServlet {
         req.getSession().setAttribute("user", refreshed);
 
         req.setAttribute("success", "保存成功");
-        req.getRequestDispatcher("/A-user/editProfile.jsp").forward(req, resp);
+        req.getRequestDispatcher("/chen_yi_an/editProfile.jsp").forward(req, resp);
     }
 }

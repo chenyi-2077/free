@@ -44,7 +44,7 @@ public class ProjectDetailServlet extends HttpServlet {
             req.setAttribute("project", project);
             req.setAttribute("bids", bidDao.findByProjectId(projectId));
             req.setAttribute("isOwner", loginUser.getId() == project.getEmployerId());
-            req.getRequestDispatcher("/B-project/projectDetail.jsp").forward(req, resp);
+            req.getRequestDispatcher("/chen_kai_bo/projectDetail.jsp").forward(req, resp);
 
         } catch (NumberFormatException e) {
             resp.sendRedirect(req.getContextPath() + "/projects");
