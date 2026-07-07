@@ -7,11 +7,21 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class DBUtil {
-    private static final String URL = "jdbc:mysql://localhost:3306/freelite?useSSL=false&serverTimezone=Asia/Shanghai&characterEncoding=utf8&allowPublicKeyRetrieval=true";
-    private static final String USER = "root";
-    private static final String PASSWORD = "@Aa20185476";
+    private static final String DB_HOST;
+    private static final String DB_PORT;
+    private static final String DB_NAME;
+    private static final String DB_USER;
+    private static final String DB_PASSWORD;
+    private static final String URL;
 
     static {
+        DB_HOST = System.getenv("DB_HOST") != null ? System.getenv("DB_HOST") : "localhost";
+        DB_PORT = System.getenv("DB_PORT") != null ? System.getenv("DB_PORT") : "3306";
+        DB_NAME = System.getenv("DB_NAME") != null ? System.getenv("DB_NAME") : "freelite";
+        DB_USER = System.getenv("DB_USER") != null ? System.getenv("DB_USER") : "root";
+        DB_PASSWORD = System.getenv("DB_PASSWORD") != null ? System.getenv("DB_PASSWORD") : "***";
+        URL = "jdbc:mysql://" + DB_HOST + ":" + DB_PORT + "/" + DB_NAME
+                + "?useSSL=false&serverTimezone=Asia/Shanghai&characterEncoding=utf8&allowPublicKeyRetrieval=true";
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
@@ -20,7 +30,7 @@ public class DBUtil {
     }
 
     public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(URL, USER, PASSWORD);
+        return DriverManager.getConnection(URL, DB_USER, DB_PASSWORD);
     }
 
     public static void closeConnection(Connection conn) {
