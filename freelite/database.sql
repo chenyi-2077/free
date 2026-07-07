@@ -1,5 +1,5 @@
 -- ============================================================
--- Freelite 数据库建表脚本
+-- Freelite 数据库建表脚本（完整版）
 -- MySQL 5.7+
 -- ============================================================
 
@@ -49,6 +49,8 @@ CREATE TABLE project (
     category_id INT,
     employer_id INT NOT NULL,
     status ENUM('open', 'in_progress', 'completed', 'cancelled') DEFAULT 'open',
+    escrow_amount DECIMAL(12,2) DEFAULT 0.00,
+    escrow_status VARCHAR(20) DEFAULT 'none',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (category_id) REFERENCES category(id),
     FOREIGN KEY (employer_id) REFERENCES user(id)
@@ -79,7 +81,8 @@ CREATE TABLE task_order (
     employer_id INT NOT NULL,
     freelancer_id INT NOT NULL,
     amount DECIMAL(10,2),
-    status ENUM('in_progress', 'completed', 'cancelled') DEFAULT 'in_progress',
+    escrow_amount DECIMAL(12,2) DEFAULT 0.00,
+    status VARCHAR(30) DEFAULT 'in_progress',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (project_id) REFERENCES project(id),
     FOREIGN KEY (employer_id) REFERENCES user(id),
@@ -100,6 +103,69 @@ CREATE TABLE review (
     FOREIGN KEY (order_id) REFERENCES task_order(id),
     FOREIGN KEY (from_user_id) REFERENCES user(id),
     FOREIGN KEY (to_user_id) REFERENCES user(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- -----------------------------------------------------------
+-- 7. 钱包表
+-- -----------------------------------------------------------
+CREATE TABLE wallet (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT UNIQUE NOT NULL,
+    balance DECIMAL(12,2) NOT NULL DEFAULT 0.00,
+    frozen DECIMAL(12,2) NOT NULL DEFAULT 0.00,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES user(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- -----------------------------------------------------------
+-- 8. 交易流水表
+-- -----------------------------------------------------------
+CREATE TABLE transaction_log (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    type VARCHAR(30) NOT NULL COMMENT 'recharge/freeze/release/refund/income',
+    amount DECIMAL(12,2) NOT NULL,
+    balance_before DECIMAL(12,2) DEFAULT 0.00,
+    balance_after DECIMAL(12,2) DEFAULT 0.00,
+    frozen_before DECIMAL(12,2) DEFAULT 0.00,
+    frozen_after DECIMAL(12,2) DEFAULT 0.00,
+    order_id INT,
+    description VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES user(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- -----------------------------------------------------------
+-- 9. 项目消息表（沟通页面）
+-- -----------------------------------------------------------
+CREATE TABLE project_message (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    project_id INT NOT NULL,
+    sender_id INT NOT NULL,
+    content TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (project_id) REFERENCES project(id),
+    FOREIGN KEY (sender_id) REFERENCES user(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- -----------------------------------------------------------
+-- 10. 交付物表
+-- -----------------------------------------------------------
+CREATE TABLE delivery (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    order_id INT,
+    project_id INT NOT NULL,
+    user_id INT NOT NULL,
+    title VARCHAR(200) NOT NULL DEFAULT '',
+    description TEXT,
+    file_name VARCHAR(255) NOT NULL,
+    file_path VARCHAR(500) NOT NULL,
+    file_size BIGINT DEFAULT 0,
+    file_type VARCHAR(100),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (project_id) REFERENCES project(id),
+    FOREIGN KEY (user_id) REFERENCES user(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- -----------------------------------------------------------
