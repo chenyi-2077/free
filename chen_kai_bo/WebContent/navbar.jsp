@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" import="chen_kai_bo.User" %>
+<%@ page import="chen_kai_bo.User" pageEncoding="UTF-8" %>
 <%
     User navUser = (User) session.getAttribute("user");
     String ctx = request.getContextPath();
