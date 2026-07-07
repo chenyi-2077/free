@@ -258,11 +258,13 @@ public class DeliveryChatServlet extends HttpServlet {
                         String safeName = UUID.randomUUID().toString() + ext;
 
                         String datePath = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM"));
-                        String uploadDir = getUploadBaseDir() + "/" + datePath;
-                        new File(uploadDir).mkdirs();
+                        File uploadDir = new File(getUploadBaseDir(), datePath);
+                        uploadDir.mkdirs();
+
+                        File targetFile = new File(uploadDir, safeName);
+                        filePart.write(targetFile.getAbsolutePath());
 
                         String filePath = datePath + "/" + safeName;
-                        filePart.write(uploadDir + "/" + safeName);
 
                         delivery.setFileName(originalName);
                         delivery.setFilePath(filePath);

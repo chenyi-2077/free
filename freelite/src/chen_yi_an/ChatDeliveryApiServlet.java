@@ -157,11 +157,13 @@ public class ChatDeliveryApiServlet extends HttpServlet {
             if (uploadBase == null || uploadBase.isEmpty()) {
                 uploadBase = "/home/admin/.openclaw/workspace/freelite-uploads";
             }
-            String uploadDir = uploadBase + "/" + datePath;
-            new java.io.File(uploadDir).mkdirs();
+            java.io.File uploadDir = new java.io.File(uploadBase, datePath);
+            uploadDir.mkdirs();
+
+            java.io.File targetFile = new java.io.File(uploadDir, safeName);
+            filePart.write(targetFile.getAbsolutePath());
 
             String filePath = datePath + "/" + safeName;
-            filePart.write(uploadDir + "/" + safeName);
 
             Delivery delivery = new Delivery();
             delivery.setProjectId(projectId);
