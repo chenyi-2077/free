@@ -129,7 +129,7 @@ public class OrderDAO {
                 o.setFreelancerName(rs.getString("freelancer_name"));
                 o.setAmount(rs.getDouble("amount"));
                 o.setStatus(rs.getString("status"));
-                o.setCreatedAt(rs.getString("created_at"));
+                o.setCreatedAt(rs.getTimestamp("created_at") == null ? null : rs.getTimestamp("created_at").toLocalDateTime());
                 list.add(o);
             }
         } catch (SQLException e) {

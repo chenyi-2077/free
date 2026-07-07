@@ -182,7 +182,7 @@ public class BidDAO {
                 b.setDays(rs.getInt("days"));
                 b.setProposal(rs.getString("proposal"));
                 b.setStatus(rs.getString("status"));
-                b.setCreatedAt(rs.getString("created_at"));
+                b.setCreatedAt(rs.getTimestamp("created_at") == null ? null : rs.getTimestamp("created_at").toLocalDateTime());
                 list.add(b);
             }
         } catch (SQLException e) {

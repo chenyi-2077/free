@@ -164,7 +164,7 @@ public class UserDAO {
         user.setAvatar(rs.getString("avatar"));
         user.setSkills(rs.getString("skills"));
         user.setRating(rs.getDouble("rating"));
-        user.setCreatedAt(rs.getString("created_at"));
+        user.setCreatedAt(rs.getTimestamp("created_at") == null ? null : rs.getTimestamp("created_at").toLocalDateTime());
         return user;
     }
 }

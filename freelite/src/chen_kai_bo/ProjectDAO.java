@@ -27,7 +27,7 @@ public class ProjectDAO {
             ps.setString(1, project.getTitle());
             ps.setString(2, project.getDescription());
             ps.setDouble(3, project.getBudget());
-            ps.setString(4, project.getDeadline());
+            ps.setDate(4, project.getDeadline() == null ? null : java.sql.Date.valueOf(project.getDeadline()));
             ps.setInt(5, project.getCategoryId());
             ps.setInt(6, project.getEmployerId());
 
@@ -227,13 +227,13 @@ public class ProjectDAO {
         p.setTitle(rs.getString("title"));
         p.setDescription(rs.getString("description"));
         p.setBudget(rs.getDouble("budget"));
-        p.setDeadline(rs.getString("deadline"));
+        p.setDeadline(rs.getDate("deadline") == null ? null : rs.getDate("deadline").toLocalDate());
         p.setCategoryId(rs.getInt("category_id"));
         p.setCategoryName(rs.getString("category_name"));
         p.setEmployerId(rs.getInt("employer_id"));
         p.setEmployerName(rs.getString("employer_name"));
         p.setStatus(rs.getString("status"));
-        p.setCreatedAt(rs.getString("created_at"));
+        p.setCreatedAt(rs.getTimestamp("created_at") == null ? null : rs.getTimestamp("created_at").toLocalDateTime());
         return p;
     }
 }
