@@ -41,16 +41,17 @@ public class OrderDetailServlet extends HttpServlet {
 
             // 订单已完成且该用户还未评价过时显示评价表单
             boolean canReview = false;
+            Review existingReview = null;
             if ("completed".equals(order.getStatus())) {
-                // 所有参与方都可评价（简化处理：当前用户没评过即可）
-                Review existing = reviewDao.findByOrderId(orderId);
-                if (existing == null) {
+                existingReview = reviewDao.findByOrderId(orderId);
+                if (existingReview == null) {
                     canReview = true;
                 }
             }
 
             req.setAttribute("order", order);
             req.setAttribute("canReview", canReview);
+            req.setAttribute("existingReview", existingReview);
             req.setAttribute("isEmployer", isEmployer);
             req.getRequestDispatcher("/chen_zi_hao/orderDetail.jsp").forward(req, resp);
 

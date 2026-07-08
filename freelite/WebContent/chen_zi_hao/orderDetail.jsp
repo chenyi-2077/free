@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="chen_yi_an.User, chen_zi_hao.Order" %>
+<%@ page import="chen_yi_an.User, chen_zi_hao.Order, chen_zi_hao.Review" %>
 <%
     User loginUser = (User) session.getAttribute("user");
     Order order = (Order) request.getAttribute("order");
@@ -7,6 +7,7 @@
     boolean canReview = canReviewObj != null && canReviewObj;
     Boolean isEmployerObj = (Boolean) request.getAttribute("isEmployer");
     boolean isEmployer = isEmployerObj != null && isEmployerObj;
+    Review existingReview = (Review) request.getAttribute("existingReview");
     if (order == null) { response.sendRedirect(request.getContextPath() + "/orders"); return; }
 %>
 <!DOCTYPE html>
@@ -96,10 +97,29 @@
                         </a>
                     <% } %>
 
-                    <%-- 评价 --%>
+                    <%-- 已有评价展示 --%>
+                    <% if (existingReview != null) { %>
+                        <div class="card p-3 mb-3">
+                            <h5 class="fw-bold mb-3">⭐ 评价</h5>
+                            <div class="mb-2">
+                                <% for (int i = 0; i < existingReview.getScore(); i++) { %>
+                                    <span style="color: #ffc107; font-size: 1.2rem;">★</span>
+                                <% } %>
+                                <% for (int i = existingReview.getScore(); i < 5; i++) { %>
+                                    <span style="color: #ddd; font-size: 1.2rem;">★</span>
+                                <% } %>
+                                <span class="ms-2 text-muted"><%= existingReview.getScore() %>/5</span>
+                            </div>
+                            <% if (existingReview.getComment() != null && !existingReview.getComment().isEmpty()) { %>
+                                <p class="mb-0"><%= existingReview.getComment() %></p>
+                            <% } %>
+                        </div>
+                    <% } %>
+
+                    <%-- 评价表单 --%>
                     <% if (canReview) { %>
                         <div class="card p-3" style="">
-                            <h5 class="fw-bold mb-3">⭐ 评价</h5>
+                            <h5 class="fw-bold mb-3">⭐ 写评价</h5>
                             <form action="${pageContext.request.contextPath}/review" method="post">
                                 <input type="hidden" name="orderId" value="<%= order.getId() %>">
                                 <div class="mb-3">
