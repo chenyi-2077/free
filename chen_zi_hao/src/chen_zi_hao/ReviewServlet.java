@@ -1,75 +1,41 @@
 package chen_zi_hao;
+import chen_zi_hao.*;
+import chen_zi_hao.*;
 
-import java.io.IOException;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import chen_yi_an.User;
+import chen_yi_an.UserDao;
 
 public class ReviewServlet extends HttpServlet {
-    private static final long serialVersionUID = 1L;
 
     private ReviewDao reviewDao = new ReviewDao();
     private OrderDao orderDao = new OrderDao();
+    private UserDao userDao = new UserDao();
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        String orderIdStr = request.getParameter("orderId");
-        if (orderIdStr == null || orderIdStr.trim().isEmpty()) {
-            response.sendRedirect(request.getContextPath() + "/orders");
-            return;
-        }
-        int orderId = Integer.parseInt(orderIdStr);
-        Order order = orderDao.findById(orderId);
-        if (order == null) {
-            response.sendRedirect(request.getContextPath() + "/orders");
-            return;
-        }
-        request.setAttribute("order", order);
-        request.getRequestDispatcher("/chen_zi_hao/review.jsp").forward(request, response);
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        // 获取登录用户
-        User loginUser = (User) request.getSession().getAttribute("user");
+        User loginUser = (User) req.getSession().getAttribute("user");
         if (loginUser == null) {
-            response.sendRedirect(request.getContextPath() + "/login");
+            resp.sendRedirect(req.getContextPath() + "/login");
             return;
         }
 
-        String orderIdStr = request.getParameter("orderId");
-        String scoreStr = request.getParameter("score");
-        String comment = request.getParameter("comment");
-
-        if (orderIdStr == null || scoreStr == null) {
-            response.sendRedirect(request.getContextPath() + "/orders");
-            return;
-        }
+        String orderIdStr = req.getParameter("orderId");
+        String scoreStr = req.getParameter("score");
+        String comment = req.getParameter("comment");
 
         int orderId = Integer.parseInt(orderIdStr);
         int score = Integer.parseInt(scoreStr);
 
-        // 评分校验
-        if (score < 1 || score > 5) {
-            request.getSession().setAttribute("errorMsg", "评分必须在 1-5 之间");
-            response.sendRedirect(request.getContextPath() + "/order/detail?id=" + orderId);
-            return;
-        }
-        if (comment == null) comment = "";
-
         Order order = orderDao.findById(orderId);
         if (order == null) {
-            response.sendRedirect(request.getContextPath() + "/orders");
-            return;
-        }
-
-        // 防重复评价
-        if (reviewDao.findByOrderId(orderId) != null) {
-            request.getSession().setAttribute("errorMsg", "该订单已评价，不可重复提交");
-            response.sendRedirect(request.getContextPath() + "/order/detail?id=" + orderId);
+            resp.sendRedirect(req.getContextPath() + "/orders");
             return;
         }
 
@@ -90,6 +56,9 @@ public class ReviewServlet extends HttpServlet {
 
         reviewDao.insert(review);
 
-        response.sendRedirect(request.getContextPath() + "/order/detail?id=" + orderId);
+        // 更新被评价者的评分
+        userDao.updateRating(toUserId);
+
+        resp.sendRedirect(req.getContextPath() + "/order/" + orderId);
     }
 }

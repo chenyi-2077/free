@@ -1,23 +1,17 @@
 package chen_zi_hao;
-
 import java.time.LocalDateTime;
+import chen_yi_an.User;
 
 public class Review {
     private int id;
     private int orderId;
     private int fromUserId;
     private int toUserId;
-    private int score;
+    private int score;          // 1~5
     private String comment;
     private LocalDateTime createdAt;
 
-    // 关联字段
-    private String fromUserName;
-
-    public Review() {}
-
-    // --- getters / setters ---
-
+    // --- Getters / Setters ---
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 
@@ -38,7 +32,4 @@ public class Review {
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
-
-    public String getFromUserName() { return fromUserName; }
-    public void setFromUserName(String fromUserName) { this.fromUserName = fromUserName; }
 }

@@ -1,6 +1,6 @@
 package chen_zi_hao;
-
 import java.time.LocalDateTime;
+import chen_kai_bo.Project;
 
 public class Order {
     private int id;
@@ -8,7 +8,8 @@ public class Order {
     private int employerId;
     private int freelancerId;
     private double amount;
-    private String status;
+    private double escrowAmount;
+    private String status;       // "in_progress" | "awaiting_confirm" | "completed" | "cancelled"
     private LocalDateTime createdAt;
 
     // 关联字段
@@ -16,10 +17,7 @@ public class Order {
     private String employerName;
     private String freelancerName;
 
-    public Order() {}
-
-    // --- getters / setters ---
-
+    // --- Getters / Setters ---
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 
@@ -33,8 +31,10 @@ public class Order {
     public void setFreelancerId(int freelancerId) { this.freelancerId = freelancerId; }
 
     public double getAmount() { return amount; }
-    public double getEscrowAmount() { return amount; }
     public void setAmount(double amount) { this.amount = amount; }
+
+    public double getEscrowAmount() { return escrowAmount; }
+    public void setEscrowAmount(double escrowAmount) { this.escrowAmount = escrowAmount; }
 
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }

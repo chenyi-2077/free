@@ -1,43 +1,61 @@
 package chen_zi_hao;
+import chen_yi_an.User;
 
-import java.io.IOException;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import chen_yi_an.User;
 
 public class OrderDetailServlet extends HttpServlet {
-    private static final long serialVersionUID = 1L;
 
     private OrderDao orderDao = new OrderDao();
     private ReviewDao reviewDao = new ReviewDao();
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        javax.servlet.http.HttpSession session = request.getSession(false);
-        User loginUser = (User) (session != null ? session.getAttribute("user") : null);
-
-        String idStr = request.getParameter("id");
-        if (idStr == null || idStr.trim().isEmpty()) {
-            response.sendRedirect(request.getContextPath() + "/orders");
+        User loginUser = (User) req.getSession().getAttribute("user");
+        if (loginUser == null) {
+            resp.sendRedirect(req.getContextPath() + "/login");
             return;
         }
-        int id = Integer.parseInt(idStr);
-        Order order = orderDao.findById(id);
-        if (order == null) {
-            response.sendRedirect(request.getContextPath() + "/orders");
+
+        String pathInfo = req.getPathInfo();
+        if (pathInfo == null || pathInfo.equals("/")) {
+            resp.sendRedirect(req.getContextPath() + "/orders");
             return;
         }
-        request.setAttribute("order", order);
 
-        Review review = reviewDao.findByOrderId(id);
-        // 独立版本：直接设单个review，JSP中用List包装便于兼容
-        java.util.List<Review> reviewList = review != null ? java.util.Collections.singletonList(review) : new java.util.ArrayList<>();
-        request.setAttribute("reviews", reviewList);
-        request.setAttribute("isEmployer", loginUser != null && loginUser.getId() == order.getEmployerId());
-        request.setAttribute("isFreelancer", loginUser != null && loginUser.getId() == order.getFreelancerId());
+        try {
+            int orderId = Integer.parseInt(pathInfo.replace("/", ""));
+            Order order = orderDao.findById(orderId);
+            if (order == null) {
+                resp.sendRedirect(req.getContextPath() + "/orders");
+                return;
+            }
 
-        request.getRequestDispatcher("/chen_zi_hao/orderDetail.jsp").forward(request, response);
+            boolean isEmployer = loginUser.getId() == order.getEmployerId();
+
+            // 订单已完成且该用户还未评价过时显示评价表单
+            boolean canReview = false;
+            if ("completed".equals(order.getStatus())) {
+                // 所有参与方都可评价（简化处理：当前用户没评过即可）
+                Review existing = reviewDao.findByOrderId(orderId);
+                if (existing == null) {
+                    canReview = true;
+                }
+            }
+
+            req.setAttribute("order", order);
+            req.setAttribute("canReview", canReview);
+            req.setAttribute("isEmployer", isEmployer);
+            req.getRequestDispatcher("/chen_zi_hao/orderDetail.jsp").forward(req, resp);
+
+        } catch (NumberFormatException e) {
+            resp.sendRedirect(req.getContextPath() + "/orders");
+        }
     }
 }
