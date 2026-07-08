@@ -1,83 +1,88 @@
 package chen_kai_bo;
+import chen_yi_an.User;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDate;
+import chen_yi_an.User;
 
 public class EditProjectServlet extends HttpServlet {
-    private static final long serialVersionUID = 1L;
 
     private ProjectDao projectDao = new ProjectDao();
     private CategoryDao categoryDao = new CategoryDao();
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        User loginUser = (User) request.getSession().getAttribute("user");
+        User loginUser = (User) req.getSession().getAttribute("user");
         if (loginUser == null) {
-            response.sendRedirect(request.getContextPath() + "/login");
+            resp.sendRedirect(req.getContextPath() + "/login");
             return;
         }
 
-        String idStr = request.getParameter("id");
-        if (idStr == null || idStr.trim().isEmpty()) {
-            response.sendRedirect(request.getContextPath() + "/my/projects");
-            return;
-        }
-        int id = Integer.parseInt(idStr);
-        Project project = projectDao.findById(id);
+        int projectId = Integer.parseInt(req.getParameter("id"));
+        Project project = projectDao.findById(projectId);
+
         if (project == null || project.getEmployerId() != loginUser.getId()) {
-            response.sendRedirect(request.getContextPath() + "/my/projects");
+            resp.sendRedirect(req.getContextPath() + "/my/projects");
             return;
         }
-        request.setAttribute("project", project);
-        request.setAttribute("categories", categoryDao.findAll());
-        request.getRequestDispatcher("/chen_kai_bo/editProject.jsp").forward(request, response);
+
+        req.setAttribute("project", project);
+        req.setAttribute("categories", categoryDao.findAll());
+        req.getRequestDispatcher("/chen_kai_bo/editProject.jsp").forward(req, resp);
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        User loginUser = (User) request.getSession().getAttribute("user");
+        req.setCharacterEncoding("UTF-8");
+        User loginUser = (User) req.getSession().getAttribute("user");
         if (loginUser == null) {
-            response.sendRedirect(request.getContextPath() + "/login");
+            resp.sendRedirect(req.getContextPath() + "/login");
             return;
         }
 
-        String idStr = request.getParameter("id");
-        String title = request.getParameter("title");
-        String description = request.getParameter("description");
-        String budgetStr = request.getParameter("budget");
-        String deadlineStr = request.getParameter("deadline");
-        String categoryIdStr = request.getParameter("categoryId");
+        int projectId = Integer.parseInt(req.getParameter("id"));
+        Project project = projectDao.findById(projectId);
 
-        if (idStr == null || title == null || title.trim().isEmpty()) {
-            response.sendRedirect(request.getContextPath() + "/my/projects");
-            return;
-        }
-
-        int id = Integer.parseInt(idStr);
-        Project project = projectDao.findById(id);
         if (project == null || project.getEmployerId() != loginUser.getId()) {
-            response.sendRedirect(request.getContextPath() + "/my/projects");
+            resp.sendRedirect(req.getContextPath() + "/my/projects");
+            return;
+        }
+
+        String title = req.getParameter("title");
+        String description = req.getParameter("description");
+        String budgetStr = req.getParameter("budget");
+        String deadlineStr = req.getParameter("deadline");
+        String categoryIdStr = req.getParameter("categoryId");
+
+        if (title == null || title.trim().isEmpty()) {
+            req.setAttribute("error", "项目标题不能为空");
+            req.setAttribute("project", project);
+            req.setAttribute("categories", categoryDao.findAll());
+            req.getRequestDispatcher("/chen_kai_bo/editProject.jsp").forward(req, resp);
             return;
         }
 
         project.setTitle(title.trim());
-        project.setDescription(description);
+        project.setDescription(description != null ? description.trim() : "");
         if (budgetStr != null && !budgetStr.isEmpty()) {
             project.setBudget(Double.parseDouble(budgetStr));
         }
         if (deadlineStr != null && !deadlineStr.isEmpty()) {
-            project.setDeadline(java.sql.Date.valueOf(deadlineStr).toLocalDate());
+            project.setDeadline(LocalDate.parse(deadlineStr));
+        } else {
+            project.setDeadline(null);
         }
         if (categoryIdStr != null && !categoryIdStr.isEmpty()) {
             project.setCategoryId(Integer.parseInt(categoryIdStr));
         }
 
         projectDao.update(project);
-        response.sendRedirect(request.getContextPath() + "/my/projects");
+        resp.sendRedirect(req.getContextPath() + "/my/projects");
     }
 }

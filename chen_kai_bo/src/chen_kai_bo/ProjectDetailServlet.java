@@ -1,44 +1,53 @@
 package chen_kai_bo;
+import chen_xi_rui.BidDao;
+
+import chen_yi_an.User;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import chen_xi_rui.BidDao;
+import chen_yi_an.User;
+import chen_xi_rui.Bid;
 
 public class ProjectDetailServlet extends HttpServlet {
-    private static final long serialVersionUID = 1L;
 
     private ProjectDao projectDao = new ProjectDao();
+    private BidDao bidDao = new BidDao();
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        String idStr = request.getParameter("id");
-        if (idStr == null || idStr.trim().isEmpty()) {
-            response.sendRedirect(request.getContextPath() + "/projects");
+        User loginUser = (User) req.getSession().getAttribute("user");
+        if (loginUser == null) {
+            resp.sendRedirect(req.getContextPath() + "/login");
+            return;
+        }
+
+        String idStr = req.getParameter("id");
+        if (idStr == null || idStr.isEmpty()) {
+            resp.sendRedirect(req.getContextPath() + "/projects");
             return;
         }
 
         try {
-            int id = Integer.parseInt(idStr);
-            Project project = projectDao.findById(id);
+            int projectId = Integer.parseInt(idStr);
+            Project project = projectDao.findById(projectId);
             if (project == null) {
-                response.sendRedirect(request.getContextPath() + "/projects");
+                resp.sendRedirect(req.getContextPath() + "/projects");
                 return;
             }
 
-            HttpSession session = request.getSession(false);
-            User user = (User) (session != null ? session.getAttribute("user") : null);
-            boolean isOwner = (user != null && user.getId() == project.getEmployerId());
+            req.setAttribute("project", project);
+            req.setAttribute("bids", bidDao.findByProjectId(projectId));
+            req.setAttribute("isOwner", loginUser.getId() == project.getEmployerId());
+            req.getRequestDispatcher("/chen_kai_bo/projectDetail.jsp").forward(req, resp);
 
-            request.setAttribute("project", project);
-            request.setAttribute("isOwner", isOwner);
-            request.setAttribute("currentUser", user);
-            request.getRequestDispatcher("/chen_kai_bo/projectDetail.jsp").forward(request, response);
         } catch (NumberFormatException e) {
-            response.sendRedirect(request.getContextPath() + "/projects");
+            resp.sendRedirect(req.getContextPath() + "/projects");
         }
     }
 }

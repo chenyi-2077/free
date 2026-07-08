@@ -1,223 +1,51 @@
 package chen_kai_bo;
-
 import com.freelite.util.DBUtil;
 
 import java.sql.*;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import chen_xi_rui.Bid;
 
 public class ProjectDao {
 
-    public List<Project> findAll() {
+    /**
+     * 分页查询项目列表（支持关键字 + 分类筛选）
+     */
+    public List<Project> search(String keyword, int categoryId, int page, int pageSize) {
         List<Project> list = new ArrayList<>();
-        String sql = "SELECT p.*, c.name AS category_name, u.display_name AS employer_name "
+        StringBuilder sql = new StringBuilder(
+                "SELECT p.*, c.name AS category_name, u.display_name AS employer_name "
                 + "FROM project p "
                 + "LEFT JOIN category c ON p.category_id = c.id "
                 + "LEFT JOIN user u ON p.employer_id = u.id "
-                + "ORDER BY p.created_at DESC";
-        Connection conn = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        try {
-            conn = DBUtil.getConnection();
-            ps = conn.prepareStatement(sql);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                list.add(mapProject(rs));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            DBUtil.close(rs, ps, conn);
-        }
-        return list;
-    }
-
-    public Project findById(int id) {
-        String sql = "SELECT p.*, c.name AS category_name, u.display_name AS employer_name "
-                + "FROM project p "
-                + "LEFT JOIN category c ON p.category_id = c.id "
-                + "LEFT JOIN user u ON p.employer_id = u.id "
-                + "WHERE p.id = ?";
-        Connection conn = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        try {
-            conn = DBUtil.getConnection();
-            ps = conn.prepareStatement(sql);
-            ps.setInt(1, id);
-            rs = ps.executeQuery();
-            if (rs.next()) {
-                return mapProject(rs);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            DBUtil.close(rs, ps, conn);
-        }
-        return null;
-    }
-
-    public List<Project> findByEmployerId(int employerId) {
-        List<Project> list = new ArrayList<>();
-        String sql = "SELECT p.*, c.name AS category_name, u.display_name AS employer_name "
-                + "FROM project p "
-                + "LEFT JOIN category c ON p.category_id = c.id "
-                + "LEFT JOIN user u ON p.employer_id = u.id "
-                + "WHERE p.employer_id = ? "
-                + "ORDER BY p.created_at DESC";
-        Connection conn = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        try {
-            conn = DBUtil.getConnection();
-            ps = conn.prepareStatement(sql);
-            ps.setInt(1, employerId);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                list.add(mapProject(rs));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            DBUtil.close(rs, ps, conn);
-        }
-        return list;
-    }
-
-    public int insert(Project project) {
-        String sql = "INSERT INTO project (title, description, budget, deadline, category_id, employer_id, status, created_at) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-        Connection conn = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        try {
-            conn = DBUtil.getConnection();
-            ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, project.getTitle());
-            ps.setString(2, project.getDescription());
-            ps.setDouble(3, project.getBudget());
-            ps.setDate(4, project.getDeadline() != null ? Date.valueOf(project.getDeadline()) : null);
-            ps.setInt(5, project.getCategoryId());
-            ps.setInt(6, project.getEmployerId());
-            ps.setString(7, project.getStatus() != null ? project.getStatus() : "open");
-            ps.setObject(8, project.getCreatedAt() != null ? project.getCreatedAt() : LocalDateTime.now());
-            ps.executeUpdate();
-            rs = ps.getGeneratedKeys();
-            if (rs.next()) {
-                return rs.getInt(1);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            DBUtil.close(rs, ps, conn);
-        }
-        return -1;
-    }
-
-    public boolean update(Project project) {
-        String sql = "UPDATE project SET title = ?, description = ?, budget = ?, deadline = ?, "
-                + "category_id = ?, status = ? WHERE id = ?";
-        Connection conn = null;
-        PreparedStatement ps = null;
-        try {
-            conn = DBUtil.getConnection();
-            ps = conn.prepareStatement(sql);
-            ps.setString(1, project.getTitle());
-            ps.setString(2, project.getDescription());
-            ps.setDouble(3, project.getBudget());
-            ps.setDate(4, project.getDeadline() != null ? Date.valueOf(project.getDeadline()) : null);
-            ps.setInt(5, project.getCategoryId());
-            ps.setString(6, project.getStatus());
-            ps.setInt(7, project.getId());
-            return ps.executeUpdate() > 0;
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            DBUtil.close(ps, conn);
-        }
-        return false;
-    }
-
-    public boolean deleteById(int id) {
-        String sql = "DELETE FROM project WHERE id = ?";
-        Connection conn = null;
-        PreparedStatement ps = null;
-        try {
-            conn = DBUtil.getConnection();
-            ps = conn.prepareStatement(sql);
-            ps.setInt(1, id);
-            return ps.executeUpdate() > 0;
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            DBUtil.close(ps, conn);
-        }
-        return false;
-    }
-
-    public boolean updateStatus(int id, String status) {
-        String sql = "UPDATE project SET status = ? WHERE id = ?";
-        Connection conn = null;
-        PreparedStatement ps = null;
-        try {
-            conn = DBUtil.getConnection();
-            ps = conn.prepareStatement(sql);
-            ps.setString(1, status);
-            ps.setInt(2, id);
-            return ps.executeUpdate() > 0;
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            DBUtil.close(ps, conn);
-        }
-        return false;
-    }
-
-    public List<Project> search(String keyword, Integer categoryId) {
-        List<Project> list = new ArrayList<>();
-        StringBuilder sql = new StringBuilder();
-        sql.append("SELECT p.*, c.name AS category_name, u.display_name AS employer_name ")
-           .append("FROM project p ")
-           .append("LEFT JOIN category c ON p.category_id = c.id ")
-           .append("LEFT JOIN user u ON p.employer_id = u.id ")
-           .append("WHERE 1=1 ");
-
-        List<Object> params = new ArrayList<>();
-
+                + "WHERE p.status != 'cancelled' ");
         if (keyword != null && !keyword.trim().isEmpty()) {
-            sql.append("AND (p.title LIKE ? OR p.description LIKE ?) ");
-            String like = "%" + keyword.trim() + "%";
-            params.add(like);
-            params.add(like);
+            sql.append(" AND (p.title LIKE ? OR p.description LIKE ?)");
         }
-
-        if (categoryId != null && categoryId > 0) {
-            sql.append("AND p.category_id = ? ");
-            params.add(categoryId);
+        if (categoryId > 0) {
+            sql.append(" AND p.category_id = ?");
         }
+        sql.append(" ORDER BY p.created_at DESC LIMIT ? OFFSET ?");
 
-        sql.append("ORDER BY p.created_at DESC");
-
-        Connection conn = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        try {
-            conn = DBUtil.getConnection();
-            ps = conn.prepareStatement(sql.toString());
-            for (int i = 0; i < params.size(); i++) {
-                ps.setObject(i + 1, params.get(i));
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+            int idx = 1;
+            if (keyword != null && !keyword.trim().isEmpty()) {
+                String like = "%" + keyword.trim() + "%";
+                ps.setString(idx++, like);
+                ps.setString(idx++, like);
             }
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                list.add(mapProject(rs));
+            if (categoryId > 0) {
+                ps.setInt(idx++, categoryId);
+            }
+            ps.setInt(idx++, pageSize);
+            ps.setInt(idx++, (page - 1) * pageSize);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) list.add(mapProject(rs));
             }
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            DBUtil.close(rs, ps, conn);
         }
         return list;
     }
@@ -251,6 +79,108 @@ public class ProjectDao {
         return 0;
     }
 
+    public Project findById(int id) {
+        String sql = "SELECT p.*, c.name AS category_name, u.display_name AS employer_name "
+                + "FROM project p "
+                + "LEFT JOIN category c ON p.category_id = c.id "
+                + "LEFT JOIN user u ON p.employer_id = u.id "
+                + "WHERE p.id=?";
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) return mapProject(rs);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public int insert(Project p) {
+        String sql = "INSERT INTO project (title, description, budget, deadline, category_id, employer_id, status) "
+                + "VALUES (?,?,?,?,?,?,'open')";
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            ps.setString(1, p.getTitle());
+            ps.setString(2, p.getDescription());
+            ps.setDouble(3, p.getBudget());
+            if (p.getDeadline() != null) {
+                ps.setDate(4, Date.valueOf(p.getDeadline()));
+            } else {
+                ps.setNull(4, Types.DATE);
+            }
+            ps.setInt(5, p.getCategoryId());
+            ps.setInt(6, p.getEmployerId());
+            ps.executeUpdate();
+            try (ResultSet rs = ps.getGeneratedKeys()) {
+                if (rs.next()) return rs.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    /**
+     * 按雇主 ID 查询其发布的全部项目
+     */
+    public List<Project> findByEmployerId(int employerId) {
+        List<Project> list = new ArrayList<>();
+        String sql = "SELECT p.*, c.name AS category_name, u.display_name AS employer_name "
+                + "FROM project p "
+                + "LEFT JOIN category c ON p.category_id = c.id "
+                + "LEFT JOIN user u ON p.employer_id = u.id "
+                + "WHERE p.employer_id=? ORDER BY p.created_at DESC";
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, employerId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) list.add(mapProject(rs));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    /**
+     * 更新项目完整信息
+     */
+    public void update(Project p) {
+        String sql = "UPDATE project SET title=?, description=?, budget=?, deadline=?, category_id=? WHERE id=?";
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, p.getTitle());
+            ps.setString(2, p.getDescription());
+            ps.setDouble(3, p.getBudget());
+            if (p.getDeadline() != null) {
+                ps.setDate(4, Date.valueOf(p.getDeadline()));
+            } else {
+                ps.setNull(4, Types.DATE);
+            }
+            ps.setInt(5, p.getCategoryId());
+            ps.setInt(6, p.getId());
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 删除项目
+     */
+    public void delete(int id) {
+        String sql = "DELETE FROM project WHERE id=?";
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void updateEscrow(int id, double amount, String status) {
         String sql = "UPDATE project SET escrow_amount=?, escrow_status=? WHERE id=?";
         try (Connection conn = DBUtil.getConnection();
@@ -264,30 +194,54 @@ public class ProjectDao {
         }
     }
 
+    public void updateStatus(int id, String status) {
+        String sql = "UPDATE project SET status=? WHERE id=?";
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, status);
+            ps.setInt(2, id);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public List<Project> findBiddedProjects(int freelancerId) {
+        List<Project> list = new ArrayList<>();
+        String sql = "SELECT p.*, c.name AS category_name, u.display_name AS employer_name "
+                + "FROM project p "
+                + "JOIN bid b ON b.project_id = p.id "
+                + "LEFT JOIN category c ON p.category_id = c.id "
+                + "LEFT JOIN user u ON p.employer_id = u.id "
+                + "WHERE b.freelancer_id=? "
+                + "ORDER BY b.created_at DESC";
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, freelancerId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) list.add(mapProject(rs));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
     private Project mapProject(ResultSet rs) throws SQLException {
         Project p = new Project();
         p.setId(rs.getInt("id"));
         p.setTitle(rs.getString("title"));
         p.setDescription(rs.getString("description"));
         p.setBudget(rs.getDouble("budget"));
-
-        Date deadlineDate = rs.getDate("deadline");
-        if (deadlineDate != null) {
-            p.setDeadline(deadlineDate.toLocalDate());
-        }
-
+        Date dd = rs.getDate("deadline");
+        if (dd != null) p.setDeadline(dd.toLocalDate());
         p.setCategoryId(rs.getInt("category_id"));
         p.setEmployerId(rs.getInt("employer_id"));
         p.setStatus(rs.getString("status"));
-
         Timestamp ts = rs.getTimestamp("created_at");
-        if (ts != null) {
-            p.setCreatedAt(ts.toLocalDateTime());
-        }
-
+        if (ts != null) p.setCreatedAt(ts.toLocalDateTime());
         p.setCategoryName(rs.getString("category_name"));
         p.setEmployerName(rs.getString("employer_name"));
-
         return p;
     }
 }

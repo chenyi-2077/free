@@ -1,5 +1,4 @@
 package chen_kai_bo;
-
 import com.freelite.util.DBUtil;
 
 import java.sql.Connection;
@@ -13,13 +12,9 @@ public class CategoryDao {
     public List<Category> findAll() {
         List<Category> list = new ArrayList<>();
         String sql = "SELECT id, name FROM category ORDER BY id";
-        Connection conn = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        try {
-            conn = DBUtil.getConnection();
-            ps = conn.prepareStatement(sql);
-            rs = ps.executeQuery();
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
                 Category c = new Category();
                 c.setId(rs.getInt("id"));
@@ -28,9 +23,26 @@ public class CategoryDao {
             }
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            DBUtil.close(rs, ps, conn);
         }
         return list;
+    }
+
+    public Category findById(int id) {
+        String sql = "SELECT id, name FROM category WHERE id=?";
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    Category c = new Category();
+                    c.setId(rs.getInt("id"));
+                    c.setName(rs.getString("name"));
+                    return c;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

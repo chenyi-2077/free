@@ -1,71 +1,69 @@
 package chen_kai_bo;
+import chen_yi_an.User;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.List;
+import chen_yi_an.User;
 
 public class PostProjectServlet extends HttpServlet {
-    private static final long serialVersionUID = 1L;
 
     private ProjectDao projectDao = new ProjectDao();
     private CategoryDao categoryDao = new CategoryDao();
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        List<Category> categories = categoryDao.findAll();
-        request.setAttribute("categories", categories);
-        request.getRequestDispatcher("/chen_kai_bo/postProject.jsp").forward(request, response);
+        User loginUser = (User) req.getSession().getAttribute("user");
+        if (loginUser == null) {
+            resp.sendRedirect(req.getContextPath() + "/login");
+            return;
+        }
+        req.setAttribute("categories", categoryDao.findAll());
+        req.getRequestDispatcher("/chen_kai_bo/postProject.jsp").forward(req, resp);
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        // 独立版本：session有 user 就用，无则用 employer_id=0（演示用）
-        HttpSession session = request.getSession(false);
-        User user = (User) (session != null ? session.getAttribute("user") : null);
-        int employerId = (user != null) ? user.getId() : 0;
-
-        String title = request.getParameter("title");
-        String description = request.getParameter("description");
-        String budgetStr = request.getParameter("budget");
-        String deadlineStr = request.getParameter("deadline");
-        String categoryIdStr = request.getParameter("categoryId");
-
-        Project project = new Project();
-        project.setTitle(title);
-        project.setDescription(description);
-        project.setEmployerId(employerId);
-        project.setStatus("open");
-        project.setCreatedAt(LocalDateTime.now());
-
-        if (budgetStr != null && !budgetStr.trim().isEmpty()) {
-            try {
-                project.setBudget(Double.parseDouble(budgetStr));
-            } catch (NumberFormatException e) {
-                project.setBudget(0.0);
-            }
+        User loginUser = (User) req.getSession().getAttribute("user");
+        if (loginUser == null) {
+            resp.sendRedirect(req.getContextPath() + "/login");
+            return;
         }
 
-        if (deadlineStr != null && !deadlineStr.trim().isEmpty()) {
-            project.setDeadline(LocalDate.parse(deadlineStr));
+        String title = req.getParameter("title");
+        String description = req.getParameter("description");
+        String budgetStr = req.getParameter("budget");
+        String deadlineStr = req.getParameter("deadline");
+        String categoryIdStr = req.getParameter("categoryId");
+
+        if (title == null || title.trim().isEmpty()) {
+            req.setAttribute("error", "项目标题不能为空");
+            req.setAttribute("categories", categoryDao.findAll());
+            req.getRequestDispatcher("/chen_kai_bo/postProject.jsp").forward(req, resp);
+            return;
         }
 
-        if (categoryIdStr != null && !categoryIdStr.trim().isEmpty()) {
-            try {
-                project.setCategoryId(Integer.parseInt(categoryIdStr));
-            } catch (NumberFormatException e) {
-                // ignore
-            }
+        Project p = new Project();
+        p.setTitle(title.trim());
+        p.setDescription(description);
+        if (budgetStr != null && !budgetStr.isEmpty()) {
+            p.setBudget(Double.parseDouble(budgetStr));
         }
+        if (deadlineStr != null && !deadlineStr.isEmpty()) {
+            p.setDeadline(LocalDate.parse(deadlineStr));
+        }
+        if (categoryIdStr != null && !categoryIdStr.isEmpty()) {
+            p.setCategoryId(Integer.parseInt(categoryIdStr));
+        }
+        p.setEmployerId(loginUser.getId());
 
-        projectDao.insert(project);
-        response.sendRedirect(request.getContextPath() + "/projects");
+        projectDao.insert(p);
+        resp.sendRedirect(req.getContextPath() + "/projects");
     }
 }

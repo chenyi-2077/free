@@ -1,5 +1,4 @@
 package chen_kai_bo;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -11,15 +10,14 @@ public class Project {
     private LocalDate deadline;
     private int categoryId;
     private int employerId;
-    private String status;
+    private String status;       // "open" | "in_progress" | "completed" | "cancelled"
     private LocalDateTime createdAt;
 
-    // 关联字段（非数据库字段）
+    // 关联字段（非数据库直存）
     private String categoryName;
     private String employerName;
 
-    public Project() {}
-
+    // --- Getters / Setters ---
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 

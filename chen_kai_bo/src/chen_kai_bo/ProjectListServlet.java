@@ -1,4 +1,5 @@
 package chen_kai_bo;
+import chen_yi_an.User;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -6,43 +7,39 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
+import chen_yi_an.User;
 
 public class ProjectListServlet extends HttpServlet {
-    private static final long serialVersionUID = 1L;
 
     private ProjectDao projectDao = new ProjectDao();
     private CategoryDao categoryDao = new CategoryDao();
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        String keyword = request.getParameter("keyword");
-        String categoryIdStr = request.getParameter("categoryId");
-
-        Integer categoryId = null;
-        if (categoryIdStr != null && !categoryIdStr.trim().isEmpty()) {
-            try {
-                categoryId = Integer.parseInt(categoryIdStr);
-            } catch (NumberFormatException e) {
-                // ignore
-            }
+        User loginUser = (User) req.getSession().getAttribute("user");
+        if (loginUser == null) {
+            resp.sendRedirect(req.getContextPath() + "/login");
+            return;
         }
 
-        List<Project> projects;
-        if ((keyword != null && !keyword.trim().isEmpty()) || (categoryId != null && categoryId > 0)) {
-            projects = projectDao.search(keyword, categoryId);
-        } else {
-            projects = projectDao.findAll();
-        }
+        String keyword = req.getParameter("keyword");
+        String catParam = req.getParameter("category");
+        int categoryId = (catParam != null && !catParam.isEmpty()) ? Integer.parseInt(catParam) : 0;
+        String pageParam = req.getParameter("page");
+        int page = (pageParam != null && !pageParam.isEmpty()) ? Integer.parseInt(pageParam) : 1;
+        int pageSize = 10;
 
-        List<Category> categories = categoryDao.findAll();
+        int total = projectDao.count(keyword, categoryId);
+        int totalPages = (int) Math.ceil((double) total / pageSize);
+        if (totalPages < 1) totalPages = 1;
 
-        request.setAttribute("projects", projects);
-        request.setAttribute("categories", categories);
-        request.setAttribute("selectedKeyword", keyword);
-        request.setAttribute("selectedCategoryId", categoryId);
-
-        request.getRequestDispatcher("/chen_kai_bo/projectList.jsp").forward(request, response);
+        req.setAttribute("projects", projectDao.search(keyword, categoryId, page, pageSize));
+        req.setAttribute("categories", categoryDao.findAll());
+        req.setAttribute("currentPage", page);
+        req.setAttribute("totalPages", totalPages);
+        req.setAttribute("keyword", keyword);
+        req.setAttribute("selectedCategory", categoryId);
+        req.getRequestDispatcher("/chen_kai_bo/projectList.jsp").forward(req, resp);
     }
 }

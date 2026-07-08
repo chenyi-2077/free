@@ -1,33 +1,32 @@
 package chen_kai_bo;
+import chen_yi_an.User;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.List;
+import chen_yi_an.User;
+import chen_xi_rui.Bid;
 
 public class MyProjectsServlet extends HttpServlet {
-    private static final long serialVersionUID = 1L;
 
     private ProjectDao projectDao = new ProjectDao();
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        // 独立版本：session有 user 就用，无则查雇主ID=0（演示用）
-        HttpSession session = request.getSession(false);
-        User user = (User) (session != null ? session.getAttribute("user") : null);
-
-        List<Project> projects;
-        if (user != null) {
-            projects = projectDao.findByEmployerId(user.getId());
-        } else {
-            projects = projectDao.findAll();
+        User loginUser = (User) req.getSession().getAttribute("user");
+        if (loginUser == null) {
+            resp.sendRedirect(req.getContextPath() + "/login");
+            return;
         }
 
-        request.setAttribute("projects", projects);
-        request.getRequestDispatcher("/chen_kai_bo/myProjects.jsp").forward(request, response);
+        // 我开发的项目（作为雇主发布的）
+        req.setAttribute("myProjects", projectDao.findByEmployerId(loginUser.getId()));
+        // 我竞标的项目（作为自由职业者投过竞标的）
+        req.setAttribute("biddedProjects", projectDao.findBiddedProjects(loginUser.getId()));
+
+        req.getRequestDispatcher("/chen_kai_bo/myProjects.jsp").forward(req, resp);
     }
 }
