@@ -25,10 +25,20 @@ public class WalletDao {
              PreparedStatement ps = conn.prepareStatement(insert, Statement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, userId);
             ps.executeUpdate();
+            try (ResultSet rs = ps.getGeneratedKeys()) {
+                if (rs.next()) {
+                    Wallet w = new Wallet();
+                    w.setId(rs.getInt(1));
+                    w.setUserId(userId);
+                    w.setBalance(0);
+                    w.setFrozen(0);
+                    return w;
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return getOrCreate(userId);
+        return null;
     }
 
     /**
