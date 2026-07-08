@@ -1,32 +1,32 @@
 package chen_xi_rui;
-
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
+import chen_kai_bo.Project;
 
-/**
- * 查看竞标列表
- */
 public class BidListServlet extends HttpServlet {
 
     private BidDao bidDao = new BidDao();
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
+        String pathInfo = req.getPathInfo();
+        if (pathInfo == null || pathInfo.equals("/")) {
+            resp.sendRedirect(req.getContextPath() + "/projects");
+            return;
+        }
 
-        String projectIdParam = request.getParameter("projectId");
-        if (projectIdParam != null && !projectIdParam.trim().isEmpty()) {
-            int projectId = Integer.parseInt(projectIdParam);
-            request.setAttribute("projectId", projectId);
-            request.setAttribute("bids", bidDao.findByProjectId(projectId));
-            request.getRequestDispatcher("/chen_xi_rui/bidsOnProject.jsp").forward(request, response);
-        } else {
-            request.setAttribute("bids", bidDao.findAll());
-            request.getRequestDispatcher("/chen_xi_rui/bidsOnProject.jsp").forward(request, response);
+        try {
+            int projectId = Integer.parseInt(pathInfo.replace("/", ""));
+            req.setAttribute("bids", bidDao.findByProjectId(projectId));
+            req.setAttribute("projectId", projectId);
+            req.getRequestDispatcher("/chen_xi_rui/bidsOnProject.jsp").forward(req, resp);
+        } catch (NumberFormatException e) {
+            resp.sendRedirect(req.getContextPath() + "/projects");
         }
     }
 }

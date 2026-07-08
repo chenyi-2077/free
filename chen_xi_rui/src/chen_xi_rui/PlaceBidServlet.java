@@ -1,62 +1,86 @@
 package chen_xi_rui;
+import chen_kai_bo.ProjectDao;
+import chen_kai_bo.Project;
+import chen_yi_an.User;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import chen_kai_bo.Project;
+import chen_kai_bo.ProjectDao;
+import chen_yi_an.User;
 
 public class PlaceBidServlet extends HttpServlet {
 
+    private ProjectDao projectDao = new ProjectDao();
     private BidDao bidDao = new BidDao();
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        // 未登录可查看竞标表单
-        String projectIdParam = request.getParameter("projectId");
-        if (projectIdParam == null || projectIdParam.trim().isEmpty()) {
-            response.sendRedirect(request.getContextPath());
+        User loginUser = (User) req.getSession().getAttribute("user");
+        if (loginUser == null) {
+            resp.sendRedirect(req.getContextPath() + "/login");
             return;
         }
-        request.setAttribute("projectId", Integer.parseInt(projectIdParam));
-        request.getRequestDispatcher("/chen_xi_rui/bidForm.jsp").forward(request, response);
+
+        String projectIdStr = req.getParameter("projectId");
+        if (projectIdStr == null || projectIdStr.isEmpty()) {
+            resp.sendRedirect(req.getContextPath() + "/projects");
+            return;
+        }
+
+        int projectId = Integer.parseInt(projectIdStr);
+        Project project = projectDao.findById(projectId);
+        if (project == null) {
+            resp.sendRedirect(req.getContextPath() + "/projects");
+            return;
+        }
+
+        req.setAttribute("project", project);
+        req.getRequestDispatcher("/chen_xi_rui/bidForm.jsp").forward(req, resp);
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-
-        User loginUser = (User) request.getSession().getAttribute("user");
+        User loginUser = (User) req.getSession().getAttribute("user");
         if (loginUser == null) {
-            response.sendRedirect(request.getContextPath() + "/login");
+            resp.sendRedirect(req.getContextPath() + "/login");
             return;
         }
 
-        String projectIdParam = request.getParameter("projectId");
-        String amountParam = request.getParameter("amount");
-        String daysParam = request.getParameter("days");
-        String proposal = request.getParameter("proposal");
+        String projectIdStr = req.getParameter("projectId");
+        String amountStr = req.getParameter("amount");
+        String daysStr = req.getParameter("days");
+        String proposal = req.getParameter("proposal");
 
-        if (projectIdParam == null || amountParam == null || daysParam == null) {
-            response.sendRedirect(request.getContextPath());
+        int projectId = Integer.parseInt(projectIdStr);
+        Project project = projectDao.findById(projectId);
+        if (project == null) {
+            resp.sendRedirect(req.getContextPath() + "/projects");
             return;
         }
 
-        int projectId = Integer.parseInt(projectIdParam);
-        double amount = Double.parseDouble(amountParam);
-        int days = Integer.parseInt(daysParam);
+        // 雇主不能给自己的项目投竞标
+        if (loginUser.getId() == project.getEmployerId()) {
+            req.setAttribute("project", project);
+            req.setAttribute("error", "您不能给自己的项目投递竞标");
+            req.getRequestDispatcher("/chen_xi_rui/bidForm.jsp").forward(req, resp);
+            return;
+        }
 
         Bid bid = new Bid();
         bid.setProjectId(projectId);
         bid.setFreelancerId(loginUser.getId());
-        bid.setAmount(amount);
-        bid.setDays(days);
-        bid.setProposal(proposal != null ? proposal : "");
-        bid.setStatus("pending");
+        bid.setAmount(Double.parseDouble(amountStr));
+        bid.setDays(Integer.parseInt(daysStr));
+        bid.setProposal(proposal);
 
         bidDao.insert(bid);
-
-        response.sendRedirect(request.getContextPath() + "/projects");
+        resp.sendRedirect(req.getContextPath() + "/project/" + projectId);
     }
 }

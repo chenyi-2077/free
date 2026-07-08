@@ -1,73 +1,81 @@
 package chen_xi_rui;
-
-import com.freelite.util.DBUtil;
+import chen_xi_rui.*;
+import chen_xi_rui.*;
+import com.freelite.service.EscrowService;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
+import chen_kai_bo.Project;
+import chen_kai_bo.ProjectDao;
+import chen_yi_an.User;
+import chen_zi_hao.Order;
+import chen_zi_hao.OrderDao;
 
 public class AwardBidServlet extends HttpServlet {
 
     private BidDao bidDao = new BidDao();
+    private ProjectDao projectDao = new ProjectDao();
+    private OrderDao orderDao = new OrderDao();
+    private EscrowService escrowService = new EscrowService();
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-
-        // 获取当前登录用户
-        User loginUser = (User) request.getSession().getAttribute("user");
+        User loginUser = (User) req.getSession().getAttribute("user");
         if (loginUser == null) {
-            response.sendRedirect(request.getContextPath() + "/login");
+            resp.sendRedirect(req.getContextPath() + "/login");
             return;
         }
 
-        String bidIdParam = request.getParameter("bidId");
-        if (bidIdParam == null || bidIdParam.trim().isEmpty()) {
-            response.sendRedirect(request.getContextPath());
+        String bidIdStr = req.getParameter("bidId");
+        String projectIdStr = req.getParameter("projectId");
+
+        int bidId = Integer.parseInt(bidIdStr);
+        int projectId = Integer.parseInt(projectIdStr);
+
+        Project project = projectDao.findById(projectId);
+        if (project == null || project.getEmployerId() != loginUser.getId()) {
+            resp.sendRedirect(req.getContextPath() + "/projects");
             return;
         }
 
-        int bidId = Integer.parseInt(bidIdParam);
         Bid bid = bidDao.findById(bidId);
-        if (bid == null) {
-            response.sendRedirect(request.getContextPath());
+        if (bid == null || !"pending".equals(bid.getStatus())) {
+            resp.sendRedirect(req.getContextPath() + "/project/" + projectId);
             return;
         }
 
-        // 更新竞标状态为 accepted，其他竞标设为 rejected
+        // ===== 结算步骤1: 资金托管（冻结雇主余额）=====
+        double escrowAmount = bid.getAmount();
+        if (!escrowService.fundEscrow(projectId, loginUser.getId(), escrowAmount)) {
+            req.getSession().setAttribute("errorMsg", "❌ 授标失败：钱包余额不足，请先充值。项目预算为 ¥" + String.format("%.2f", escrowAmount));
+            resp.sendRedirect(req.getContextPath() + "/project/" + projectId);
+            return;
+        }
+
+        // 选中该竞标，拒绝其他竞标
         bidDao.updateStatus(bidId, "accepted");
-        for (Bid other : bidDao.findByProjectId(bid.getProjectId())) {
+        for (Bid other : bidDao.findByProjectId(projectId)) {
             if (other.getId() != bidId && "pending".equals(other.getStatus())) {
                 bidDao.updateStatus(other.getId(), "rejected");
             }
         }
 
-        // 创建 order，使用真实雇主ID（而非硬编码1）
-        createOrder(bid, loginUser.getId());
+        // 更新项目状态
+        projectDao.updateStatus(projectId, "in_progress");
 
-        response.sendRedirect(request.getContextPath() + "/bids?projectId=" + bid.getProjectId());
-    }
+        // 创建订单（含托管金额）
+        Order order = new Order();
+        order.setProjectId(projectId);
+        order.setEmployerId(loginUser.getId());
+        order.setFreelancerId(bid.getFreelancerId());
+        order.setAmount(bid.getAmount());
+        orderDao.insert(order);
 
-    private void createOrder(Bid bid, int employerId) {
-        String sql = "INSERT INTO task_order (project_id, freelancer_id, employer_id, amount, status, created_at) " +
-                     "VALUES (?, ?, ?, ?, 'in_progress', ?)";
-        try (Connection conn = DBUtil.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, bid.getProjectId());
-            ps.setInt(2, bid.getFreelancerId());
-            ps.setInt(3, employerId);
-            ps.setDouble(4, bid.getAmount());
-            ps.setTimestamp(5, Timestamp.valueOf(LocalDateTime.now()));
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        req.getSession().setAttribute("successMsg", "🎉 中标成功！¥" + String.format("%.2f", escrowAmount) + " 已托管担保，自由职业者可开始工作。");
+        resp.sendRedirect(req.getContextPath() + "/project/" + projectId);
     }
 }

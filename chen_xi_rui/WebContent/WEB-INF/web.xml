@@ -2,6 +2,8 @@
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" id="WebApp_ID" version="3.1">
     <display-name>chen_xi_rui</display-name>
     <welcome-file-list><welcome-file>index.jsp</welcome-file></welcome-file-list>
+
+    <!-- ==================== 竞标模块 Servlet ==================== -->
     <servlet>
         <servlet-name>PlaceBidServlet</servlet-name>
         <servlet-class>chen_xi_rui.PlaceBidServlet</servlet-class>
@@ -10,14 +12,16 @@
         <servlet-name>PlaceBidServlet</servlet-name>
         <url-pattern>/bid/place</url-pattern>
     </servlet-mapping>
+
     <servlet>
         <servlet-name>BidListServlet</servlet-name>
         <servlet-class>chen_xi_rui.BidListServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>BidListServlet</servlet-name>
-        <url-pattern>/bids</url-pattern>
+        <url-pattern>/bids/*</url-pattern>
     </servlet-mapping>
+
     <servlet>
         <servlet-name>MyBidsServlet</servlet-name>
         <servlet-class>chen_xi_rui.MyBidsServlet</servlet-class>
@@ -26,6 +30,7 @@
         <servlet-name>MyBidsServlet</servlet-name>
         <url-pattern>/my/bids</url-pattern>
     </servlet-mapping>
+
     <servlet>
         <servlet-name>AwardBidServlet</servlet-name>
         <servlet-class>chen_xi_rui.AwardBidServlet</servlet-class>
@@ -34,6 +39,18 @@
         <servlet-name>AwardBidServlet</servlet-name>
         <url-pattern>/bid/award</url-pattern>
     </servlet-mapping>
+
+    <!-- ==================== 过滤器 ==================== -->
+    <!-- 登录认证过滤器 -->
+    <filter>
+        <filter-name>AuthFilter</filter-name>
+        <filter-class>com.freelite.filter.AuthFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>AuthFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
     <!-- 字符编码过滤器 -->
     <filter>
         <filter-name>EncodingFilter</filter-name>
