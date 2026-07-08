@@ -155,7 +155,14 @@ public class ChatDeliveryApiServlet extends HttpServlet {
             // 从 web.xml context-param 读取上传目录
             String uploadBase = getServletContext().getInitParameter("uploadDir");
             if (uploadBase == null || uploadBase.isEmpty()) {
-                uploadBase = "/home/admin/.openclaw/workspace/freelite-uploads";
+                // 没有配置则尝试 Docker volume 路径，不行回退 webapp 内部
+                String externalDir = "/home/admin/.openclaw/workspace/freelite-uploads";
+                java.io.File extDir = new java.io.File(externalDir);
+                if (extDir.exists() || extDir.mkdirs()) {
+                    uploadBase = externalDir;
+                } else {
+                    uploadBase = getServletContext().getRealPath("/WEB-INF/uploads");
+                }
             }
             java.io.File uploadDir = new java.io.File(uploadBase, datePath);
             uploadDir.mkdirs();

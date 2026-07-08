@@ -7,10 +7,14 @@
 
     <display-name>Freelite</display-name>
 
-    <!-- ========== 全局配置 ========== -->
+    <!-- ========== 全局配置 ==========
+         上传文件存储目录。
+         Windows（Eclipse本地开发）：将 param-value 设为空字符串，自动使用 WEB-INF/uploads
+         Linux/Docker（服务器部署）：设为 /home/admin/.openclaw/workspace/freelite-uploads
+    -->
     <context-param>
         <param-name>uploadDir</param-name>
-        <param-value>/home/admin/.openclaw/workspace/freelite-uploads</param-value>
+        <param-value></param-value>
     </context-param>
 
     <!-- 欢迎页 -->
