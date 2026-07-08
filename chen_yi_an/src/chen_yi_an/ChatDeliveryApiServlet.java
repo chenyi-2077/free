@@ -148,7 +148,7 @@ public class ChatDeliveryApiServlet extends HttpServlet {
 
             String safeName = UUID.randomUUID().toString() + ext;
             String datePath = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM"));
-            String uploadBase = "/home/admin/.openclaw/workspace/freelite-uploads";
+            String uploadBase = getUploadBaseDir(req);
             String uploadDir = uploadBase + "/" + datePath;
             new java.io.File(uploadDir).mkdirs();
 
@@ -271,6 +271,20 @@ public class ChatDeliveryApiServlet extends HttpServlet {
         messageDao.insert(msg);
 
         out.print("{\"success\":true,\"newStatus\":\"completed\"}");
+    }
+
+    /**
+     * 获取上传基础目录。
+     * 优先使用外部路径（Docker volume 挂载 /home/admin/.openclaw/workspace/freelite-uploads），
+     * 如果不可用（Windows 开发环境等）则回退到 webapp 内部 WEB-INF/uploads。
+     */
+    private String getUploadBaseDir(HttpServletRequest req) {
+        String externalDir = "/home/admin/.openclaw/workspace/freelite-uploads";
+        File dir = new File(externalDir);
+        if (dir.exists() || dir.mkdirs()) {
+            return externalDir;
+        }
+        return req.getServletContext().getRealPath("/WEB-INF/uploads");
     }
 
     private String jsonEscape(String s) {

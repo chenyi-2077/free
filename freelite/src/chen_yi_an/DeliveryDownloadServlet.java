@@ -17,6 +17,20 @@ public class DeliveryDownloadServlet extends HttpServlet {
 
     private DeliveryDao deliveryDao = new DeliveryDao();
 
+    /**
+     * 获取上传基础目录。
+     * 优先使用外部路径（Docker volume 挂载 /home/admin/.openclaw/workspace/freelite-uploads），
+     * 如果不可用（Windows 开发环境等）则回退到 webapp 内部 WEB-INF/uploads。
+     */
+    private String getUploadBaseDir() {
+        String externalDir = "/home/admin/.openclaw/workspace/freelite-uploads";
+        File dir = new File(externalDir);
+        if (dir.exists() || dir.mkdirs()) {
+            return externalDir;
+        }
+        return getServletContext().getRealPath("/WEB-INF/uploads");
+    }
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
@@ -40,7 +54,7 @@ public class DeliveryDownloadServlet extends HttpServlet {
             return;
         }
 
-        String baseDir = "/home/admin/.openclaw/workspace/freelite-uploads";
+        String baseDir = getUploadBaseDir();
         File file = new File(baseDir + "/" + delivery.getFilePath());
         // 回退 webapp 内部路径
         if (!file.exists()) {
