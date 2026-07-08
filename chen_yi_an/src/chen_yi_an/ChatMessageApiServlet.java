@@ -10,6 +10,10 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import chen_kai_bo.Project;
+import chen_kai_bo.ProjectDao;
+import chen_zi_hao.OrderDao;
+import chen_zi_hao.Order;
 
 /**
  * 聊天弹窗的 API 端点
@@ -29,7 +33,7 @@ public class ChatMessageApiServlet extends HttpServlet {
 
         User loginUser = (User) req.getSession().getAttribute("user");
         if (loginUser == null) {
-            out.print("{\"error\":\"not logged in\",\"empty\":true,\"messages\":[]}");
+            out.print("{\"error\":\"not logged in\"}");
             return;
         }
 
@@ -92,7 +96,7 @@ public class ChatMessageApiServlet extends HttpServlet {
 
         User loginUser = (User) req.getSession().getAttribute("user");
         if (loginUser == null) {
-            out.print("{\"error\":\"not logged in\",\"success\":false}");
+            out.print("{\"error\":\"not logged in\"}");
             return;
         }
 

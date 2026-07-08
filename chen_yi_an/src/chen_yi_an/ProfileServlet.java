@@ -1,25 +1,50 @@
 package chen_yi_an;
-
-import java.io.IOException;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import java.io.IOException;
 
 public class ProfileServlet extends HttpServlet {
-    private static final long serialVersionUID = 1L;
+
+    private UserDao userDao = new UserDao();
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        HttpSession session = request.getSession(false);
-        if (session != null) {
-            User user = (User) session.getAttribute("user");
-            if (user != null) {
-                request.setAttribute("profileUser", user);
-            }
+        User loginUser = (User) req.getSession().getAttribute("user");
+        if (loginUser == null) {
+            resp.sendRedirect(req.getContextPath() + "/login");
+            return;
         }
-        request.getRequestDispatcher("/chen_yi_an/profile.jsp").forward(request, response);
+
+        // 从路径提取用户 ID，如 /profile/2 或 /profile
+        String pathInfo = req.getPathInfo();
+        int profileUserId;
+        boolean isOwnProfile;
+
+        if (pathInfo == null || pathInfo.equals("/")) {
+            // 查看自己的主页
+            profileUserId = loginUser.getId();
+            isOwnProfile = true;
+        } else {
+            try {
+                profileUserId = Integer.parseInt(pathInfo.replace("/", ""));
+            } catch (NumberFormatException e) {
+                profileUserId = loginUser.getId();
+            }
+            isOwnProfile = (profileUserId == loginUser.getId());
+        }
+
+        User profileUser = userDao.findById(profileUserId);
+        if (profileUser == null) {
+            resp.sendRedirect(req.getContextPath() + "/projects");
+            return;
+        }
+
+        req.setAttribute("profileUser", profileUser);
+        req.setAttribute("isOwnProfile", isOwnProfile);
+        req.getRequestDispatcher("/chen_yi_an/profile.jsp").forward(req, resp);
     }
 }

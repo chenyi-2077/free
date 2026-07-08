@@ -1,12 +1,11 @@
 package chen_yi_an;
-
 import java.time.LocalDateTime;
 
 public class User {
     private int id;
     private String email;
     private String password;
-    private String role;
+    private String role;        // "employer" | "freelancer"
     private String displayName;
     private String avatar;
     private String skills;
@@ -21,8 +20,10 @@ public class User {
         this.role = role;
         this.displayName = displayName;
         this.skills = skills;
+        this.rating = 0.0;
     }
 
+    // --- Getters / Setters ---
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 

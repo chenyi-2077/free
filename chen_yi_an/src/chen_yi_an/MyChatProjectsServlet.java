@@ -9,6 +9,10 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import chen_kai_bo.Project;
+import chen_kai_bo.ProjectDao;
+import chen_zi_hao.Order;
+import chen_zi_hao.OrderDao;
 
 /**
  * GET /api/myChatProjects — 返回当前用户参与的所有项目（雇主 or 中标 freelancer）
@@ -28,7 +32,7 @@ public class MyChatProjectsServlet extends HttpServlet {
 
         User loginUser = (User) req.getSession().getAttribute("user");
         if (loginUser == null) {
-            out.print("{\"projects\":[],\"info\":\"请先登录以查看项目\"}");
+            out.print("{\"error\":\"not logged in\"}");
             return;
         }
 

@@ -14,12 +14,7 @@ public class SwitchRoleServlet extends HttpServlet {
             throws ServletException, IOException {
         User loginUser = (User) req.getSession().getAttribute("user");
         if (loginUser == null) {
-            resp.setContentType("text/html;charset=UTF-8");
-            resp.getWriter().write("<html><body style='font-family:sans-serif;text-align:center;padding:80px 20px;'>"
-                + "<h2 style='color:#999;'>🔒 请先登录</h2>"
-                + "<p style='color:#666;font-size:16px;'>需要登录后才能切换角色。</p>"
-                + "<a href='" + req.getContextPath() + "/login' style='color:#667eea;'>← 去登录</a>"
-                + "</body></html>");
+            resp.sendRedirect(req.getContextPath() + "/login");
             return;
         }
 

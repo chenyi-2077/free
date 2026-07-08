@@ -1,44 +1,46 @@
 package chen_yi_an;
-
-import java.io.IOException;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import java.io.IOException;
 
 public class LoginServlet extends HttpServlet {
-    private static final long serialVersionUID = 1L;
+
     private UserDao userDao = new UserDao();
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        request.getRequestDispatcher("/chen_yi_an/login.jsp").forward(request, response);
+        // 已登录则跳转项目列表
+        if (req.getSession().getAttribute("user") != null) {
+            resp.sendRedirect(req.getContextPath() + "/projects");
+            return;
+        }
+        req.getRequestDispatcher("/chen_yi_an/login.jsp").forward(req, resp);
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
-
-        if (email == null || email.trim().isEmpty() ||
-            password == null || password.trim().isEmpty()) {
-            request.setAttribute("error", "邮箱和密码不能为空");
-            request.getRequestDispatcher("/chen_yi_an/login.jsp").forward(request, response);
-            return;
-        }
+        String email = req.getParameter("email");
+        String password = req.getParameter("password");
 
         User user = userDao.findByEmail(email);
         if (user == null || !user.getPassword().equals(password)) {
-            request.setAttribute("error", "邮箱或密码错误");
-            request.getRequestDispatcher("/chen_yi_an/login.jsp").forward(request, response);
+            req.setAttribute("error", "邮箱或密码错误");
+            req.getRequestDispatcher("/chen_yi_an/login.jsp").forward(req, resp);
             return;
         }
 
-        HttpSession session = request.getSession();
-        session.setAttribute("user", user);
-        response.sendRedirect(request.getContextPath() + "/profile");
+        req.getSession().setAttribute("user", user);
+        // 如果有 redirect 参数则跳转
+        String redirect = req.getParameter("redirect");
+        if (redirect != null && !redirect.isEmpty()) {
+            resp.sendRedirect(req.getContextPath() + redirect);
+        } else {
+            resp.sendRedirect(req.getContextPath() + "/projects");
+        }
     }
 }

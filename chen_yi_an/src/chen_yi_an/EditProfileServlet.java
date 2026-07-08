@@ -1,57 +1,47 @@
 package chen_yi_an;
-
-import java.io.IOException;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import java.io.IOException;
 
 public class EditProfileServlet extends HttpServlet {
-    private static final long serialVersionUID = 1L;
+
     private UserDao userDao = new UserDao();
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        HttpSession session = request.getSession(false);
-        User user = (User) (session != null ? session.getAttribute("user") : null);
-        if (user == null) {
-            response.sendRedirect(request.getContextPath() + "/login");
+        User loginUser = (User) req.getSession().getAttribute("user");
+        if (loginUser == null) {
+            resp.sendRedirect(req.getContextPath() + "/login");
             return;
         }
-        request.getRequestDispatcher("/chen_yi_an/editProfile.jsp").forward(request, response);
+        req.getRequestDispatcher("/chen_yi_an/editProfile.jsp").forward(req, resp);
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        // 独立版本：如果session有user就更新，无则提示
-        HttpSession session = request.getSession(false);
-        User user = (User) (session != null ? session.getAttribute("user") : null);
-
-        if (user == null) {
-            request.setAttribute("error", "请先登录后再编辑资料");
-            request.getRequestDispatcher("/chen_yi_an/editProfile.jsp").forward(request, response);
+        User loginUser = (User) req.getSession().getAttribute("user");
+        if (loginUser == null) {
+            resp.sendRedirect(req.getContextPath() + "/login");
             return;
         }
 
-        String displayName = request.getParameter("displayName");
-        String skills = request.getParameter("skills");
+        String displayName = req.getParameter("displayName");
+        String skills = req.getParameter("skills");
 
-        if (displayName != null && !displayName.trim().isEmpty()) {
-            user.setDisplayName(displayName);
-        }
-        user.setSkills(skills);
+        loginUser.setDisplayName(displayName);
+        loginUser.setSkills(skills);
+        userDao.update(loginUser);
 
-        boolean success = userDao.update(user);
-        if (success) {
-            session.setAttribute("user", user);
-            request.setAttribute("success", "资料更新成功");
-        } else {
-            request.setAttribute("error", "资料更新失败");
-        }
+        // 刷新 session 中的用户
+        User refreshed = userDao.findById(loginUser.getId());
+        req.getSession().setAttribute("user", refreshed);
 
-        request.getRequestDispatcher("/chen_yi_an/editProfile.jsp").forward(request, response);
+        req.setAttribute("success", "保存成功");
+        req.getRequestDispatcher("/chen_yi_an/editProfile.jsp").forward(req, resp);
     }
 }

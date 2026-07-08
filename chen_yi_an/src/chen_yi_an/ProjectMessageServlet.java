@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import chen_kai_bo.Project;
 
 /**
  * 项目消息 — 发送和查看
@@ -20,9 +21,7 @@ public class ProjectMessageServlet extends HttpServlet {
             throws ServletException, IOException {
         User loginUser = (User) req.getSession().getAttribute("user");
         if (loginUser == null) {
-            req.setAttribute("info", "请先登录");
-            req.setAttribute("messages", null);
-            req.getRequestDispatcher("/projectMessages.jsp").forward(req, resp);
+            resp.sendRedirect(req.getContextPath() + "/login");
             return;
         }
 
@@ -37,7 +36,7 @@ public class ProjectMessageServlet extends HttpServlet {
 
         req.setAttribute("messages", messages);
         req.setAttribute("projectId", projectId);
-        req.getRequestDispatcher("/projectMessages.jsp").forward(req, resp);
+        req.getRequestDispatcher("/chen_yi_an/projectMessages.jsp").forward(req, resp);
     }
 
     @Override
@@ -46,8 +45,7 @@ public class ProjectMessageServlet extends HttpServlet {
         req.setCharacterEncoding("UTF-8");
         User loginUser = (User) req.getSession().getAttribute("user");
         if (loginUser == null) {
-            req.setAttribute("error", "请先登录");
-            doGet(req, resp);
+            resp.sendRedirect(req.getContextPath() + "/login");
             return;
         }
 

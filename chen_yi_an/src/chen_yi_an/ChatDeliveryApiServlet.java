@@ -12,6 +12,10 @@ import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import chen_kai_bo.Project;
+import chen_kai_bo.ProjectDao;
+import chen_zi_hao.Order;
+import chen_zi_hao.OrderDao;
 
 /**
  * 聊天弹窗的交付和订单操作 API
@@ -46,7 +50,7 @@ public class ChatDeliveryApiServlet extends HttpServlet {
 
         User loginUser = (User) req.getSession().getAttribute("user");
         if (loginUser == null) {
-            out.print("{\"error\":\"not logged in\",\"empty\":true,\"deliveries\":[]}");
+            out.print("{\"error\":\"not logged in\"}");
             return;
         }
 
@@ -86,7 +90,7 @@ public class ChatDeliveryApiServlet extends HttpServlet {
 
         User loginUser = (User) req.getSession().getAttribute("user");
         if (loginUser == null) {
-            out.print("{\"error\":\"not logged in\",\"success\":false}");
+            out.print("{\"error\":\"not logged in\"}");
             return;
         }
 
@@ -149,13 +153,25 @@ public class ChatDeliveryApiServlet extends HttpServlet {
 
             String safeName = UUID.randomUUID().toString() + ext;
             String datePath = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM"));
-            String uploadBase = getUploadBaseDir(req);
+            // 从 web.xml context-param 读取上传目录
+            String uploadBase = getServletContext().getInitParameter("uploadDir");
+            if (uploadBase == null || uploadBase.isEmpty()) {
+                // 没有配置则尝试 Docker volume 路径，不行回退 webapp 内部
+                String externalDir = "/home/admin/.openclaw/workspace/freelite-uploads";
+                java.io.File extDir = new java.io.File(externalDir);
+                if (extDir.exists() || extDir.mkdirs()) {
+                    uploadBase = externalDir;
+                } else {
+                    uploadBase = getServletContext().getRealPath("/WEB-INF/uploads");
+                }
+            }
             java.io.File uploadDir = new java.io.File(uploadBase, datePath);
             uploadDir.mkdirs();
 
             java.io.File targetFile = new java.io.File(uploadDir, safeName);
-            String filePath = datePath + "/" + safeName;
             filePart.write(targetFile.getAbsolutePath());
+
+            String filePath = datePath + "/" + safeName;
 
             Delivery delivery = new Delivery();
             delivery.setProjectId(projectId);
@@ -273,24 +289,6 @@ public class ChatDeliveryApiServlet extends HttpServlet {
         messageDao.insert(msg);
 
         out.print("{\"success\":true,\"newStatus\":\"completed\"}");
-    }
-
-    /**
-     * 获取上传基础目录。
-     * 优先从 web.xml context-param 读取，没有配置则尝试外部 Docker volume 路径，
-     * 不可用时回退到 webapp 内部 WEB-INF/uploads（Windows Eclipse 开发环境）。
-     */
-    private String getUploadBaseDir(HttpServletRequest req) {
-        String dir = req.getServletContext().getInitParameter("uploadDir");
-        if (dir != null && !dir.isEmpty()) {
-            return dir;
-        }
-        String externalDir = "/home/admin/.openclaw/workspace/freelite-uploads";
-        File extDir = new File(externalDir);
-        if (extDir.exists() || extDir.mkdirs()) {
-            return externalDir;
-        }
-        return req.getServletContext().getRealPath("/WEB-INF/uploads");
     }
 
     private String jsonEscape(String s) {
